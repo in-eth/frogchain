@@ -1,0 +1,12 @@
+syntax = "proto3";
+package frogchain.amm;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "frogchain/x/amm/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

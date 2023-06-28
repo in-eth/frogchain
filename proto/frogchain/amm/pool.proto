@@ -1,0 +1,25 @@
+syntax = "proto3";
+package frogchain.amm;
+
+option go_package = "frogchain/x/amm/types";
+import "frogchain/amm/pool_param.proto"; 
+import "frogchain/amm/pool_asset.proto"; 
+import "gogoproto/gogo.proto"; 
+import "cosmos/base/v1beta1/coin.proto"; 
+
+message Pool {
+  uint64 id = 1;
+
+  // pool params for swap and exit fees
+  PoolParam poolParam = 2; 
+
+  // assets in the pool
+  repeated PoolAsset poolAssets = 3; 
+
+  // LP token
+  cosmos.base.v1beta1.Coin shareToken = 4 [(gogoproto.nullable) = false]; 
+
+  // Pool activate state
+  bool isActivated = 5; 
+  
+}

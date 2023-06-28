@@ -1,0 +1,19 @@
+syntax = "proto3";
+package frogchain.amm;
+
+option go_package = "frogchain/x/amm/types";
+import "gogoproto/gogo.proto"; 
+import "cosmos/base/v1beta1/coin.proto"; 
+
+// Pool has my PoolAssets that has token and weight.
+// weight determines the value of token.
+message PoolAsset {
+  
+  cosmos.base.v1beta1.Coin token = 1 [(gogoproto.nullable) = false]; 
+
+  // token weight represents the value of token
+  uint64 weight = 2; 
+
+  // token reserved amount in the pool
+  uint64 reserve = 3; 
+}
