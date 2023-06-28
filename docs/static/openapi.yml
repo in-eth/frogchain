@@ -70944,6 +70944,18 @@ definitions:
 
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
+  frogchain.amm.MsgSwapExactTokensForTokensResponse:
+    type: object
+    properties:
+      amountOut:
+        type: string
+        format: uint64
+  frogchain.amm.MsgSwapTokensForExactTokensResponse:
+    type: object
+    properties:
+      amountIn:
+        type: string
+        format: uint64
   frogchain.amm.Params:
     type: object
     description: Params defines the parameters for the module.

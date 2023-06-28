@@ -11,9 +11,11 @@ option go_package = "frogchain/x/amm/types";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc CreatePool      (MsgCreatePool     ) returns (MsgCreatePoolResponse     );
-  rpc AddLiquidity    (MsgAddLiquidity   ) returns (MsgAddLiquidityResponse   );
-  rpc RemoveLiquidity (MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
+  rpc CreatePool               (MsgCreatePool              ) returns (MsgCreatePoolResponse              );
+  rpc AddLiquidity             (MsgAddLiquidity            ) returns (MsgAddLiquidityResponse            );
+  rpc RemoveLiquidity          (MsgRemoveLiquidity         ) returns (MsgRemoveLiquidityResponse         );
+  rpc SwapExactTokensForTokens (MsgSwapExactTokensForTokens) returns (MsgSwapExactTokensForTokensResponse);
+  rpc SwapTokensForExactTokens (MsgSwapTokensForExactTokens) returns (MsgSwapTokensForExactTokensResponse);
 }
 message MsgCreatePool {
            string    creator    = 1;
@@ -45,5 +47,32 @@ message MsgRemoveLiquidity {
 
 message MsgRemoveLiquidityResponse {
   repeated cosmos.base.v1beta1.Coin receivedTokens = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgSwapExactTokensForTokens {
+           string                   creator      = 1;
+           uint64                   poolId       = 2;
+           uint64                   amountIn     = 3;
+           uint64                   amountOutMin = 4;
+  repeated cosmos.base.v1beta1.Coin path         = 5 [(gogoproto.nullable) = false];
+           string                   to           = 6;
+           uint64                   deadline     = 7;
+}
+
+message MsgSwapExactTokensForTokensResponse {
+  uint64 amountOut = 1;
+}
+
+message MsgSwapTokensForExactTokens {
+           string                   creator   = 1;
+           uint64                   poolId    = 2;
+           uint64                   amountOut = 3;
+  repeated cosmos.base.v1beta1.Coin path      = 4 [(gogoproto.nullable) = false];
+           string                   to        = 5;
+           uint64                   deadline  = 6;
+}
+
+message MsgSwapTokensForExactTokensResponse {
+  uint64 amountIn = 1;
 }
 

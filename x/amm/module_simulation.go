@@ -35,6 +35,14 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgRemoveLiquidity int = 100
 
+	opWeightMsgSwapExactTokensForTokens = "op_weight_msg_swap_exact_tokens_for_tokens"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgSwapExactTokensForTokens int = 100
+
+	opWeightMsgSwapTokensForExactTokens = "op_weight_msg_swap_tokens_for_exact_tokens"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgSwapTokensForExactTokens int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -96,6 +104,28 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		ammsimulation.SimulateMsgRemoveLiquidity(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
+	var weightMsgSwapExactTokensForTokens int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgSwapExactTokensForTokens, &weightMsgSwapExactTokensForTokens, nil,
+		func(_ *rand.Rand) {
+			weightMsgSwapExactTokensForTokens = defaultWeightMsgSwapExactTokensForTokens
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSwapExactTokensForTokens,
+		ammsimulation.SimulateMsgSwapExactTokensForTokens(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgSwapTokensForExactTokens int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgSwapTokensForExactTokens, &weightMsgSwapTokensForExactTokens, nil,
+		func(_ *rand.Rand) {
+			weightMsgSwapTokensForExactTokens = defaultWeightMsgSwapTokensForExactTokens
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSwapTokensForExactTokens,
+		ammsimulation.SimulateMsgSwapTokensForExactTokens(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -125,6 +155,22 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgRemoveLiquidity,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				ammsimulation.SimulateMsgRemoveLiquidity(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgSwapExactTokensForTokens,
+			defaultWeightMsgSwapExactTokensForTokens,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				ammsimulation.SimulateMsgSwapExactTokensForTokens(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgSwapTokensForExactTokens,
+			defaultWeightMsgSwapTokensForExactTokens,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				ammsimulation.SimulateMsgSwapTokensForExactTokens(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
