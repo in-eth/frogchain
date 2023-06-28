@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"frogchain/x/amm/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -37,10 +38,7 @@ func CmdSwapExactTokensForTokens() *cobra.Command {
 				return err
 			}
 			argTo := args[4]
-			argDeadline, err := cast.ToUint64E(args[5])
-			if err != nil {
-				return err
-			}
+			argDeadline := args[5]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {

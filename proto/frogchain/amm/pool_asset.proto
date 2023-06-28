@@ -13,7 +13,4 @@ message PoolAsset {
 
   // token weight represents the value of token
   uint64 weight = 2; 
-
-  // token reserved amount in the pool
-  uint64 reserve = 3; 
 }

@@ -1,6 +1,11 @@
 package types
 
+import "fmt"
+
 const (
+	// ChainName defines the chain name
+	ChainName = "frogchain"
+
 	// ModuleName defines the module name
 	ModuleName = "amm"
 
@@ -12,6 +17,9 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_amm"
+
+	// MINIMUM_LIQUIDITY defines the minimum share amount to maintain pool
+	MINIMUM_LIQUIDITY = 1000
 )
 
 func KeyPrefix(p string) []byte {
@@ -19,6 +27,10 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
-	PoolKey      = "Pool/value/"
+	PoolKey      = "Pool/"
 	PoolCountKey = "Pool/count/"
 )
+
+func ShareTokenIndex(portID uint64) string {
+	return fmt.Sprintf("%s-%s-pool-%s-shareToken", ChainName, ModuleName, fmt.Sprint(portID))
+}

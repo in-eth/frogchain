@@ -19,6 +19,9 @@ message Pool {
   // LP token
   cosmos.base.v1beta1.Coin shareToken = 4 [(gogoproto.nullable) = false]; 
 
+  // min liquidity is the minimum amount of share token to maintain the pool
+  uint64 mininumliquidity = 5;
+
   // Pool activate state
   bool isActivated = 6; 
   

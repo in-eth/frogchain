@@ -56,7 +56,7 @@ message MsgSwapExactTokensForTokens {
            uint64                   amountOutMin = 4;
   repeated cosmos.base.v1beta1.Coin path         = 5 [(gogoproto.nullable) = false];
            string                   to           = 6;
-           uint64                   deadline     = 7;
+           string                   deadline     = 7;
 }
 
 message MsgSwapExactTokensForTokensResponse {
@@ -69,7 +69,7 @@ message MsgSwapTokensForExactTokens {
            uint64                   amountOut = 3;
   repeated cosmos.base.v1beta1.Coin path      = 4 [(gogoproto.nullable) = false];
            string                   to        = 5;
-           uint64                   deadline  = 6;
+           string                   deadline  = 6;
 }
 
 message MsgSwapTokensForExactTokensResponse {
