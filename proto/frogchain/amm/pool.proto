@@ -19,9 +19,6 @@ message Pool {
   // LP token
   cosmos.base.v1beta1.Coin shareToken = 4 [(gogoproto.nullable) = false]; 
 
-  // pool holder
-  string ownerAddress = 5;
-
   // Pool activate state
   bool isActivated = 6; 
   
