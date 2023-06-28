@@ -1,7 +1,49 @@
 syntax = "proto3";
+
 package frogchain.amm;
+
+import "frogchain/amm/pool_param.proto";
+import "frogchain/amm/pool_asset.proto";
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "frogchain/x/amm/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc CreatePool      (MsgCreatePool     ) returns (MsgCreatePoolResponse     );
+  rpc AddLiquidity    (MsgAddLiquidity   ) returns (MsgAddLiquidityResponse   );
+  rpc RemoveLiquidity (MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
+}
+message MsgCreatePool {
+           string    creator    = 1;
+           PoolParam poolParam  = 2;
+  repeated PoolAsset poolAssets = 3;
+}
+
+message MsgCreatePoolResponse {
+  int32 id = 1;
+}
+
+message MsgAddLiquidity {
+           string creator        = 1;
+           uint64 poolId         = 2;
+  repeated uint64 desiredAmounts = 3;
+  repeated uint64 minAmounts     = 4;
+}
+
+message MsgAddLiquidityResponse {
+  uint64 shareToken = 1;
+}
+
+message MsgRemoveLiquidity {
+  string creator       = 1;
+  uint64 poolId        = 2;
+  uint64 desiredAmount = 3;
+  uint64 minAmount     = 4;
+}
+
+message MsgRemoveLiquidityResponse {
+  repeated cosmos.base.v1beta1.Coin receivedTokens = 1 [(gogoproto.nullable) = false];
+}
+

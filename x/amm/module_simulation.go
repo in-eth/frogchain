@@ -23,7 +23,19 @@ var (
 )
 
 const (
-// this line is used by starport scaffolding # simapp/module/const
+	opWeightMsgCreatePool = "op_weight_msg_create_pool"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCreatePool int = 100
+
+	opWeightMsgAddLiquidity = "op_weight_msg_add_liquidity"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgAddLiquidity int = 100
+
+	opWeightMsgRemoveLiquidity = "op_weight_msg_remove_liquidity"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgRemoveLiquidity int = 100
+
+	// this line is used by starport scaffolding # simapp/module/const
 )
 
 // GenerateGenesisState creates a randomized GenState of the module.
@@ -51,6 +63,39 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
 
+	var weightMsgCreatePool int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCreatePool, &weightMsgCreatePool, nil,
+		func(_ *rand.Rand) {
+			weightMsgCreatePool = defaultWeightMsgCreatePool
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCreatePool,
+		ammsimulation.SimulateMsgCreatePool(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgAddLiquidity int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgAddLiquidity, &weightMsgAddLiquidity, nil,
+		func(_ *rand.Rand) {
+			weightMsgAddLiquidity = defaultWeightMsgAddLiquidity
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgAddLiquidity,
+		ammsimulation.SimulateMsgAddLiquidity(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgRemoveLiquidity int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgRemoveLiquidity, &weightMsgRemoveLiquidity, nil,
+		func(_ *rand.Rand) {
+			weightMsgRemoveLiquidity = defaultWeightMsgRemoveLiquidity
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgRemoveLiquidity,
+		ammsimulation.SimulateMsgRemoveLiquidity(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -59,6 +104,30 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 // ProposalMsgs returns msgs used for governance proposals for simulations.
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgCreatePool,
+			defaultWeightMsgCreatePool,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				ammsimulation.SimulateMsgCreatePool(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgAddLiquidity,
+			defaultWeightMsgAddLiquidity,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				ammsimulation.SimulateMsgAddLiquidity(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgRemoveLiquidity,
+			defaultWeightMsgRemoveLiquidity,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				ammsimulation.SimulateMsgRemoveLiquidity(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
 		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }

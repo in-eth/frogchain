@@ -34977,39 +34977,78 @@ paths:
                       type: string
                       format: uint64
                     poolParam:
+                      title: pool params for swap and exit fees
                       type: object
                       properties:
                         swapFee:
                           type: string
                           format: uint64
+                          title: >-
+                            100% of the swap fee goes to the liquidity providers
+                            — the amount of the 
+
+                            underlying token that can beredeemed by each pool
+                            token increases.
+
+                            this represents the percent * 10^6 for the float. (0
+                            ~ 10^8)
                         exitFee:
                           type: string
                           format: uint64
+                          title: >-
+                            When exiting a pool, the user provides the minimum
+                            amount of tokens they are 
+
+                            willing to receive as they are returning their
+                            shares of the pool. However, 
+
+                            unlike joining a pool, exiting a pool requires the
+                            user to pay the exit fee, 
+
+                            which is set as a param of the pool. The user's
+                            share tokens burnt as result. 
+
+                            Exiting the pool using a single asset is also
+                            possible.
+
+                            this represents the percent * 10^6 for the float. (0
+                            ~ 10^8)
+                      description: >-
+                        PoolParams defined the parameters that will be managed
+                        by the token holders of the pool.
                     poolAssets:
-                      type: object
-                      properties:
-                        token:
-                          type: object
-                          properties:
-                            denom:
-                              type: string
-                            amount:
-                              type: string
-                          description: >-
-                            Coin defines a token with a denomination and an
-                            amount.
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          token:
+                            type: object
+                            properties:
+                              denom:
+                                type: string
+                              amount:
+                                type: string
+                            description: >-
+                              Coin defines a token with a denomination and an
+                              amount.
 
 
-                            NOTE: The amount field is an Int which implements
-                            the custom method
+                              NOTE: The amount field is an Int which implements
+                              the custom method
 
-                            signatures required by gogoproto.
-                        weight:
-                          type: string
-                          format: uint64
-                        reserve:
-                          type: string
-                          format: uint64
+                              signatures required by gogoproto.
+                          weight:
+                            type: string
+                            format: uint64
+                            title: token weight represents the value of token
+                          reserve:
+                            type: string
+                            format: uint64
+                            title: token reserved amount in the pool
+                        description: |-
+                          Pool has my PoolAssets that has token and weight.
+                          weight determines the value of token.
+                      title: assets in the pool
                     shareToken:
                       type: object
                       properties:
@@ -35025,8 +35064,10 @@ paths:
                         custom method
 
                         signatures required by gogoproto.
+                      title: LP token
                     isActivated:
                       type: boolean
+                      title: Pool activate state
               pagination:
                 type: object
                 properties:
@@ -35149,39 +35190,78 @@ paths:
                     type: string
                     format: uint64
                   poolParam:
+                    title: pool params for swap and exit fees
                     type: object
                     properties:
                       swapFee:
                         type: string
                         format: uint64
+                        title: >-
+                          100% of the swap fee goes to the liquidity providers —
+                          the amount of the 
+
+                          underlying token that can beredeemed by each pool
+                          token increases.
+
+                          this represents the percent * 10^6 for the float. (0 ~
+                          10^8)
                       exitFee:
                         type: string
                         format: uint64
+                        title: >-
+                          When exiting a pool, the user provides the minimum
+                          amount of tokens they are 
+
+                          willing to receive as they are returning their shares
+                          of the pool. However, 
+
+                          unlike joining a pool, exiting a pool requires the
+                          user to pay the exit fee, 
+
+                          which is set as a param of the pool. The user's share
+                          tokens burnt as result. 
+
+                          Exiting the pool using a single asset is also
+                          possible.
+
+                          this represents the percent * 10^6 for the float. (0 ~
+                          10^8)
+                    description: >-
+                      PoolParams defined the parameters that will be managed by
+                      the token holders of the pool.
                   poolAssets:
-                    type: object
-                    properties:
-                      token:
-                        type: object
-                        properties:
-                          denom:
-                            type: string
-                          amount:
-                            type: string
-                        description: >-
-                          Coin defines a token with a denomination and an
-                          amount.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        token:
+                          type: object
+                          properties:
+                            denom:
+                              type: string
+                            amount:
+                              type: string
+                          description: >-
+                            Coin defines a token with a denomination and an
+                            amount.
 
 
-                          NOTE: The amount field is an Int which implements the
-                          custom method
+                            NOTE: The amount field is an Int which implements
+                            the custom method
 
-                          signatures required by gogoproto.
-                      weight:
-                        type: string
-                        format: uint64
-                      reserve:
-                        type: string
-                        format: uint64
+                            signatures required by gogoproto.
+                        weight:
+                          type: string
+                          format: uint64
+                          title: token weight represents the value of token
+                        reserve:
+                          type: string
+                          format: uint64
+                          title: token reserved amount in the pool
+                      description: |-
+                        Pool has my PoolAssets that has token and weight.
+                        weight determines the value of token.
+                    title: assets in the pool
                   shareToken:
                     type: object
                     properties:
@@ -35197,8 +35277,10 @@ paths:
                       custom method
 
                       signatures required by gogoproto.
+                    title: LP token
                   isActivated:
                     type: boolean
+                    title: Pool activate state
         default:
           description: An unexpected error response.
           schema:
@@ -70833,6 +70915,35 @@ definitions:
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
     description: Period defines a length of time and amount of coins that will vest.
+  frogchain.amm.MsgAddLiquidityResponse:
+    type: object
+    properties:
+      shareToken:
+        type: string
+        format: uint64
+  frogchain.amm.MsgCreatePoolResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+  frogchain.amm.MsgRemoveLiquidityResponse:
+    type: object
+    properties:
+      receivedTokens:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
   frogchain.amm.Params:
     type: object
     description: Params defines the parameters for the module.
@@ -70843,38 +70954,73 @@ definitions:
         type: string
         format: uint64
       poolParam:
+        title: pool params for swap and exit fees
         type: object
         properties:
           swapFee:
             type: string
             format: uint64
+            title: >-
+              100% of the swap fee goes to the liquidity providers — the amount
+              of the 
+
+              underlying token that can beredeemed by each pool token increases.
+
+              this represents the percent * 10^6 for the float. (0 ~ 10^8)
           exitFee:
             type: string
             format: uint64
+            title: >-
+              When exiting a pool, the user provides the minimum amount of
+              tokens they are 
+
+              willing to receive as they are returning their shares of the pool.
+              However, 
+
+              unlike joining a pool, exiting a pool requires the user to pay the
+              exit fee, 
+
+              which is set as a param of the pool. The user's share tokens burnt
+              as result. 
+
+              Exiting the pool using a single asset is also possible.
+
+              this represents the percent * 10^6 for the float. (0 ~ 10^8)
+        description: >-
+          PoolParams defined the parameters that will be managed by the token
+          holders of the pool.
       poolAssets:
-        type: object
-        properties:
-          token:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
+        type: array
+        items:
+          type: object
+          properties:
+            token:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
 
 
-              NOTE: The amount field is an Int which implements the custom
-              method
+                NOTE: The amount field is an Int which implements the custom
+                method
 
-              signatures required by gogoproto.
-          weight:
-            type: string
-            format: uint64
-          reserve:
-            type: string
-            format: uint64
+                signatures required by gogoproto.
+            weight:
+              type: string
+              format: uint64
+              title: token weight represents the value of token
+            reserve:
+              type: string
+              format: uint64
+              title: token reserved amount in the pool
+          description: |-
+            Pool has my PoolAssets that has token and weight.
+            weight determines the value of token.
+        title: assets in the pool
       shareToken:
         type: object
         properties:
@@ -70887,8 +71033,10 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+        title: LP token
       isActivated:
         type: boolean
+        title: Pool activate state
   frogchain.amm.PoolAsset:
     type: object
     properties:
@@ -70907,18 +71055,49 @@ definitions:
       weight:
         type: string
         format: uint64
+        title: token weight represents the value of token
       reserve:
         type: string
         format: uint64
+        title: token reserved amount in the pool
+    description: |-
+      Pool has my PoolAssets that has token and weight.
+      weight determines the value of token.
   frogchain.amm.PoolParam:
     type: object
     properties:
       swapFee:
         type: string
         format: uint64
+        title: >-
+          100% of the swap fee goes to the liquidity providers — the amount of
+          the 
+
+          underlying token that can beredeemed by each pool token increases.
+
+          this represents the percent * 10^6 for the float. (0 ~ 10^8)
       exitFee:
         type: string
         format: uint64
+        title: >-
+          When exiting a pool, the user provides the minimum amount of tokens
+          they are 
+
+          willing to receive as they are returning their shares of the pool.
+          However, 
+
+          unlike joining a pool, exiting a pool requires the user to pay the
+          exit fee, 
+
+          which is set as a param of the pool. The user's share tokens burnt as
+          result. 
+
+          Exiting the pool using a single asset is also possible.
+
+          this represents the percent * 10^6 for the float. (0 ~ 10^8)
+    description: >-
+      PoolParams defined the parameters that will be managed by the token
+      holders of the pool.
   frogchain.amm.QueryAllPoolResponse:
     type: object
     properties:
@@ -70931,38 +71110,74 @@ definitions:
               type: string
               format: uint64
             poolParam:
+              title: pool params for swap and exit fees
               type: object
               properties:
                 swapFee:
                   type: string
                   format: uint64
+                  title: >-
+                    100% of the swap fee goes to the liquidity providers — the
+                    amount of the 
+
+                    underlying token that can beredeemed by each pool token
+                    increases.
+
+                    this represents the percent * 10^6 for the float. (0 ~ 10^8)
                 exitFee:
                   type: string
                   format: uint64
+                  title: >-
+                    When exiting a pool, the user provides the minimum amount of
+                    tokens they are 
+
+                    willing to receive as they are returning their shares of the
+                    pool. However, 
+
+                    unlike joining a pool, exiting a pool requires the user to
+                    pay the exit fee, 
+
+                    which is set as a param of the pool. The user's share tokens
+                    burnt as result. 
+
+                    Exiting the pool using a single asset is also possible.
+
+                    this represents the percent * 10^6 for the float. (0 ~ 10^8)
+              description: >-
+                PoolParams defined the parameters that will be managed by the
+                token holders of the pool.
             poolAssets:
-              type: object
-              properties:
-                token:
-                  type: object
-                  properties:
-                    denom:
-                      type: string
-                    amount:
-                      type: string
-                  description: >-
-                    Coin defines a token with a denomination and an amount.
+              type: array
+              items:
+                type: object
+                properties:
+                  token:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-                    NOTE: The amount field is an Int which implements the custom
-                    method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-                    signatures required by gogoproto.
-                weight:
-                  type: string
-                  format: uint64
-                reserve:
-                  type: string
-                  format: uint64
+                      signatures required by gogoproto.
+                  weight:
+                    type: string
+                    format: uint64
+                    title: token weight represents the value of token
+                  reserve:
+                    type: string
+                    format: uint64
+                    title: token reserved amount in the pool
+                description: |-
+                  Pool has my PoolAssets that has token and weight.
+                  weight determines the value of token.
+              title: assets in the pool
             shareToken:
               type: object
               properties:
@@ -70978,8 +71193,10 @@ definitions:
                 method
 
                 signatures required by gogoproto.
+              title: LP token
             isActivated:
               type: boolean
+              title: Pool activate state
       pagination:
         type: object
         properties:
@@ -71016,38 +71233,74 @@ definitions:
             type: string
             format: uint64
           poolParam:
+            title: pool params for swap and exit fees
             type: object
             properties:
               swapFee:
                 type: string
                 format: uint64
+                title: >-
+                  100% of the swap fee goes to the liquidity providers — the
+                  amount of the 
+
+                  underlying token that can beredeemed by each pool token
+                  increases.
+
+                  this represents the percent * 10^6 for the float. (0 ~ 10^8)
               exitFee:
                 type: string
                 format: uint64
+                title: >-
+                  When exiting a pool, the user provides the minimum amount of
+                  tokens they are 
+
+                  willing to receive as they are returning their shares of the
+                  pool. However, 
+
+                  unlike joining a pool, exiting a pool requires the user to pay
+                  the exit fee, 
+
+                  which is set as a param of the pool. The user's share tokens
+                  burnt as result. 
+
+                  Exiting the pool using a single asset is also possible.
+
+                  this represents the percent * 10^6 for the float. (0 ~ 10^8)
+            description: >-
+              PoolParams defined the parameters that will be managed by the
+              token holders of the pool.
           poolAssets:
-            type: object
-            properties:
-              token:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
+            type: array
+            items:
+              type: object
+              properties:
+                token:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
 
 
-                  NOTE: The amount field is an Int which implements the custom
-                  method
+                    NOTE: The amount field is an Int which implements the custom
+                    method
 
-                  signatures required by gogoproto.
-              weight:
-                type: string
-                format: uint64
-              reserve:
-                type: string
-                format: uint64
+                    signatures required by gogoproto.
+                weight:
+                  type: string
+                  format: uint64
+                  title: token weight represents the value of token
+                reserve:
+                  type: string
+                  format: uint64
+                  title: token reserved amount in the pool
+              description: |-
+                Pool has my PoolAssets that has token and weight.
+                weight determines the value of token.
+            title: assets in the pool
           shareToken:
             type: object
             properties:
@@ -71063,8 +71316,10 @@ definitions:
               method
 
               signatures required by gogoproto.
+            title: LP token
           isActivated:
             type: boolean
+            title: Pool activate state
   frogchain.amm.QueryParamsResponse:
     type: object
     properties:
