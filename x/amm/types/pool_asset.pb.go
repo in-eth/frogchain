@@ -5,8 +5,6 @@ package types
 
 import (
 	fmt "fmt"
-	types "github.com/cosmos/cosmos-sdk/types"
-	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	io "io"
 	math "math"
@@ -27,9 +25,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Pool has my PoolAssets that has token and weight.
 // weight determines the value of token.
 type PoolAsset struct {
-	Token types.Coin `protobuf:"bytes,1,opt,name=token,proto3" json:"token"`
+	TokenDenom string `protobuf:"bytes,1,opt,name=tokenDenom,proto3" json:"tokenDenom,omitempty"`
 	// token weight represents the value of token
-	Weight uint64 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
+	TokenWeight uint64 `protobuf:"varint,2,opt,name=tokenWeight,proto3" json:"tokenWeight,omitempty"`
+	// token reserve represents the reserve amount of the pool in the module
+	TokenReserve uint64 `protobuf:"varint,3,opt,name=tokenReserve,proto3" json:"tokenReserve,omitempty"`
 }
 
 func (m *PoolAsset) Reset()         { *m = PoolAsset{} }
@@ -65,16 +65,23 @@ func (m *PoolAsset) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PoolAsset proto.InternalMessageInfo
 
-func (m *PoolAsset) GetToken() types.Coin {
+func (m *PoolAsset) GetTokenDenom() string {
 	if m != nil {
-		return m.Token
+		return m.TokenDenom
 	}
-	return types.Coin{}
+	return ""
 }
 
-func (m *PoolAsset) GetWeight() uint64 {
+func (m *PoolAsset) GetTokenWeight() uint64 {
 	if m != nil {
-		return m.Weight
+		return m.TokenWeight
+	}
+	return 0
+}
+
+func (m *PoolAsset) GetTokenReserve() uint64 {
+	if m != nil {
+		return m.TokenReserve
 	}
 	return 0
 }
@@ -86,21 +93,19 @@ func init() {
 func init() { proto.RegisterFile("frogchain/amm/pool_asset.proto", fileDescriptor_fdbae35704c490d2) }
 
 var fileDescriptor_fdbae35704c490d2 = []byte{
-	// 220 bytes of a gzipped FileDescriptorProto
+	// 183 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4b, 0x2b, 0xca, 0x4f,
 	0x4f, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x4f, 0xcc, 0xcd, 0xd5, 0x2f, 0xc8, 0xcf, 0xcf, 0x89, 0x4f,
 	0x2c, 0x2e, 0x4e, 0x2d, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x85, 0xcb, 0xeb, 0x25,
-	0xe6, 0xe6, 0x4a, 0x89, 0xa4, 0xe7, 0xa7, 0xe7, 0x83, 0x65, 0xf4, 0x41, 0x2c, 0x88, 0x22, 0x29,
-	0xb9, 0xe4, 0xfc, 0xe2, 0xdc, 0xfc, 0x62, 0xfd, 0xa4, 0xc4, 0xe2, 0x54, 0xfd, 0x32, 0xc3, 0xa4,
-	0xd4, 0x92, 0x44, 0x43, 0xfd, 0xe4, 0xfc, 0xcc, 0x3c, 0x88, 0xbc, 0x52, 0x14, 0x17, 0x67, 0x40,
-	0x7e, 0x7e, 0x8e, 0x23, 0xc8, 0x5c, 0x21, 0x53, 0x2e, 0xd6, 0x92, 0xfc, 0xec, 0xd4, 0x3c, 0x09,
-	0x46, 0x05, 0x46, 0x0d, 0x6e, 0x23, 0x49, 0x3d, 0x88, 0x66, 0x3d, 0x90, 0x66, 0x3d, 0xa8, 0x66,
-	0x3d, 0xe7, 0xfc, 0xcc, 0x3c, 0x27, 0x96, 0x13, 0xf7, 0xe4, 0x19, 0x82, 0x20, 0xaa, 0x85, 0xc4,
-	0xb8, 0xd8, 0xca, 0x53, 0x33, 0xd3, 0x33, 0x4a, 0x24, 0x98, 0x14, 0x18, 0x35, 0x58, 0x82, 0xa0,
-	0x3c, 0x27, 0xfd, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71,
-	0xc2, 0x63, 0x39, 0x86, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0x12, 0x45, 0x78,
-	0xad, 0x02, 0xec, 0xb9, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0xb0, 0x9b, 0x8c, 0x01, 0x01,
-	0x00, 0x00, 0xff, 0xff, 0x17, 0x4c, 0xe5, 0xa4, 0xfa, 0x00, 0x00, 0x00,
+	0xe6, 0xe6, 0x2a, 0x15, 0x72, 0x71, 0x06, 0xe4, 0xe7, 0xe7, 0x38, 0x82, 0x54, 0x08, 0xc9, 0x71,
+	0x71, 0x95, 0xe4, 0x67, 0xa7, 0xe6, 0xb9, 0xa4, 0xe6, 0xe5, 0xe7, 0x4a, 0x30, 0x2a, 0x30, 0x6a,
+	0x70, 0x06, 0x21, 0x89, 0x08, 0x29, 0x70, 0x71, 0x83, 0x79, 0xe1, 0xa9, 0x99, 0xe9, 0x19, 0x25,
+	0x12, 0x4c, 0x0a, 0x8c, 0x1a, 0x2c, 0x41, 0xc8, 0x42, 0x42, 0x4a, 0x5c, 0x3c, 0x60, 0x6e, 0x50,
+	0x6a, 0x71, 0x6a, 0x51, 0x59, 0xaa, 0x04, 0x33, 0x58, 0x09, 0x8a, 0x98, 0x93, 0xfe, 0x89, 0x47,
+	0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24, 0xc7, 0x38, 0xe1, 0xb1, 0x1c, 0xc3, 0x85,
+	0xc7, 0x72, 0x0c, 0x37, 0x1e, 0xcb, 0x31, 0x44, 0x89, 0x22, 0xdc, 0x5e, 0x01, 0x76, 0x7d, 0x49,
+	0x65, 0x41, 0x6a, 0x71, 0x12, 0x1b, 0xd8, 0xe5, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x43,
+	0x1e, 0xd3, 0x79, 0xdb, 0x00, 0x00, 0x00,
 }
 
 func (m *PoolAsset) Marshal() (dAtA []byte, err error) {
@@ -123,21 +128,23 @@ func (m *PoolAsset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Weight != 0 {
-		i = encodeVarintPoolAsset(dAtA, i, uint64(m.Weight))
+	if m.TokenReserve != 0 {
+		i = encodeVarintPoolAsset(dAtA, i, uint64(m.TokenReserve))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.TokenWeight != 0 {
+		i = encodeVarintPoolAsset(dAtA, i, uint64(m.TokenWeight))
 		i--
 		dAtA[i] = 0x10
 	}
-	{
-		size, err := m.Token.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintPoolAsset(dAtA, i, uint64(size))
+	if len(m.TokenDenom) > 0 {
+		i -= len(m.TokenDenom)
+		copy(dAtA[i:], m.TokenDenom)
+		i = encodeVarintPoolAsset(dAtA, i, uint64(len(m.TokenDenom)))
+		i--
+		dAtA[i] = 0xa
 	}
-	i--
-	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -158,10 +165,15 @@ func (m *PoolAsset) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.Token.Size()
-	n += 1 + l + sovPoolAsset(uint64(l))
-	if m.Weight != 0 {
-		n += 1 + sovPoolAsset(uint64(m.Weight))
+	l = len(m.TokenDenom)
+	if l > 0 {
+		n += 1 + l + sovPoolAsset(uint64(l))
+	}
+	if m.TokenWeight != 0 {
+		n += 1 + sovPoolAsset(uint64(m.TokenWeight))
+	}
+	if m.TokenReserve != 0 {
+		n += 1 + sovPoolAsset(uint64(m.TokenReserve))
 	}
 	return n
 }
@@ -203,9 +215,9 @@ func (m *PoolAsset) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenDenom", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPoolAsset
@@ -215,30 +227,29 @@ func (m *PoolAsset) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthPoolAsset
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthPoolAsset
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.Token.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.TokenDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenWeight", wireType)
 			}
-			m.Weight = 0
+			m.TokenWeight = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPoolAsset
@@ -248,7 +259,26 @@ func (m *PoolAsset) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Weight |= uint64(b&0x7F) << shift
+				m.TokenWeight |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenReserve", wireType)
+			}
+			m.TokenReserve = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPoolAsset
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TokenReserve |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

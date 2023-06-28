@@ -24,14 +24,19 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	// castShareAmount is the cast amount for shares
 	// castShareAmount = mulAll(tokenAmount)
 	castShareAmount := math.NewInt(0)
-	for _, poolAsset := range msg.PoolAssets {
-		collateral := sdk.NewCoins(poolAsset.Token)
+	for i, assetAmount := range msg.AssetAmounts {
+		collateral := sdk.NewCoins(
+			sdk.NewCoin(
+				msg.PoolAssets[i].TokenDenom,
+				sdk.NewInt(int64(assetAmount)),
+			),
+		)
 		sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, collateral)
 		if sdkError != nil {
 			return nil, sdkError
 		}
 
-		castShareAmount = castShareAmount.Mul(poolAsset.Token.Amount)
+		castShareAmount = castShareAmount.Mul(math.NewInt(int64(assetAmount)))
 	}
 
 	// shareAmount is share token amount for liquidity

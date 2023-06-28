@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
 
@@ -22,10 +23,14 @@ func CmdCreatePool() *cobra.Command {
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argPoolParam := new(types.PoolParam)
+
+			// unmarshal PoolParam
 			err = json.Unmarshal([]byte(args[0]), argPoolParam)
 			if err != nil {
 				return err
 			}
+
+			// unmarshal PoolAssets
 			argCastPoolAssets := strings.Split(args[1], listSeparator)
 			argPoolAssets := make([]*types.PoolAsset, len(argCastPoolAssets))
 			for i, arg := range argCastPoolAssets {
@@ -36,8 +41,16 @@ func CmdCreatePool() *cobra.Command {
 				}
 				argPoolAssets[i] = argPoolAsset
 			}
-			if err != nil {
-				return err
+
+			// unmarshal asset Amounts
+			argCastAssetAmounts := strings.Split(args[2], listSeparator)
+			argAssetAmounts := make([]uint64, len(argCastAssetAmounts))
+			for i, arg := range argCastAssetAmounts {
+				value, err := cast.ToUint64E(arg)
+				if err != nil {
+					return err
+				}
+				argAssetAmounts[i] = value
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -49,6 +62,7 @@ func CmdCreatePool() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				argPoolParam,
 				argPoolAssets,
+				argAssetAmounts,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

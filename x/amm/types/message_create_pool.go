@@ -11,11 +11,12 @@ const TypeMsgCreatePool = "create_pool"
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolParam *PoolParam, poolAssets []*PoolAsset) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolParam *PoolParam, poolAssets []*PoolAsset, assetAmounts []uint64) *MsgCreatePool {
 	return &MsgCreatePool{
-		Creator:    creator,
-		PoolParam:  poolParam,
-		PoolAssets: poolAssets,
+		Creator:      creator,
+		PoolParam:    poolParam,
+		PoolAssets:   poolAssets,
+		AssetAmounts: assetAmounts,
 	}
 }
 
@@ -57,14 +58,9 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	}
 
 	for _, poolAsset := range msg.PoolAssets {
-		weight := poolAsset.Weight
+		weight := poolAsset.TokenWeight
 		if weight == 0 {
 			return ErrWeightZero
-		}
-
-		token := poolAsset.Token
-		if !token.IsValid() {
-			return sdkerrors.Wrapf(ErrInvalidAddress, "create | invalid pool token address (%s)", fmt.Sprint(exitFeeAmount))
 		}
 	}
 	return nil

@@ -17,10 +17,13 @@ service Msg {
   rpc SwapExactTokensForTokens (MsgSwapExactTokensForTokens) returns (MsgSwapExactTokensForTokensResponse);
   rpc SwapTokensForExactTokens (MsgSwapTokensForExactTokens) returns (MsgSwapTokensForExactTokensResponse);
 }
+
 message MsgCreatePool {
-           string    creator    = 1;
-           PoolParam poolParam  = 2;
-  repeated PoolAsset poolAssets = 3;
+           string    creator      = 1;
+           PoolParam poolParam    = 2;
+  repeated PoolAsset poolAssets   = 3;
+  // assetAmounts : amounts for sending assets to pool
+  repeated uint64    assetAmounts = 4;
 }
 
 message MsgCreatePoolResponse {
@@ -49,6 +52,7 @@ message MsgRemoveLiquidityResponse {
   repeated cosmos.base.v1beta1.Coin receivedTokens = 1 [(gogoproto.nullable) = false];
 }
 
+// SwapExactTokensForTokens message is for providing exact tokens to get tokens
 message MsgSwapExactTokensForTokens {
            string                   creator      = 1;
            uint64                   poolId       = 2;
@@ -63,6 +67,7 @@ message MsgSwapExactTokensForTokensResponse {
   uint64 amountOut = 1;
 }
 
+// SwapExactTokensForTokens message is for providing tokens to get exact tokens
 message MsgSwapTokensForExactTokens {
            string                   creator   = 1;
            uint64                   poolId    = 2;
