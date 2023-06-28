@@ -24,10 +24,14 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// Pool has my PoolAssets that has token and weight.
+// weight determines the value of token.
 type PoolAsset struct {
-	Token   types.Coin `protobuf:"bytes,1,opt,name=token,proto3" json:"token"`
-	Weight  uint64     `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
-	Reserve uint64     `protobuf:"varint,3,opt,name=reserve,proto3" json:"reserve,omitempty"`
+	Token types.Coin `protobuf:"bytes,1,opt,name=token,proto3" json:"token"`
+	// token weight represents the value of token
+	Weight uint64 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
+	// token reserved amount in the pool
+	Reserve uint64 `protobuf:"varint,3,opt,name=reserve,proto3" json:"reserve,omitempty"`
 }
 
 func (m *PoolAsset) Reset()         { *m = PoolAsset{} }

@@ -22,8 +22,18 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// PoolParams defined the parameters that will be managed by the token holders of the pool.
 type PoolParam struct {
+	// 100% of the swap fee goes to the liquidity providers — the amount of the
+	// underlying token that can beredeemed by each pool token increases.
+	// this represents the percent * 10^6 for the float. (0 ~ 10^8)
 	SwapFee uint64 `protobuf:"varint,1,opt,name=swapFee,proto3" json:"swapFee,omitempty"`
+	// When exiting a pool, the user provides the minimum amount of tokens they are
+	// willing to receive as they are returning their shares of the pool. However,
+	// unlike joining a pool, exiting a pool requires the user to pay the exit fee,
+	// which is set as a param of the pool. The user's share tokens burnt as result.
+	// Exiting the pool using a single asset is also possible.
+	// this represents the percent * 10^6 for the float. (0 ~ 10^8)
 	ExitFee uint64 `protobuf:"varint,2,opt,name=exitFee,proto3" json:"exitFee,omitempty"`
 }
 
