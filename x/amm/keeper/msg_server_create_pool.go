@@ -6,7 +6,6 @@ import (
 	"frogchain/x/amm/types"
 
 	"cosmossdk.io/math"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,6 +13,13 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	count := k.GetPoolCount(ctx)
+
+	// pool data
+	var pool = types.Pool{
+		PoolParam:   msg.PoolParam,
+		PoolAssets:  msg.PoolAssets,
+		IsActivated: true,
+	}
 
 	// get message creator
 	creator, err := sdk.AccAddressFromBech32(msg.Creator)
@@ -24,19 +30,24 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	// castShareAmount is the cast amount for shares
 	// castShareAmount = mulAll(tokenAmount)
 	castShareAmount := math.NewInt(0)
+	collateral := sdk.NewCoins()
 	for i, assetAmount := range msg.AssetAmounts {
-		collateral := sdk.NewCoins(
+		collateral.Add(
 			sdk.NewCoin(
 				msg.PoolAssets[i].TokenDenom,
 				sdk.NewInt(int64(assetAmount)),
 			),
 		)
-		sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, collateral)
-		if sdkError != nil {
-			return nil, sdkError
-		}
+
+		pool.PoolAssets[i].TokenReserve = assetAmount
 
 		castShareAmount = castShareAmount.Mul(math.NewInt(int64(assetAmount)))
+	}
+
+	// send asset tokens from creator to module
+	sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, collateral)
+	if sdkError != nil {
+		return nil, sdkError
 	}
 
 	// shareAmount is share token amount for liquidity
@@ -52,6 +63,10 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, err
 	}
 
+	// share token data
+	pool.ShareToken.TokenDenom = types.ShareTokenIndex(count)
+	pool.ShareToken.TokenReserve = shareAmount.Uint64()
+
 	// minimun liquidity is truncated to maintain pool
 	minLiquidity := sdk.NewInt(types.MINIMUM_LIQUIDITY)
 
@@ -65,27 +80,15 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	)
 
 	// send share_token to the pool creator
-	sdkError := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creator, creatorShareToken)
+	sdkError = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creator, creatorShareToken)
 	if sdkError != nil {
 		return nil, sdkError
 	}
 
-	// pool data
-	var pool = types.Pool{
-		Id:          count,
-		PoolParam:   msg.PoolParam,
-		PoolAssets:  msg.PoolAssets,
-		ShareToken:  shareToken,
-		IsActivated: true,
-	}
-
-	// store pool in pool id
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PoolKey))
-	appendedValue := k.cdc.MustMarshal(&pool)
-	store.Set(GetPoolIDBytes(pool.Id), appendedValue)
-	k.SetPoolCount(ctx, count+1)
+	// append pool
+	poolId := k.AppendPool(ctx, pool)
 
 	return &types.MsgCreatePoolResponse{
-		Id: int32(pool.Id),
+		Id: poolId,
 	}, nil
 }

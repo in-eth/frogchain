@@ -3,7 +3,7 @@ package frogchain.amm;
 
 option go_package = "frogchain/x/amm/types";
 import "frogchain/amm/pool_param.proto"; 
-import "frogchain/amm/pool_asset.proto"; 
+import "frogchain/amm/pool_token.proto"; 
 import "gogoproto/gogo.proto"; 
 import "cosmos/base/v1beta1/coin.proto"; 
 
@@ -14,10 +14,10 @@ message Pool {
   PoolParam poolParam = 2; 
 
   // assets in the pool
-  repeated PoolAsset poolAssets = 3; 
+  repeated PoolToken poolAssets = 3; 
 
   // LP token
-  cosmos.base.v1beta1.Coin shareToken = 4 [(gogoproto.nullable) = false]; 
+  PoolToken shareToken = 4 [(gogoproto.nullable) = false]; 
 
   // min liquidity is the minimum amount of share token to maintain the pool
   uint64 mininumliquidity = 5;

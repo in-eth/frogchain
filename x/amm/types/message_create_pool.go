@@ -11,7 +11,7 @@ const TypeMsgCreatePool = "create_pool"
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolParam *PoolParam, poolAssets []*PoolAsset, assetAmounts []uint64) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolParam *PoolParam, poolAssets []*PoolToken, assetAmounts []uint64) *MsgCreatePool {
 	return &MsgCreatePool{
 		Creator:      creator,
 		PoolParam:    poolParam,
@@ -48,12 +48,12 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	}
 
 	swapFeeAmount := msg.PoolParam.SwapFee
-	if swapFeeAmount > 10^18 {
+	if swapFeeAmount > 10^8 {
 		return sdkerrors.Wrapf(ErrFeeOverflow, "create | invalid swap fee (%s)", fmt.Sprint(swapFeeAmount))
 	}
 
 	exitFeeAmount := msg.PoolParam.SwapFee
-	if exitFeeAmount > 10^18 {
+	if exitFeeAmount > 10^8 {
 		return sdkerrors.Wrapf(ErrFeeOverflow, "create | invalid exit fee (%s)", fmt.Sprint(exitFeeAmount))
 	}
 

@@ -5,7 +5,7 @@ option go_package = "frogchain/x/amm/types";
 
 // Pool has my PoolAssets that has token and weight.
 // weight determines the value of token.
-message PoolAsset {
+message PoolToken {
   
   string tokenDenom = 1; 
 
