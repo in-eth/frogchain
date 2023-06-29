@@ -52,5 +52,9 @@ func (msg *MsgSwapExactTokensForTokens) ValidateBasic() error {
 
 	// }
 
+	if len(msg.Path) == 1 {
+		return ErrInvalidPath
+	}
+
 	return nil
 }

@@ -17,4 +17,5 @@ var (
 	ErrInvalidAmount   = sdkerrors.Register(ModuleName, 1106, "invalid amount")
 	ErrInvalidDeadline = sdkerrors.Register(ModuleName, 1107, "deadline cannot be parsed: %s")
 	ErrDeadlinePassed  = sdkerrors.Register(ModuleName, 1108, "deadline is passed: %s %s")
+	ErrInvalidPath     = sdkerrors.Register(ModuleName, 1109, "invalid path for swap")
 )

@@ -46,5 +46,9 @@ func (msg *MsgSwapTokensForExactTokens) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
+	if len(msg.Path) == 1 {
+		return ErrInvalidPath
+	}
 	return nil
 }

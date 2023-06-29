@@ -26,6 +26,14 @@ const (
 
 	// TOTALPERCENT defines the 100% amount(this is for fee calc)
 	TOTALPERCENT = 10 ^ 8
+
+	// SWAP_EXACT_TOKEN_IN defines the type of token.
+	// get output token amount for exact input token
+	SWAP_EXACT_TOKEN_IN = 1
+
+	// SWAP_EXACT_TOKEN_OUT defines the type of token.
+	// get input token amount for exact output token
+	SWAP_EXACT_TOKEN_OUT = 2
 )
 
 func KeyPrefix(p string) []byte {
