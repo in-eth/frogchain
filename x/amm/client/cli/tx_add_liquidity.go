@@ -4,12 +4,13 @@ import (
 	"strconv"
 
 	"frogchain/x/amm/types"
+	"strings"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 var _ = strconv.Itoa(0)
@@ -20,10 +21,14 @@ func CmdAddLiquidity() *cobra.Command {
 		Short: "Broadcast message add-liquidity",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
+
+			// get pool id
 			argPoolId, err := cast.ToUint64E(args[0])
 			if err != nil {
 				return err
 			}
+
+			// get desired token amounts to add liquidity
 			argCastDesiredAmounts := strings.Split(args[1], listSeparator)
 			argDesiredAmounts := make([]uint64, len(argCastDesiredAmounts))
 			for i, arg := range argCastDesiredAmounts {
@@ -33,6 +38,8 @@ func CmdAddLiquidity() *cobra.Command {
 				}
 				argDesiredAmounts[i] = value
 			}
+
+			// get minimum token amounts to add liquidity
 			argCastMinAmounts := strings.Split(args[2], listSeparator)
 			argMinAmounts := make([]uint64, len(argCastMinAmounts))
 			for i, arg := range argCastMinAmounts {

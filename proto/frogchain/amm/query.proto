@@ -7,6 +7,8 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "frogchain/amm/params.proto";
 import "frogchain/amm/pool.proto";
+import "frogchain/amm/pool_param.proto";
+import "frogchain/amm/pool_token.proto";
 
 option go_package = "frogchain/x/amm/types";
 
@@ -26,6 +28,42 @@ service Query {
   }
   rpc PoolAll (QueryAllPoolRequest) returns (QueryAllPoolResponse) {
     option (google.api.http).get = "/frogchain/amm/pool";
+  
+  }
+  
+  // Queries a list of GetPoolParam items.
+  rpc GetPoolParam (QueryGetPoolParamRequest) returns (QueryGetPoolParamResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_param/{id}";
+  
+  }
+  
+  // Queries a list of GetPoolTotalLiquidity items.
+  rpc GetPoolTotalLiquidity (QueryGetPoolTotalLiquidityRequest) returns (QueryGetPoolTotalLiquidityResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_total_liquidity/{id}";
+  
+  }
+  
+  // Queries a list of GetPoolTokenDenom items.
+  rpc GetPoolTokenDenom (QueryGetPoolTokenDenomRequest) returns (QueryGetPoolTokenDenomResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_token_denom/{id}";
+  
+  }
+  
+  // Queries a list of GetPoolShareTokenDenom items.
+  rpc GetPoolShareTokenDenom (QueryGetPoolShareTokenDenomRequest) returns (QueryGetPoolShareTokenDenomResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_share_token_denom/{id}";
+  
+  }
+  
+  // Queries a list of GetPoolAssetReserve items.
+  rpc GetPoolAssetReserve (QueryGetPoolAssetReserveRequest) returns (QueryGetPoolAssetReserveResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_asset_reserve/{id}/{assetId}";
+  
+  }
+  
+  // Queries a list of GetPoolAssets items.
+  rpc GetPoolAssets (QueryGetPoolAssetsRequest) returns (QueryGetPoolAssetsResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_assets/{id}";
   
   }
 }
@@ -54,5 +92,55 @@ message QueryAllPoolRequest {
 message QueryAllPoolResponse {
   repeated Pool                                   Pool       = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPoolParamRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolParamResponse {
+  PoolParam poolParam = 1;
+}
+
+message QueryGetPoolTotalLiquidityRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolTotalLiquidityResponse {
+  uint64 totalLiquidity = 1;
+}
+
+message QueryGetPoolTokenDenomRequest {
+  uint64 id      = 1;
+  uint64 assetId = 2;
+}
+
+message QueryGetPoolTokenDenomResponse {
+  string tokenDenom = 1;
+}
+
+message QueryGetPoolShareTokenDenomRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolShareTokenDenomResponse {
+  string shareDenom = 1;
+}
+
+message QueryGetPoolAssetReserveRequest {
+  uint64 id      = 1;
+  uint64 assetId = 2;
+}
+
+message QueryGetPoolAssetReserveResponse {
+  uint64 reserve = 1;
+}
+
+message QueryGetPoolAssetsRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolAssetsResponse {
+  repeated PoolToken assets = 1;
 }
 

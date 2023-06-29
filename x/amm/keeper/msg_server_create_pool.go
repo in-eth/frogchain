@@ -12,8 +12,6 @@ import (
 func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	count := k.GetPoolCount(ctx)
-
 	// pool data
 	var pool = types.Pool{
 		PoolParam:   msg.PoolParam,
@@ -21,15 +19,15 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		IsActivated: true,
 	}
 
+	// append pool
+	poolId := k.AppendPool(ctx, pool)
+
 	// get message creator
-	creator, err := sdk.AccAddressFromBech32(msg.Creator)
-	if err != nil {
-		panic(err)
-	}
+	creator, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	// castShareAmount is the cast amount for shares
 	// castShareAmount = mulAll(tokenAmount)
-	castShareAmount := math.NewInt(0)
+	castShareAmount := math.NewInt(1)
 	collateral := sdk.NewCoins()
 	for i, assetAmount := range msg.AssetAmounts {
 		collateral.Add(
@@ -39,7 +37,12 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 			),
 		)
 
-		pool.PoolAssets[i].TokenReserve = assetAmount
+		poolAsset := msg.PoolAssets[i]
+		poolAsset.TokenReserve = assetAmount
+		err := k.SetPoolToken(ctx, poolId, uint64(i), *poolAsset)
+		if err != nil {
+			return nil, err
+		}
 
 		castShareAmount = castShareAmount.Mul(math.NewInt(int64(assetAmount)))
 	}
@@ -54,18 +57,25 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	// shareAmount ^ 2 = castShareAmount = mulAll(tokenAmount)
 	shareAmount := math.Int.BigInt(castShareAmount).Sqrt(castShareAmount.BigInt())
 
-	// mint share token
-	shareToken := sdk.NewCoin(types.ShareTokenIndex(count), sdk.NewInt(shareAmount.Int64()))
-
-	if err := k.bankKeeper.MintCoins(
-		ctx, types.ModuleName, sdk.NewCoins(shareToken),
-	); err != nil {
+	// set share token data
+	shareToken := types.PoolToken{
+		TokenDenom:   types.ShareTokenIndex(poolId),
+		TokenWeight:  1,
+		TokenReserve: math.NewIntFromBigInt(shareAmount).Uint64(),
+	}
+	err := k.SetPoolShareToken(ctx, poolId, shareToken)
+	if err != nil {
 		return nil, err
 	}
 
-	// share token data
-	pool.ShareToken.TokenDenom = types.ShareTokenIndex(count)
-	pool.ShareToken.TokenReserve = shareAmount.Uint64()
+	// mint share token
+	newShareToken := sdk.NewCoin(shareToken.TokenDenom, sdk.NewInt(shareAmount.Int64()))
+
+	if err := k.bankKeeper.MintCoins(
+		ctx, types.ModuleName, sdk.NewCoins(newShareToken),
+	); err != nil {
+		return nil, err
+	}
 
 	// minimun liquidity is truncated to maintain pool
 	minLiquidity := sdk.NewInt(types.MINIMUM_LIQUIDITY)
@@ -74,7 +84,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	creatorShareAmount := shareAmount.Sub(shareAmount, math.Int.BigInt(minLiquidity))
 	creatorShareToken := sdk.NewCoins(
 		sdk.NewCoin(
-			types.ShareTokenIndex(count),
+			shareToken.TokenDenom,
 			sdk.NewInt(creatorShareAmount.Int64()),
 		),
 	)
@@ -84,9 +94,6 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	if sdkError != nil {
 		return nil, sdkError
 	}
-
-	// append pool
-	poolId := k.AppendPool(ctx, pool)
 
 	return &types.MsgCreatePoolResponse{
 		Id: poolId,

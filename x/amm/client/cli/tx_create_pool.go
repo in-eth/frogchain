@@ -18,13 +18,14 @@ var _ = strconv.Itoa(0)
 
 func CmdCreatePool() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-pool [pool-param] [pool-assets]",
+		Use:   "create-pool [pool-param] [pool-assets] [asset-amounts]",
 		Short: "Broadcast message create-pool",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argPoolParam := new(types.PoolParam)
 
 			// unmarshal PoolParam
+			argPoolParam := new(types.PoolParam)
+
 			err = json.Unmarshal([]byte(args[0]), argPoolParam)
 			if err != nil {
 				return err
@@ -32,9 +33,9 @@ func CmdCreatePool() *cobra.Command {
 
 			// unmarshal PoolAssets
 			argCastPoolAssets := strings.Split(args[1], listSeparator)
-			argPoolAssets := make([]*types.PoolAsset, len(argCastPoolAssets))
+			argPoolAssets := make([]*types.PoolToken, len(argCastPoolAssets))
 			for i, arg := range argCastPoolAssets {
-				argPoolAsset := new(types.PoolAsset)
+				argPoolAsset := new(types.PoolToken)
 				err = json.Unmarshal([]byte(arg), argPoolAssets[i])
 				if err != nil {
 					return err
@@ -42,7 +43,7 @@ func CmdCreatePool() *cobra.Command {
 				argPoolAssets[i] = argPoolAsset
 			}
 
-			// unmarshal asset Amounts
+			// get asset Amounts
 			argCastAssetAmounts := strings.Split(args[2], listSeparator)
 			argAssetAmounts := make([]uint64, len(argCastAssetAmounts))
 			for i, arg := range argCastAssetAmounts {

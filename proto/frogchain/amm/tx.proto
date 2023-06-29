@@ -42,10 +42,10 @@ message MsgAddLiquidityResponse {
 }
 
 message MsgRemoveLiquidity {
-  string creator       = 1;
-  uint64 poolId        = 2;
-  uint64 desiredAmount = 3;
-  uint64 minAmount     = 4;
+           string creator       = 1;
+           uint64 poolId        = 2;
+           uint64 liquidity     = 3;
+  repeated uint64 minAmounts    = 4;
 }
 
 message MsgRemoveLiquidityResponse {
@@ -54,13 +54,13 @@ message MsgRemoveLiquidityResponse {
 
 // SwapExactTokensForTokens message is for providing exact tokens to get tokens
 message MsgSwapExactTokensForTokens {
-           string                   creator      = 1;
-           uint64                   poolId       = 2;
-           uint64                   amountIn     = 3;
-           uint64                   amountOutMin = 4;
-  repeated cosmos.base.v1beta1.Coin path         = 5 [(gogoproto.nullable) = false];
-           string                   to           = 6;
-           string                   deadline     = 7;
+           string creator      = 1;
+           uint64 poolId       = 2;
+           uint64 amountIn     = 3;
+           uint64 amountOutMin = 4;
+  repeated string path         = 5 [(gogoproto.nullable) = false];
+           string to           = 6;
+           string deadline     = 7;
 }
 
 message MsgSwapExactTokensForTokensResponse {
@@ -69,12 +69,12 @@ message MsgSwapExactTokensForTokensResponse {
 
 // SwapExactTokensForTokens message is for providing tokens to get exact tokens
 message MsgSwapTokensForExactTokens {
-           string                   creator   = 1;
-           uint64                   poolId    = 2;
-           uint64                   amountOut = 3;
-  repeated cosmos.base.v1beta1.Coin path      = 4 [(gogoproto.nullable) = false];
-           string                   to        = 5;
-           string                   deadline  = 6;
+           string creator   = 1;
+           uint64 poolId    = 2;
+           uint64 amountOut = 3;
+  repeated string path      = 4 [(gogoproto.nullable) = false];
+           string to        = 5;
+           string deadline  = 6;
 }
 
 message MsgSwapTokensForExactTokensResponse {
