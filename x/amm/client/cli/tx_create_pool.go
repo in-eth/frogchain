@@ -42,7 +42,7 @@ func CmdCreatePool() *cobra.Command {
 				argPoolAssets[i] = argPoolAsset
 			}
 
-			// unmarshal asset Amounts
+			// get asset Amounts
 			argCastAssetAmounts := strings.Split(args[2], listSeparator)
 			argAssetAmounts := make([]uint64, len(argCastAssetAmounts))
 			for i, arg := range argCastAssetAmounts {

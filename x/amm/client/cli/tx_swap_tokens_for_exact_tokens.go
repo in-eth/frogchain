@@ -2,13 +2,13 @@ package cli
 
 import (
 	"strconv"
+	"strings"
 
 	"frogchain/x/amm/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
@@ -21,19 +21,26 @@ func CmdSwapTokensForExactTokens() *cobra.Command {
 		Short: "Broadcast message swap-tokens-for-exact-tokens",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
+
+			// get pool id
 			argPoolId, err := cast.ToUint64E(args[0])
 			if err != nil {
 				return err
 			}
+
+			// get output token amount out
 			argAmountOut, err := cast.ToUint64E(args[1])
 			if err != nil {
 				return err
 			}
-			argPath, err := sdk.ParseCoinsNormalized(args[2])
-			if err != nil {
-				return err
-			}
+
+			// unmarshal token path
+			argPath := strings.Split(args[2], listSeparator)
+
+			// get receiver address
 			argTo := args[3]
+
+			// get swap deadline
 			argDeadline := args[4]
 
 			clientCtx, err := client.GetClientTxContext(cmd)

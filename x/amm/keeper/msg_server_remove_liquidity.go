@@ -16,49 +16,56 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	// TODO: Handling the message
 
-	// get pool
-	pool, found := k.GetPool(ctx, msg.PoolId)
-	if !found {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", msg.PoolId)
+	// get pool param
+	poolParam, err := k.GetPoolParam(ctx, msg.PoolId)
+	if err != nil {
+		return nil, err
+	}
+
+	// get pool share token
+	shareToken, err := k.GetPoolShareToken(ctx, msg.PoolId)
+	if err != nil {
+		return nil, err
 	}
 
 	liquidityProvider, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	// burn share token, amount is desiredAmount
-	liquidity := msg.Liquidity * pool.PoolParam.ExitFee / (10 ^ 8)
+	fee := msg.Liquidity * poolParam.ExitFee / (types.TOTALPERCENT)
+	liquidity := msg.Liquidity - fee
 
-	shareToken := sdk.NewCoin(
+	burnShareToken := sdk.NewCoin(
 		types.ShareTokenIndex(msg.PoolId),
 		sdk.NewInt(int64(liquidity)),
 	)
 
 	//move share tokens from account to module
-	err := k.bankKeeper.SendCoinsFromAccountToModule(
+	err = k.bankKeeper.SendCoinsFromAccountToModule(
 		ctx,
 		liquidityProvider,
 		types.ModuleName,
-		sdk.NewCoins(shareToken),
+		sdk.NewCoins(burnShareToken),
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	// burn share token except fee
-	err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(shareToken))
+	err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(burnShareToken))
 	if err != nil {
 		return nil, err
 	}
 
-	// send fee share token to feeCollector
-	fee := msg.Liquidity - liquidity
-	feeCollector, err := sdk.AccAddressFromBech32(pool.PoolParam.FeeCollector)
+	// get pool fee collector
+	feeCollector, err := sdk.AccAddressFromBech32(poolParam.FeeCollector)
 	if err != nil {
 		return nil, err
 	}
 
+	// send fee share token to fee collector
 	err = k.bankKeeper.SendCoins(ctx, liquidityProvider, feeCollector, sdk.NewCoins(
 		sdk.NewCoin(
-			types.ShareTokenIndex(msg.PoolId),
+			shareToken.TokenDenom,
 			sdk.NewInt(int64(fee)),
 		),
 	))
@@ -66,12 +73,24 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		return nil, err
 	}
 
-	pool.ShareToken.TokenReserve -= liquidity
+	// update pool share token data
+	shareToken.TokenReserve -= liquidity
+	err = k.SetPoolShareToken(ctx, msg.PoolId, shareToken)
+	if err != nil {
+		return nil, err
+	}
 
 	// send assets from pool to account
 	receiveTokens := sdk.NewCoins()
 	for i, minAmount := range msg.MinAmounts {
-		castAmount := liquidity * pool.PoolAssets[i].TokenReserve / pool.ShareToken.TokenReserve
+		// get pool asset
+		poolAsset, err := k.GetPoolToken(ctx, msg.PoolId, uint64(i))
+		if err != nil {
+			return nil, err
+		}
+
+		// calculate token amount for liquidity
+		castAmount := liquidity * poolAsset.TokenReserve / shareToken.TokenReserve
 
 		if castAmount < minAmount {
 			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
@@ -84,14 +103,17 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 		receiveTokens.Add(
 			sdk.NewCoin(
-				pool.PoolAssets[i].TokenDenom,
+				poolAsset.TokenDenom,
 				math.NewInt(int64(castAmount)),
 			),
 		)
 
-		pool.PoolAssets[i].TokenReserve -= castAmount
+		// update pool asset data
+		poolAsset.TokenReserve -= castAmount
+		k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
 	}
 
+	// send tokens from module to account
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
@@ -101,9 +123,6 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	if err != nil {
 		return nil, err
 	}
-
-	// update pool
-	k.SetPool(ctx, pool)
 
 	return &types.MsgRemoveLiquidityResponse{
 		ReceivedTokens: receiveTokens,

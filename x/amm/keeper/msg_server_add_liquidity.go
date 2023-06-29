@@ -3,8 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
-
-	"cosmossdk.io/math"
+	"math"
 
 	"frogchain/x/amm/types"
 
@@ -17,18 +16,26 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 
 	// TODO: Handling the message
 
-	// get pool
-	pool, found := k.GetPool(ctx, msg.PoolId)
-	if !found {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", msg.PoolId)
+	// get share token from pool with pool id
+	shareToken, err := k.GetPoolShareToken(ctx, msg.PoolId)
+	if err != nil {
+		return nil, err
 	}
 
+	// get provider address from msg.Creater
 	liquidityProvider, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	// get liquidity amount
-	liquidityAmount := msg.DesiredAmounts[0] * pool.ShareToken.TokenReserve / pool.PoolAssets[0].TokenReserve
+	// liquidity amount is the minimum value of the list with this formula
+	// liquidityAmount = tokenAmountIn * shareTokenAmount / tokenAmount
+	liquidityAmount := uint64(math.MaxUint64)
 	for i, desiredAmount := range msg.DesiredAmounts {
-		castAmount := desiredAmount * pool.ShareToken.TokenReserve / pool.PoolAssets[i].TokenReserve
+		poolAsset, err := k.GetPoolToken(ctx, msg.PoolId, uint64(i))
+		if err != nil {
+			return nil, err
+		}
+
+		castAmount := desiredAmount * shareToken.TokenReserve / poolAsset.TokenReserve
 		if liquidityAmount > castAmount {
 			liquidityAmount = castAmount
 		}
@@ -38,11 +45,18 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 		return nil, sdkerrors.Wrapf(types.ErrInvalidAmount, "no liquidity with amounts you deposit")
 	}
 
-	// send assets from account to pool
+	// calculate asset amounts from account to pool and update pool data
 	collateral := sdk.NewCoins()
 	for i, minAmount := range msg.MinAmounts {
-		castAmount := liquidityAmount * pool.PoolAssets[i].TokenReserve / pool.ShareToken.TokenReserve
+		poolAsset, err := k.GetPoolToken(ctx, msg.PoolId, uint64(i))
+		if err != nil {
+			return nil, err
+		}
 
+		// input token amount calculated by liquidity amount
+		castAmount := liquidityAmount * poolAsset.TokenReserve / shareToken.TokenReserve
+
+		// if input token amount is below min amount, then revert
 		if castAmount < minAmount {
 			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
 				"calculated amount is below minimum, %d, %d, %d",
@@ -54,15 +68,20 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 
 		collateral.Add(
 			sdk.NewCoin(
-				pool.PoolAssets[i].TokenDenom,
-				math.NewInt(int64(castAmount)),
+				poolAsset.TokenDenom,
+				sdk.NewInt(int64(castAmount)),
 			),
 		)
 
-		pool.PoolAssets[i].TokenReserve += castAmount
+		poolAsset.TokenReserve += castAmount
+		err = k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	err := k.bankKeeper.SendCoinsFromAccountToModule(
+	// send assets from account to pool
+	err = k.bankKeeper.SendCoinsFromAccountToModule(
 		ctx,
 		liquidityProvider,
 		types.ModuleName,
@@ -73,33 +92,34 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	// mint new share token, amount is liquidityAmount
-	shareToken := sdk.NewCoin(
-		types.ShareTokenIndex(msg.PoolId),
+	newShareToken := sdk.NewCoin(
+		shareToken.TokenDenom,
 		sdk.NewInt(int64(liquidityAmount)),
 	)
 
-	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(shareToken))
+	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(newShareToken))
 	if err != nil {
 		return nil, err
 	}
 
-	pool.ShareToken.TokenReserve += liquidityAmount
+	shareToken.TokenReserve += liquidityAmount
+	err = k.SetPoolShareToken(ctx, msg.PoolId, shareToken)
+	if err != nil {
+		return nil, err
+	}
 
 	// send share token to liquidity provider
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
 		liquidityProvider,
-		sdk.NewCoins(shareToken),
+		sdk.NewCoins(newShareToken),
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	// update pool
-	k.SetPool(ctx, pool)
-
 	return &types.MsgAddLiquidityResponse{
-		ShareToken: &shareToken,
+		ShareToken: &newShareToken,
 	}, nil
 }

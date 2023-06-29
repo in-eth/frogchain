@@ -4,8 +4,10 @@ import (
 	"encoding/binary"
 
 	"frogchain/x/amm/types"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // GetPoolCount get the total number of pool
@@ -103,4 +105,68 @@ func GetPoolIDBytes(id uint64) []byte {
 // GetPoolIDFromBytes returns ID in uint64 format from a byte array
 func GetPoolIDFromBytes(bz []byte) uint64 {
 	return binary.BigEndian.Uint64(bz)
+}
+
+func (k Keeper) GetPoolToken(ctx sdk.Context, poolId uint64, assetId uint64) (types.PoolToken, error) {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return *pool.PoolAssets[assetId], sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	return *pool.PoolAssets[assetId], nil
+}
+
+func (k Keeper) SetPoolToken(ctx sdk.Context, poolId uint64, assetId uint64, poolAsset types.PoolToken) error {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	pool.PoolAssets[assetId] = &poolAsset
+	k.SetPool(ctx, pool)
+
+	return nil
+}
+
+func (k Keeper) GetPoolShareToken(ctx sdk.Context, poolId uint64) (types.PoolToken, error) {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return pool.ShareToken, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	return pool.ShareToken, nil
+}
+
+func (k Keeper) SetPoolShareToken(ctx sdk.Context, poolId uint64, shareToken types.PoolToken) error {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	pool.ShareToken = shareToken
+
+	k.SetPool(ctx, pool)
+
+	return nil
+}
+
+func (k Keeper) GetPoolParam(ctx sdk.Context, poolId uint64) (types.PoolParam, error) {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return *pool.PoolParam, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	return *pool.PoolParam, nil
+}
+
+func (k Keeper) SetPoolParam(ctx sdk.Context, poolId uint64, poolParam types.PoolParam) error {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	pool.PoolParam = &poolParam
+	k.SetPool(ctx, pool)
+
+	return nil
 }

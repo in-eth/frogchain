@@ -23,19 +23,19 @@ func CmdRemoveLiquidity() *cobra.Command {
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 
-			// pool id
+			// get pool id
 			argPoolId, err := cast.ToUint64E(args[0])
 			if err != nil {
 				return err
 			}
 
-			// liquidity to burn
+			// get liquidity amount to burn
 			argLiquidity, err := cast.ToUint64E(args[1])
 			if err != nil {
 				return err
 			}
 
-			// min token amounts to get
+			// get min token amounts to get
 			argCastMinAmounts := strings.Split(args[2], listSeparator)
 			argMinAmounts := make([]uint64, len(argCastMinAmounts))
 			for i, arg := range argCastMinAmounts {

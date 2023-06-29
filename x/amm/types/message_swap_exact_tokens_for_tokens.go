@@ -9,7 +9,7 @@ const TypeMsgSwapExactTokensForTokens = "swap_exact_tokens_for_tokens"
 
 var _ sdk.Msg = &MsgSwapExactTokensForTokens{}
 
-func NewMsgSwapExactTokensForTokens(creator string, poolId uint64, amountIn uint64, amountOutMin uint64, path sdk.Coins, to string, deadline string) *MsgSwapExactTokensForTokens {
+func NewMsgSwapExactTokensForTokens(creator string, poolId uint64, amountIn uint64, amountOutMin uint64, path []string, to string, deadline string) *MsgSwapExactTokensForTokens {
 	return &MsgSwapExactTokensForTokens{
 		Creator:      creator,
 		PoolId:       poolId,
@@ -47,5 +47,10 @@ func (msg *MsgSwapExactTokensForTokens) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+	// deadline, err := time.Parse(DeadlineLayout, msg.Deadline)
+	// if deadline < .BlockTime() {
+
+	// }
+
 	return nil
 }

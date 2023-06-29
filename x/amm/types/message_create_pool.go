@@ -48,13 +48,13 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	}
 
 	swapFeeAmount := msg.PoolParam.SwapFee
-	if swapFeeAmount > 10^8 {
-		return sdkerrors.Wrapf(ErrFeeOverflow, "create | invalid swap fee (%s)", fmt.Sprint(swapFeeAmount))
+	if swapFeeAmount > TOTALPERCENT {
+		return sdkerrors.Wrapf(ErrFeeOverflow, ErrFeeOverflow.Error(), fmt.Sprint(swapFeeAmount), "Swap Fee")
 	}
 
 	exitFeeAmount := msg.PoolParam.SwapFee
-	if exitFeeAmount > 10^8 {
-		return sdkerrors.Wrapf(ErrFeeOverflow, "create | invalid exit fee (%s)", fmt.Sprint(exitFeeAmount))
+	if exitFeeAmount > TOTALPERCENT {
+		return sdkerrors.Wrapf(ErrFeeOverflow, ErrFeeOverflow.Error(), fmt.Sprint(exitFeeAmount), "Exit Fee")
 	}
 
 	for _, poolAsset := range msg.PoolAssets {
