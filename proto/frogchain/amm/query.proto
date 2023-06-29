@@ -8,6 +8,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "frogchain/amm/params.proto";
 import "frogchain/amm/pool.proto";
 import "frogchain/amm/pool_param.proto";
+import "frogchain/amm/pool_token.proto";
 
 option go_package = "frogchain/x/amm/types";
 
@@ -57,6 +58,12 @@ service Query {
   // Queries a list of GetPoolAssetReserve items.
   rpc GetPoolAssetReserve (QueryGetPoolAssetReserveRequest) returns (QueryGetPoolAssetReserveResponse) {
     option (google.api.http).get = "/frogchain/amm/get_pool_asset_reserve/{id}/{assetId}";
+  
+  }
+  
+  // Queries a list of GetPoolAssets items.
+  rpc GetPoolAssets (QueryGetPoolAssetsRequest) returns (QueryGetPoolAssetsResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_pool_assets/{id}";
   
   }
 }
@@ -127,5 +134,13 @@ message QueryGetPoolAssetReserveRequest {
 
 message QueryGetPoolAssetReserveResponse {
   uint64 reserve = 1;
+}
+
+message QueryGetPoolAssetsRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolAssetsResponse {
+  repeated PoolToken assets = 1;
 }
 

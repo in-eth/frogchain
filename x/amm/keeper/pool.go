@@ -107,6 +107,16 @@ func GetPoolIDFromBytes(bz []byte) uint64 {
 	return binary.BigEndian.Uint64(bz)
 }
 
+// GetAllPoolAssets returns all assets for pool id
+func (k Keeper) GetAllPoolAssets(ctx sdk.Context, poolId uint64) ([]*types.PoolToken, error) {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	}
+
+	return pool.PoolAssets, nil
+}
+
 func (k Keeper) GetPoolTokenForId(ctx sdk.Context, poolId uint64, assetId uint64) (types.PoolToken, error) {
 	pool, found := k.GetPool(ctx, poolId)
 	if !found {
