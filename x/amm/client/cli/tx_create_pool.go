@@ -32,9 +32,9 @@ func CmdCreatePool() *cobra.Command {
 
 			// unmarshal PoolAssets
 			argCastPoolAssets := strings.Split(args[1], listSeparator)
-			argPoolAssets := make([]*types.PoolAsset, len(argCastPoolAssets))
+			argPoolAssets := make([]*types.PoolToken, len(argCastPoolAssets))
 			for i, arg := range argCastPoolAssets {
-				argPoolAsset := new(types.PoolAsset)
+				argPoolAsset := new(types.PoolToken)
 				err = json.Unmarshal([]byte(arg), argPoolAssets[i])
 				if err != nil {
 					return err

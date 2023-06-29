@@ -15,5 +15,4 @@ var (
 	ErrInValidToken   = sdkerrors.Register(ModuleName, 1104, "token is not a valid Coins object")
 	ErrInvalidAddress = sdkerrors.Register(ModuleName, 1105, "invalid address")
 	ErrInvalidAmount  = sdkerrors.Register(ModuleName, 1106, "invalid amount")
-	ErrInvalidAmount  = sdkerrors.Register(ModuleName, 1106, "invalid amount")
 )
