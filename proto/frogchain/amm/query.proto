@@ -66,6 +66,18 @@ service Query {
     option (google.api.http).get = "/frogchain/amm/get_pool_assets/{id}";
   
   }
+  
+  // Queries a list of GetSwapExactTokensForTokens items.
+  rpc GetSwapExactTokensForTokens (QueryGetSwapExactTokensForTokensRequest) returns (QueryGetSwapExactTokensForTokensResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_swap_exact_tokens_for_tokens/{poolId}/{amountIn}/{path}";
+  
+  }
+  
+  // Queries a list of GetSwapTokensForExactTokens items.
+  rpc GetSwapTokensForExactTokens (QueryGetSwapTokensForExactTokensRequest) returns (QueryGetSwapTokensForExactTokensResponse) {
+    option (google.api.http).get = "/frogchain/amm/get_swap_tokens_for_exact_tokens/{poolId}/{amountOut}/{path}";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -142,5 +154,25 @@ message QueryGetPoolAssetsRequest {
 
 message QueryGetPoolAssetsResponse {
   repeated PoolToken assets = 1;
+}
+
+message QueryGetSwapExactTokensForTokensRequest {
+           uint64 poolId   = 1;
+           uint64 amountIn = 2;
+  repeated string path     = 3;
+}
+
+message QueryGetSwapExactTokensForTokensResponse {
+  uint64 amountOut = 1;
+}
+
+message QueryGetSwapTokensForExactTokensRequest {
+           uint64 poolId    = 1;
+           uint64 amountOut = 2;
+  repeated string path      = 3;
+}
+
+message QueryGetSwapTokensForExactTokensResponse {
+  uint64 amountOut = 1;
 }
 

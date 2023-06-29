@@ -34978,23 +34978,25 @@ paths:
             type: object
             properties:
               assets:
-                type: object
-                properties:
-                  tokenDenom:
-                    type: string
-                  tokenWeight:
-                    type: string
-                    format: uint64
-                    title: token weight represents the value of token
-                  tokenReserve:
-                    type: string
-                    format: uint64
-                    title: >-
-                      token reserve represents the reserve amount of the pool in
-                      the module
-                description: |-
-                  Pool has my PoolAssets that has token and weight.
-                  weight determines the value of token.
+                type: array
+                items:
+                  type: object
+                  properties:
+                    tokenDenom:
+                      type: string
+                    tokenWeight:
+                      type: string
+                      format: uint64
+                      title: token weight represents the value of token
+                    tokenReserve:
+                      type: string
+                      format: uint64
+                      title: >-
+                        token reserve represents the reserve amount of the pool
+                        in the module
+                  description: |-
+                    Pool has my PoolAssets that has token and weight.
+                    weight determines the value of token.
         default:
           description: An unexpected error response.
           schema:
@@ -35220,6 +35222,110 @@ paths:
           format: uint64
       tags:
         - Query
+  /frogchain/amm/get_swap_exact_tokens_for_tokens/{poolId}/{amountIn}/{path}:
+    get:
+      summary: Queries a list of GetSwapExactTokensForTokens items.
+      operationId: FrogchainAmmGetSwapExactTokensForTokens
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              amountOut:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: poolId
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: amountIn
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: path
+          in: path
+          required: true
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+          minItems: 1
+      tags:
+        - Query
+  /frogchain/amm/get_swap_tokens_for_exact_tokens/{poolId}/{amountOut}/{path}:
+    get:
+      summary: Queries a list of GetSwapTokensForExactTokens items.
+      operationId: FrogchainAmmGetSwapTokensForExactTokens
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              amountOut:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: poolId
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: amountOut
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: path
+          in: path
+          required: true
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+          minItems: 1
+      tags:
+        - Query
   /frogchain/amm/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -35340,6 +35446,7 @@ paths:
                           weight determines the value of token.
                       title: assets in the pool
                     shareToken:
+                      title: LP token
                       type: object
                       properties:
                         tokenDenom:
@@ -35357,7 +35464,6 @@ paths:
                       description: |-
                         Pool has my PoolAssets that has token and weight.
                         weight determines the value of token.
-                      title: LP token
                     mininumliquidity:
                       type: string
                       format: uint64
@@ -35555,6 +35661,7 @@ paths:
                         weight determines the value of token.
                     title: assets in the pool
                   shareToken:
+                    title: LP token
                     type: object
                     properties:
                       tokenDenom:
@@ -35572,7 +35679,6 @@ paths:
                     description: |-
                       Pool has my PoolAssets that has token and weight.
                       weight determines the value of token.
-                    title: LP token
                   mininumliquidity:
                     type: string
                     format: uint64
@@ -71336,6 +71442,7 @@ definitions:
             weight determines the value of token.
         title: assets in the pool
       shareToken:
+        title: LP token
         type: object
         properties:
           tokenDenom:
@@ -71353,7 +71460,6 @@ definitions:
         description: |-
           Pool has my PoolAssets that has token and weight.
           weight determines the value of token.
-        title: LP token
       mininumliquidity:
         type: string
         format: uint64
@@ -71492,6 +71598,7 @@ definitions:
                   weight determines the value of token.
               title: assets in the pool
             shareToken:
+              title: LP token
               type: object
               properties:
                 tokenDenom:
@@ -71509,7 +71616,6 @@ definitions:
               description: |-
                 Pool has my PoolAssets that has token and weight.
                 weight determines the value of token.
-              title: LP token
             mininumliquidity:
               type: string
               format: uint64
@@ -71555,23 +71661,25 @@ definitions:
     type: object
     properties:
       assets:
-        type: object
-        properties:
-          tokenDenom:
-            type: string
-          tokenWeight:
-            type: string
-            format: uint64
-            title: token weight represents the value of token
-          tokenReserve:
-            type: string
-            format: uint64
-            title: >-
-              token reserve represents the reserve amount of the pool in the
-              module
-        description: |-
-          Pool has my PoolAssets that has token and weight.
-          weight determines the value of token.
+        type: array
+        items:
+          type: object
+          properties:
+            tokenDenom:
+              type: string
+            tokenWeight:
+              type: string
+              format: uint64
+              title: token weight represents the value of token
+            tokenReserve:
+              type: string
+              format: uint64
+              title: >-
+                token reserve represents the reserve amount of the pool in the
+                module
+          description: |-
+            Pool has my PoolAssets that has token and weight.
+            weight determines the value of token.
   frogchain.amm.QueryGetPoolParamResponse:
     type: object
     properties:
@@ -71686,6 +71794,7 @@ definitions:
                 weight determines the value of token.
             title: assets in the pool
           shareToken:
+            title: LP token
             type: object
             properties:
               tokenDenom:
@@ -71703,7 +71812,6 @@ definitions:
             description: |-
               Pool has my PoolAssets that has token and weight.
               weight determines the value of token.
-            title: LP token
           mininumliquidity:
             type: string
             format: uint64
@@ -71727,6 +71835,18 @@ definitions:
     type: object
     properties:
       totalLiquidity:
+        type: string
+        format: uint64
+  frogchain.amm.QueryGetSwapExactTokensForTokensResponse:
+    type: object
+    properties:
+      amountOut:
+        type: string
+        format: uint64
+  frogchain.amm.QueryGetSwapTokensForExactTokensResponse:
+    type: object
+    properties:
+      amountOut:
         type: string
         format: uint64
   frogchain.amm.QueryParamsResponse:

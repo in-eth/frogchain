@@ -42,14 +42,20 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 		panic(err)
 	}
 
+	// get token receiver
+	tokenReceiver, err := sdk.AccAddressFromBech32(msg.To)
+	if err != nil {
+		panic(err)
+	}
+
 	// get fee collector
 	feeCollector, err := sdk.AccAddressFromBech32(poolParam.FeeCollector)
 	if err != nil {
 		panic(err)
 	}
 
-	// send output token from module to sender
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, sdk.NewCoins(
+	// send output token from module to receiver
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, tokenReceiver, sdk.NewCoins(
 		sdk.NewCoin(
 			msg.Path[len(msg.Path)-1],
 			sdk.NewInt(int64(msg.AmountOut)),
