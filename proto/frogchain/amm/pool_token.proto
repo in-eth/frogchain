@@ -1,0 +1,17 @@
+syntax = "proto3";
+package frogchain.amm;
+
+option go_package = "frogchain/x/amm/types";
+
+// Pool has my PoolAssets that has token and weight.
+// weight determines the value of token.
+message PoolToken {
+  
+  string tokenDenom = 1; 
+
+  // token weight represents the value of token
+  uint64 tokenWeight = 2; 
+
+  // token reserve represents the reserve amount of the pool in the module
+  uint64 tokenReserve = 3;
+}

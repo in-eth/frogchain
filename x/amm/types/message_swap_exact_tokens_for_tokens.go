@@ -9,7 +9,7 @@ const TypeMsgSwapExactTokensForTokens = "swap_exact_tokens_for_tokens"
 
 var _ sdk.Msg = &MsgSwapExactTokensForTokens{}
 
-func NewMsgSwapExactTokensForTokens(creator string, poolId uint64, amountIn uint64, amountOutMin uint64, path sdk.Coins, to string, deadline uint64) *MsgSwapExactTokensForTokens {
+func NewMsgSwapExactTokensForTokens(creator string, poolId uint64, amountIn uint64, amountOutMin uint64, path sdk.Coins, to string, deadline string) *MsgSwapExactTokensForTokens {
 	return &MsgSwapExactTokensForTokens{
 		Creator:      creator,
 		PoolId:       poolId,
