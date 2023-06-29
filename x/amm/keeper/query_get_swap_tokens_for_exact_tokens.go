@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"frogchain/x/amm/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -17,7 +18,13 @@ func (k Keeper) GetSwapTokensForExactTokens(goCtx context.Context, req *types.Qu
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// TODO: Process the query
-	_ = ctx
 
-	return &types.QueryGetSwapTokensForExactTokensResponse{}, nil
+	tokenInAmount, _, err := k.SwapExactAmountOut(ctx, req.PoolId, req.AmountOut, req.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryGetSwapTokensForExactTokensResponse{
+		AmountIn: tokenInAmount,
+	}, nil
 }

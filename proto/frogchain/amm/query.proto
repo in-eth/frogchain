@@ -173,6 +173,6 @@ message QueryGetSwapTokensForExactTokensRequest {
 }
 
 message QueryGetSwapTokensForExactTokensResponse {
-  uint64 amountOut = 1;
+  uint64 amountIn = 1;
 }
 

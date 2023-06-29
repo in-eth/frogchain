@@ -1,0 +1,16 @@
+frogchain query amm list-pool
+frogchain query amm show-pool [id]
+frogchain query amm get-pool-param [id]
+frogchain query amm get-pool-share-token-denom [id]
+frogchain query amm get-pool-total-liquidity [id]
+frogchain query amm get-pool-assets [id]
+frogchain query amm get-pool-token-denom [id] [asset-id]
+frogchain query amm get-pool-asset-reserve [id] [asset-id]
+frogchain query amm get-swap-exact-tokens-for-tokens [pool-id] [amount-in] [path]
+frogchain query amm get-swap-tokens-for-exact-tokens [pool-id] [amount-out] [path]
+
+frogchain query amm create-pool [pool-param] [pool-assets] [asset-amounts]
+frogchain query amm add-liquidity [pool-id] [desired-amounts] [min-amounts]
+frogchain query amm remove-liquidity [pool-id] [desired-amount] [min-amounts]
+frogchain query amm swap-exact-tokens-for-tokens [pool-id] [amount-in] [amount-out-min] [path] [to] [deadline]
+frogchain query amm swap-tokens-for-exact-tokens [pool-id] [amount-out] [path] [to] [deadline]
