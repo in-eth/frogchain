@@ -17,13 +17,13 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	// TODO: Handling the message
 
 	// get pool param
-	poolParam, err := k.GetPoolParam(ctx, msg.PoolId)
+	poolParam, err := k.GetPoolParamForId(ctx, msg.PoolId)
 	if err != nil {
 		return nil, err
 	}
 
 	// get pool share token
-	shareToken, err := k.GetPoolShareToken(ctx, msg.PoolId)
+	shareToken, err := k.GetPoolShareTokenForId(ctx, msg.PoolId)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	receiveTokens := sdk.NewCoins()
 	for i, minAmount := range msg.MinAmounts {
 		// get pool asset
-		poolAsset, err := k.GetPoolToken(ctx, msg.PoolId, uint64(i))
+		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
 		if err != nil {
 			return nil, err
 		}

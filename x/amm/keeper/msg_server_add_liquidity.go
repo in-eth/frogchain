@@ -17,7 +17,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	// TODO: Handling the message
 
 	// get share token from pool with pool id
-	shareToken, err := k.GetPoolShareToken(ctx, msg.PoolId)
+	shareToken, err := k.GetPoolShareTokenForId(ctx, msg.PoolId)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	// liquidityAmount = tokenAmountIn * shareTokenAmount / tokenAmount
 	liquidityAmount := uint64(math.MaxUint64)
 	for i, desiredAmount := range msg.DesiredAmounts {
-		poolAsset, err := k.GetPoolToken(ctx, msg.PoolId, uint64(i))
+		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +48,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	// calculate asset amounts from account to pool and update pool data
 	collateral := sdk.NewCoins()
 	for i, minAmount := range msg.MinAmounts {
-		poolAsset, err := k.GetPoolToken(ctx, msg.PoolId, uint64(i))
+		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
 		if err != nil {
 			return nil, err
 		}

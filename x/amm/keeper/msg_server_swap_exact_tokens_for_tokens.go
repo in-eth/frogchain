@@ -31,7 +31,7 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	}
 
 	// get pool param
-	poolParam, err := k.GetPoolParam(ctx, msg.PoolId)
+	poolParam, err := k.GetPoolParamForId(ctx, msg.PoolId)
 	if err != nil {
 		return nil, err
 	}

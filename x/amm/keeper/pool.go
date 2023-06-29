@@ -107,7 +107,7 @@ func GetPoolIDFromBytes(bz []byte) uint64 {
 	return binary.BigEndian.Uint64(bz)
 }
 
-func (k Keeper) GetPoolToken(ctx sdk.Context, poolId uint64, assetId uint64) (types.PoolToken, error) {
+func (k Keeper) GetPoolTokenForId(ctx sdk.Context, poolId uint64, assetId uint64) (types.PoolToken, error) {
 	pool, found := k.GetPool(ctx, poolId)
 	if !found {
 		return *pool.PoolAssets[assetId], sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
@@ -128,7 +128,7 @@ func (k Keeper) SetPoolToken(ctx sdk.Context, poolId uint64, assetId uint64, poo
 	return nil
 }
 
-func (k Keeper) GetPoolShareToken(ctx sdk.Context, poolId uint64) (types.PoolToken, error) {
+func (k Keeper) GetPoolShareTokenForId(ctx sdk.Context, poolId uint64) (types.PoolToken, error) {
 	pool, found := k.GetPool(ctx, poolId)
 	if !found {
 		return pool.ShareToken, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
@@ -150,7 +150,7 @@ func (k Keeper) SetPoolShareToken(ctx sdk.Context, poolId uint64, shareToken typ
 	return nil
 }
 
-func (k Keeper) GetPoolParam(ctx sdk.Context, poolId uint64) (types.PoolParam, error) {
+func (k Keeper) GetPoolParamForId(ctx sdk.Context, poolId uint64) (types.PoolParam, error) {
 	pool, found := k.GetPool(ctx, poolId)
 	if !found {
 		return *pool.PoolParam, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)

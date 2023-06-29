@@ -18,13 +18,14 @@ var _ = strconv.Itoa(0)
 
 func CmdCreatePool() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-pool [pool-param] [pool-assets]",
+		Use:   "create-pool [pool-param] [pool-assets] [asset-amounts]",
 		Short: "Broadcast message create-pool",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argPoolParam := new(types.PoolParam)
 
 			// unmarshal PoolParam
+			argPoolParam := new(types.PoolParam)
+
 			err = json.Unmarshal([]byte(args[0]), argPoolParam)
 			if err != nil {
 				return err
