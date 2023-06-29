@@ -42,10 +42,10 @@ message MsgAddLiquidityResponse {
 }
 
 message MsgRemoveLiquidity {
-  string creator       = 1;
-  uint64 poolId        = 2;
-  uint64 desiredAmount = 3;
-  uint64 minAmount     = 4;
+           string creator       = 1;
+           uint64 poolId        = 2;
+           uint64 liquidity     = 3;
+  repeated uint64 minAmounts    = 4;
 }
 
 message MsgRemoveLiquidityResponse {
