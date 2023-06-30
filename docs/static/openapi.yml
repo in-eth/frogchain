@@ -35284,7 +35284,7 @@ paths:
           schema:
             type: object
             properties:
-              amountOut:
+              amountIn:
                 type: string
                 format: uint64
         default:
@@ -71846,7 +71846,7 @@ definitions:
   frogchain.amm.QueryGetSwapTokensForExactTokensResponse:
     type: object
     properties:
-      amountOut:
+      amountIn:
         type: string
         format: uint64
   frogchain.amm.QueryParamsResponse:
