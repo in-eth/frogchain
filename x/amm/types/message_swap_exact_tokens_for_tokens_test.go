@@ -5,7 +5,6 @@ import (
 
 	"frogchain/testutil/sample"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,13 +17,45 @@ func TestMsgSwapExactTokensForTokens_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgSwapExactTokensForTokens{
-				Creator: "invalid_address",
+				Creator:      "invalid_address",
+				PoolId:       1,
+				AmountIn:     10,
+				AmountOutMin: 100,
+				Path:         []string{"1"},
+				To:           "invalid_address",
 			},
-			err: sdkerrors.ErrInvalidAddress,
+			err: ErrInvalidAddress,
+		}, {
+			name: "invalid to address",
+			msg: MsgSwapExactTokensForTokens{
+				Creator:      sample.AccAddress(),
+				PoolId:       1,
+				AmountIn:     10,
+				AmountOutMin: 100,
+				Path:         []string{"1"},
+				To:           "invalid_address",
+			},
+			err: ErrInvalidAddress,
+		}, {
+			name: "invalid path",
+			msg: MsgSwapExactTokensForTokens{
+				Creator:      sample.AccAddress(),
+				PoolId:       1,
+				AmountIn:     10,
+				AmountOutMin: 100,
+				Path:         []string{"1"},
+				To:           sample.AccAddress(),
+			},
+			err: ErrInvalidPath,
 		}, {
 			name: "valid address",
 			msg: MsgSwapExactTokensForTokens{
-				Creator: sample.AccAddress(),
+				Creator:      sample.AccAddress(),
+				PoolId:       1,
+				AmountIn:     10,
+				AmountOutMin: 100,
+				Path:         []string{"1", "2"},
+				To:           sample.AccAddress(),
 			},
 		},
 	}

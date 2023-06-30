@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"frogchain/testutil/sample"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,12 +18,60 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			name: "invalid address",
 			msg: MsgCreatePool{
 				Creator: "invalid_address",
+				PoolParam: &PoolParam{
+					SwapFee:      10,
+					ExitFee:      10,
+					FeeCollector: "invalid_address",
+				},
+				PoolAssets: []*PoolToken{},
 			},
-			err: sdkerrors.ErrInvalidAddress,
+			err: ErrInvalidAddress,
+		}, {
+			name: "invalid address",
+			msg: MsgCreatePool{
+				Creator: sample.AccAddress(),
+				PoolParam: &PoolParam{
+					SwapFee:      10,
+					ExitFee:      10,
+					FeeCollector: "invalid_address",
+				},
+				PoolAssets: []*PoolToken{},
+			},
+			err: ErrInvalidAddress,
+		}, {
+			name: "exit fee amount overflow",
+			msg: MsgCreatePool{
+				Creator: sample.AccAddress(),
+				PoolParam: &PoolParam{
+					SwapFee:      10,
+					ExitFee:      100000001,
+					FeeCollector: sample.AccAddress(),
+				},
+				PoolAssets: []*PoolToken{},
+			},
+			err: ErrFeeOverflow,
+		}, {
+			name: "swap fee amount overflow",
+			msg: MsgCreatePool{
+				Creator: sample.AccAddress(),
+				PoolParam: &PoolParam{
+					SwapFee:      100000001,
+					ExitFee:      10,
+					FeeCollector: sample.AccAddress(),
+				},
+				PoolAssets: []*PoolToken{},
+			},
+			err: ErrFeeOverflow,
 		}, {
 			name: "valid address",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
+				PoolParam: &PoolParam{
+					SwapFee:      10,
+					ExitFee:      10,
+					FeeCollector: sample.AccAddress(),
+				},
+				PoolAssets: []*PoolToken{},
 			},
 		},
 	}

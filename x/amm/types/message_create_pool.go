@@ -1,10 +1,7 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgCreatePool = "create_pool"
@@ -44,17 +41,21 @@ func (msg *MsgCreatePool) GetSignBytes() []byte {
 func (msg *MsgCreatePool) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(ErrInvalidAddress, "create | invalid creator address (%s)", err)
+		return ErrInvalidAddress
+	}
+	_, err = sdk.AccAddressFromBech32(msg.PoolParam.FeeCollector)
+	if err != nil {
+		return ErrInvalidAddress
 	}
 
 	swapFeeAmount := msg.PoolParam.SwapFee
-	if swapFeeAmount > TOTALPERCENT {
-		return sdkerrors.Wrapf(ErrFeeOverflow, ErrFeeOverflow.Error(), fmt.Sprint(swapFeeAmount), "Swap Fee")
+	if swapFeeAmount >= TOTALPERCENT {
+		return ErrFeeOverflow
 	}
 
-	exitFeeAmount := msg.PoolParam.SwapFee
-	if exitFeeAmount > TOTALPERCENT {
-		return sdkerrors.Wrapf(ErrFeeOverflow, ErrFeeOverflow.Error(), fmt.Sprint(exitFeeAmount), "Exit Fee")
+	exitFeeAmount := msg.PoolParam.ExitFee
+	if exitFeeAmount >= TOTALPERCENT {
+		return ErrFeeOverflow
 	}
 
 	for _, poolAsset := range msg.PoolAssets {

@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgRemoveLiquidity = "remove_liquidity"
@@ -42,7 +41,7 @@ func (msg *MsgRemoveLiquidity) GetSignBytes() []byte {
 func (msg *MsgRemoveLiquidity) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return ErrInvalidAddress
 	}
 	return nil
 }

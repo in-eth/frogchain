@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"frogchain/testutil/sample"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,13 +17,28 @@ func TestMsgAddLiquidity_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgAddLiquidity{
-				Creator: "invalid_address",
+				Creator:        "invalid_address",
+				PoolId:         1,
+				DesiredAmounts: []uint64{10, 10},
+				MinAmounts:     []uint64{10, 10},
 			},
-			err: sdkerrors.ErrInvalidAddress,
+			err: ErrInvalidAddress,
+		}, {
+			name: "invalid desired amounts",
+			msg: MsgAddLiquidity{
+				Creator:        sample.AccAddress(),
+				PoolId:         1,
+				DesiredAmounts: []uint64{9, 10},
+				MinAmounts:     []uint64{10, 10},
+			},
+			err: ErrInvalidAmount,
 		}, {
 			name: "valid address",
 			msg: MsgAddLiquidity{
-				Creator: sample.AccAddress(),
+				Creator:        sample.AccAddress(),
+				PoolId:         1,
+				DesiredAmounts: []uint64{10, 10},
+				MinAmounts:     []uint64{10, 10},
 			},
 		},
 	}

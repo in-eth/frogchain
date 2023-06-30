@@ -10,7 +10,7 @@ import (
 var (
 	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
 
-	ErrFeeOverflow      = sdkerrors.Register(ModuleName, 1102, "fee amount overflow. must be less than %s : %s")
+	ErrFeeOverflow      = sdkerrors.Register(ModuleName, 1102, "fee amount overflow")
 	ErrWeightZero       = sdkerrors.Register(ModuleName, 1103, "weight amount zero. must be greater than 0 for pool create")
 	ErrInValidToken     = sdkerrors.Register(ModuleName, 1104, "token is not a valid Coins object")
 	ErrInvalidAddress   = sdkerrors.Register(ModuleName, 1105, "invalid address")

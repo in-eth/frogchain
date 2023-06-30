@@ -25,7 +25,7 @@ const (
 	MINIMUM_LIQUIDITY = 1000
 
 	// TOTALPERCENT defines the 100% amount(this is for fee calc)
-	TOTALPERCENT = 10 ^ 8
+	TOTALPERCENT = 100000000
 
 	// SWAP_EXACT_TOKEN_IN defines the type of token.
 	// get output token amount for exact input token
