@@ -58,6 +58,18 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 		return ErrFeeOverflow
 	}
 
+	if len(msg.PoolAssets) == 1 {
+		return ErrInvalidAssets
+	}
+
+	for i := 0; i < len(msg.PoolAssets); i++ {
+		for j := i + 1; j < len(msg.PoolAssets); j++ {
+			if msg.PoolAssets[i].TokenDenom == msg.PoolAssets[j].TokenDenom {
+				return ErrInvalidAssets
+			}
+		}
+	}
+
 	for _, poolAsset := range msg.PoolAssets {
 		weight := poolAsset.TokenWeight
 		if weight == 0 {
