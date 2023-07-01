@@ -20,10 +20,10 @@ service Msg {
 
 message MsgCreatePool {
            string    creator      = 1;
-           PoolParam poolParam    = 2;
-  repeated PoolToken poolAssets   = 3;
+           PoolParam poolParam    = 2 [(gogoproto.nullable) = false];
+  repeated PoolToken poolAssets   = 3 [(gogoproto.nullable) = false];
   // assetAmounts : amounts for sending assets to pool
-  repeated uint64    assetAmounts = 4;
+  repeated uint64    assetAmounts = 4 [(gogoproto.nullable) = false];
 }
 
 message MsgCreatePoolResponse {
@@ -33,19 +33,19 @@ message MsgCreatePoolResponse {
 message MsgAddLiquidity {
            string creator        = 1;
            uint64 poolId         = 2;
-  repeated uint64 desiredAmounts = 3;
-  repeated uint64 minAmounts     = 4;
+  repeated uint64 desiredAmounts = 3 [(gogoproto.nullable) = false];
+  repeated uint64 minAmounts     = 4 [(gogoproto.nullable) = false];
 }
 
 message MsgAddLiquidityResponse {
-  cosmos.base.v1beta1.Coin shareToken = 1;
+  cosmos.base.v1beta1.Coin shareToken = 1 [(gogoproto.nullable) = false];
 }
 
 message MsgRemoveLiquidity {
            string creator       = 1;
            uint64 poolId        = 2;
            uint64 liquidity     = 3;
-  repeated uint64 minAmounts    = 4;
+  repeated uint64 minAmounts    = 4 [(gogoproto.nullable) = false];
 }
 
 message MsgRemoveLiquidityResponse {

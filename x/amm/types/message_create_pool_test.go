@@ -18,61 +18,61 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			name: "invalid address",
 			msg: MsgCreatePool{
 				Creator: "invalid_address",
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      10,
 					ExitFee:      10,
 					FeeCollector: "invalid_address",
 				},
-				PoolAssets: []*PoolToken{},
+				PoolAssets: []PoolToken{},
 			},
 			err: ErrInvalidAddress,
 		}, {
 			name: "invalid address",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      10,
 					ExitFee:      10,
 					FeeCollector: "invalid_address",
 				},
-				PoolAssets: []*PoolToken{},
+				PoolAssets: []PoolToken{},
 			},
 			err: ErrInvalidAddress,
 		}, {
 			name: "exit fee amount overflow",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      10,
 					ExitFee:      100000001,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []*PoolToken{},
+				PoolAssets: []PoolToken{},
 			},
 			err: ErrFeeOverflow,
 		}, {
 			name: "swap fee amount overflow",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      100000001,
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []*PoolToken{},
+				PoolAssets: []PoolToken{},
 			},
 			err: ErrFeeOverflow,
 		}, {
 			name: "assets not enough",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      10,
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []*PoolToken{
-					&PoolToken{
+				PoolAssets: []PoolToken{
+					PoolToken{
 						TokenDenom:   "123",
 						TokenWeight:  1,
 						TokenReserve: 0,
@@ -84,18 +84,18 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			name: "same assets exist in assets",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      10,
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []*PoolToken{
-					&PoolToken{
+				PoolAssets: []PoolToken{
+					PoolToken{
 						TokenDenom:   "123",
 						TokenWeight:  1,
 						TokenReserve: 0,
 					},
-					&PoolToken{
+					PoolToken{
 						TokenDenom:   "123",
 						TokenWeight:  1,
 						TokenReserve: 0,
@@ -107,18 +107,18 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			name: "valid address",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
+				PoolParam: PoolParam{
 					SwapFee:      10,
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []*PoolToken{
-					&PoolToken{
+				PoolAssets: []PoolToken{
+					PoolToken{
 						TokenDenom:   "123",
 						TokenWeight:  1,
 						TokenReserve: 0,
 					},
-					&PoolToken{
+					PoolToken{
 						TokenDenom:   "124",
 						TokenWeight:  1,
 						TokenReserve: 0,

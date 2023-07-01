@@ -111,7 +111,7 @@ message QueryGetPoolParamRequest {
 }
 
 message QueryGetPoolParamResponse {
-  PoolParam poolParam = 1;
+  PoolParam poolParam = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetPoolTotalLiquidityRequest {
@@ -153,13 +153,13 @@ message QueryGetPoolAssetsRequest {
 }
 
 message QueryGetPoolAssetsResponse {
-  repeated PoolToken assets = 1;
+  repeated PoolToken assets = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetSwapExactTokensForTokensRequest {
            uint64 poolId   = 1;
            uint64 amountIn = 2;
-  repeated string path     = 3;
+  repeated string path     = 3 [(gogoproto.nullable) = false];
 }
 
 message QueryGetSwapExactTokensForTokensResponse {
@@ -169,7 +169,7 @@ message QueryGetSwapExactTokensForTokensResponse {
 message QueryGetSwapTokensForExactTokensRequest {
            uint64 poolId    = 1;
            uint64 amountOut = 2;
-  repeated string path      = 3;
+  repeated string path      = 3 [(gogoproto.nullable) = false];
 }
 
 message QueryGetSwapTokensForExactTokensResponse {

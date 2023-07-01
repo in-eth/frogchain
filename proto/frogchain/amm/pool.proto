@@ -11,13 +11,13 @@ message Pool {
   uint64 id = 1;
 
   // pool params for swap and exit fees
-  PoolParam poolParam = 2; 
+  PoolParam poolParam = 2 [(gogoproto.nullable) = false]; 
 
   // assets in the pool
-  repeated PoolToken poolAssets = 3; 
+  repeated PoolToken poolAssets = 3 [(gogoproto.nullable) = false]; 
 
   // LP token
-  PoolToken shareToken = 4 [(gogoproto.nullable) = false]; 
+  PoolToken shareToken = 4; 
 
   // min liquidity is the minimum amount of share token to maintain the pool
   uint64 mininumliquidity = 5;

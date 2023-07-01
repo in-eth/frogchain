@@ -39,7 +39,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 		poolAsset := msg.PoolAssets[i]
 		poolAsset.TokenReserve = assetAmount
-		err := k.SetPoolToken(ctx, poolId, uint64(i), *poolAsset)
+		err := k.SetPoolToken(ctx, poolId, uint64(i), poolAsset)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +63,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		TokenWeight:  1,
 		TokenReserve: math.NewIntFromBigInt(shareAmount).Uint64(),
 	}
-	err := k.SetPoolShareToken(ctx, poolId, shareToken)
+	err := k.SetPoolShareToken(ctx, poolId, &shareToken)
 	if err != nil {
 		return nil, err
 	}

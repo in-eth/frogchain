@@ -18,23 +18,23 @@ func TestGenesis(t *testing.T) {
 		PoolList: []types.Pool{
 			{
 				Id: 0,
-				PoolParam: &types.PoolParam{
+				PoolParam: types.PoolParam{
 					SwapFee: 1,
 					ExitFee: 1,
 				},
-				PoolAssets: []*types.PoolToken{
-					&types.PoolToken{
+				PoolAssets: []types.PoolToken{
+					types.PoolToken{
 						TokenDenom:   "coin",
 						TokenWeight:  1,
 						TokenReserve: 100,
 					},
-					&types.PoolToken{
+					types.PoolToken{
 						TokenDenom:   "val",
 						TokenWeight:  1,
 						TokenReserve: 100,
 					},
 				},
-				ShareToken: types.PoolToken{
+				ShareToken: &types.PoolToken{
 					TokenDenom:   types.ShareTokenIndex(0),
 					TokenWeight:  1,
 					TokenReserve: 100,
@@ -44,23 +44,23 @@ func TestGenesis(t *testing.T) {
 			},
 			{
 				Id: 1,
-				PoolParam: &types.PoolParam{
+				PoolParam: types.PoolParam{
 					SwapFee: 1,
 					ExitFee: 1,
 				},
-				PoolAssets: []*types.PoolToken{
-					&types.PoolToken{
+				PoolAssets: []types.PoolToken{
+					types.PoolToken{
 						TokenDenom:   "coin",
 						TokenWeight:  1,
 						TokenReserve: 100,
 					},
-					&types.PoolToken{
+					types.PoolToken{
 						TokenDenom:   "val",
 						TokenWeight:  1,
 						TokenReserve: 100,
 					},
 				},
-				ShareToken: types.PoolToken{
+				ShareToken: &types.PoolToken{
 					TokenDenom:   types.ShareTokenIndex(1),
 					TokenWeight:  1,
 					TokenReserve: 100,

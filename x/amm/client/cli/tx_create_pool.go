@@ -33,14 +33,14 @@ func CmdCreatePool() *cobra.Command {
 
 			// unmarshal PoolAssets
 			argCastPoolAssets := strings.Split(args[1], listSeparator)
-			argPoolAssets := make([]*types.PoolToken, len(argCastPoolAssets))
+			argPoolAssets := make([]types.PoolToken, len(argCastPoolAssets))
 			for i, arg := range argCastPoolAssets {
 				argPoolAsset := new(types.PoolToken)
 				err = json.Unmarshal([]byte(arg), argPoolAssets[i])
 				if err != nil {
 					return err
 				}
-				argPoolAssets[i] = argPoolAsset
+				argPoolAssets[i] = *argPoolAsset
 			}
 
 			// get asset Amounts
@@ -61,7 +61,7 @@ func CmdCreatePool() *cobra.Command {
 
 			msg := types.NewMsgCreatePool(
 				clientCtx.GetFromAddress().String(),
-				argPoolParam,
+				*argPoolParam,
 				argPoolAssets,
 				argAssetAmounts,
 			)
