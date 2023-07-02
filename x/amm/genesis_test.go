@@ -39,7 +39,7 @@ func TestGenesis(t *testing.T) {
 					TokenWeight:  1,
 					TokenReserve: 100,
 				},
-				Mininumliquidity: 1000,
+				MinimumLiquidity: 1000,
 				IsActivated:      true,
 			},
 			{
@@ -65,7 +65,7 @@ func TestGenesis(t *testing.T) {
 					TokenWeight:  1,
 					TokenReserve: 100,
 				},
-				Mininumliquidity: 1000,
+				MinimumLiquidity: 1000,
 				IsActivated:      true,
 			},
 		},

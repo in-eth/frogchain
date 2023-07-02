@@ -81,18 +81,15 @@ func (k Keeper) RemovePool(ctx sdk.Context, id uint64) {
 
 // GetAllPool returns all pool
 func (k Keeper) GetAllPool(ctx sdk.Context) (list []types.Pool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PoolKey))
-	iterator := sdk.KVStorePrefixIterator(store, []byte{})
-
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Pool
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
+	for i := 0; i < int(k.GetPoolCount(ctx)); i++ {
+		pool, found := k.GetPool(ctx, uint64(i))
+		if found == false {
+			continue
+		}
+		list = append(list, pool)
 	}
 
-	return
+	return list
 }
 
 // GetPoolIDBytes returns the byte representation of the ID

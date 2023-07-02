@@ -20,7 +20,7 @@ service Msg {
 
 message MsgCreatePool {
            string    creator      = 1;
-           PoolParam poolParam    = 2 [(gogoproto.nullable) = false];
+           PoolParam poolParam    = 2;
   repeated PoolToken poolAssets   = 3 [(gogoproto.nullable) = false];
   // assetAmounts : amounts for sending assets to pool
   repeated uint64    assetAmounts = 4 [(gogoproto.nullable) = false];

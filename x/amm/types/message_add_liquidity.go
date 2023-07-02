@@ -45,7 +45,7 @@ func (msg *MsgAddLiquidity) ValidateBasic() error {
 	}
 
 	for i, desiredAmount := range msg.DesiredAmounts {
-		if desiredAmount < msg.MinAmounts[i] {
+		if desiredAmount < msg.MinAmounts[i] || desiredAmount == 0 || msg.MinAmounts[i] == 0 {
 			return ErrInvalidAmount
 		}
 	}

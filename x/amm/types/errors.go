@@ -19,5 +19,7 @@ var (
 	ErrDeadlinePassed   = sdkerrors.Register(ModuleName, 1108, "deadline is passed: %s %s")
 	ErrInvalidPath      = sdkerrors.Register(ModuleName, 1109, "invalid path for swap")
 	ErrInvalidSwapDenom = sdkerrors.Register(ModuleName, 1110, "invalid swap, in and out denom is same")
-	ErrInvalidAssets    = sdkerrors.Register(ModuleName, 1111, "invalid assets for create")
+	ErrInvalidAssets    = sdkerrors.Register(ModuleName, 1111, "invalid assets")
+	ErrDuplicateAssets  = sdkerrors.Register(ModuleName, 1112, "duplicate assets")
+	ErrInvalidLength    = sdkerrors.Register(ModuleName, 1113, "invalid assets length")
 )

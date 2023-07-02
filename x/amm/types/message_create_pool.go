@@ -11,7 +11,7 @@ var _ sdk.Msg = &MsgCreatePool{}
 func NewMsgCreatePool(creator string, poolParam PoolParam, poolAssets []PoolToken, assetAmounts []uint64) *MsgCreatePool {
 	return &MsgCreatePool{
 		Creator:      creator,
-		PoolParam:    poolParam,
+		PoolParam:    &poolParam,
 		PoolAssets:   poolAssets,
 		AssetAmounts: assetAmounts,
 	}
@@ -65,15 +65,25 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	for i := 0; i < len(msg.PoolAssets); i++ {
 		for j := i + 1; j < len(msg.PoolAssets); j++ {
 			if msg.PoolAssets[i].TokenDenom == msg.PoolAssets[j].TokenDenom {
-				return ErrInvalidAssets
+				return ErrDuplicateAssets
 			}
 		}
+	}
+
+	if len(msg.PoolAssets) != len(msg.AssetAmounts) {
+		return ErrInvalidLength
 	}
 
 	for _, poolAsset := range msg.PoolAssets {
 		weight := poolAsset.TokenWeight
 		if weight == 0 {
 			return ErrWeightZero
+		}
+	}
+
+	for _, assetAmount := range msg.AssetAmounts {
+		if assetAmount == 0 {
+			return ErrInvalidAmount
 		}
 	}
 	return nil

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"frogchain/x/amm/keeper"
+	"frogchain/x/amm/testutil"
 	"frogchain/x/amm/types"
 
 	tmdb "github.com/cometbft/cometbft-db"
@@ -19,6 +20,10 @@ import (
 )
 
 func AmmKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
+	return AmmKeeperWithMocks(t, nil)
+}
+
+func AmmKeeperWithMocks(t testing.TB, bank *testutil.MockBankKeeper) (*keeper.Keeper, sdk.Context) {
 	storeKey := sdk.NewKVStoreKey(types.StoreKey)
 	memStoreKey := storetypes.NewMemoryStoreKey(types.MemStoreKey)
 
@@ -42,7 +47,7 @@ func AmmKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		storeKey,
 		memStoreKey,
 		paramsSubspace,
-		nil,
+		bank,
 	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())

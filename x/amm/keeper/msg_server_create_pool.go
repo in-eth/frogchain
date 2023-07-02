@@ -14,7 +14,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 	// pool data
 	var pool = types.Pool{
-		PoolParam:   msg.PoolParam,
+		PoolParam:   *msg.PoolParam,
 		PoolAssets:  msg.PoolAssets,
 		IsActivated: true,
 	}

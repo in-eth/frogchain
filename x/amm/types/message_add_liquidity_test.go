@@ -33,6 +33,24 @@ func TestMsgAddLiquidity_ValidateBasic(t *testing.T) {
 			},
 			err: ErrInvalidAmount,
 		}, {
+			name: "zero desired amounts",
+			msg: MsgAddLiquidity{
+				Creator:        sample.AccAddress(),
+				PoolId:         1,
+				DesiredAmounts: []uint64{0, 10},
+				MinAmounts:     []uint64{10, 10},
+			},
+			err: ErrInvalidAmount,
+		}, {
+			name: "zero min amount",
+			msg: MsgAddLiquidity{
+				Creator:        sample.AccAddress(),
+				PoolId:         1,
+				DesiredAmounts: []uint64{10, 10},
+				MinAmounts:     []uint64{0, 10},
+			},
+			err: ErrInvalidAmount,
+		}, {
 			name: "valid address",
 			msg: MsgAddLiquidity{
 				Creator:        sample.AccAddress(),
