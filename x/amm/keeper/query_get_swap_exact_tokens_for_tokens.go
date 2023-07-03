@@ -19,5 +19,12 @@ func (k Keeper) GetSwapExactTokensForTokens(goCtx context.Context, req *types.Qu
 
 	// TODO: Process the query
 
-	return &types.QueryGetSwapExactTokensForTokensResponse{}, nil
+	tokenOutAmout, _, err := k.SwapExactAmountIn(ctx, req.PoolId, req.AmountIn, req.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryGetSwapExactTokensForTokensResponse{
+		AmountOut: tokenOutAmout,
+	}, nil
 }

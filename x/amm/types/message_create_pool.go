@@ -1,20 +1,17 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgCreatePool = "create_pool"
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolParam *PoolParam, poolAssets []*PoolToken, assetAmounts []uint64) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolParam PoolParam, poolAssets []PoolToken, assetAmounts []uint64) *MsgCreatePool {
 	return &MsgCreatePool{
 		Creator:      creator,
-		PoolParam:    poolParam,
+		PoolParam:    &poolParam,
 		PoolAssets:   poolAssets,
 		AssetAmounts: assetAmounts,
 	}
@@ -44,23 +41,49 @@ func (msg *MsgCreatePool) GetSignBytes() []byte {
 func (msg *MsgCreatePool) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(ErrInvalidAddress, "create | invalid creator address (%s)", err)
+		return ErrInvalidAddress
+	}
+	_, err = sdk.AccAddressFromBech32(msg.PoolParam.FeeCollector)
+	if err != nil {
+		return ErrInvalidAddress
 	}
 
 	swapFeeAmount := msg.PoolParam.SwapFee
-	if swapFeeAmount > TOTALPERCENT {
-		return sdkerrors.Wrapf(ErrFeeOverflow, ErrFeeOverflow.Error(), fmt.Sprint(swapFeeAmount), "Swap Fee")
+	if swapFeeAmount >= TOTALPERCENT {
+		return ErrFeeOverflow
 	}
 
-	exitFeeAmount := msg.PoolParam.SwapFee
-	if exitFeeAmount > TOTALPERCENT {
-		return sdkerrors.Wrapf(ErrFeeOverflow, ErrFeeOverflow.Error(), fmt.Sprint(exitFeeAmount), "Exit Fee")
+	exitFeeAmount := msg.PoolParam.ExitFee
+	if exitFeeAmount >= TOTALPERCENT {
+		return ErrFeeOverflow
+	}
+
+	if len(msg.PoolAssets) == 1 {
+		return ErrInvalidAssets
+	}
+
+	for i := 0; i < len(msg.PoolAssets); i++ {
+		for j := i + 1; j < len(msg.PoolAssets); j++ {
+			if msg.PoolAssets[i].TokenDenom == msg.PoolAssets[j].TokenDenom {
+				return ErrDuplicateAssets
+			}
+		}
+	}
+
+	if len(msg.PoolAssets) != len(msg.AssetAmounts) {
+		return ErrInvalidLength
 	}
 
 	for _, poolAsset := range msg.PoolAssets {
 		weight := poolAsset.TokenWeight
 		if weight == 0 {
 			return ErrWeightZero
+		}
+	}
+
+	for _, assetAmount := range msg.AssetAmounts {
+		if assetAmount == 0 {
+			return ErrInvalidAmount
 		}
 	}
 	return nil

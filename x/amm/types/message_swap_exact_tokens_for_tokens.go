@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgSwapExactTokensForTokens = "swap_exact_tokens_for_tokens"
@@ -45,8 +44,13 @@ func (msg *MsgSwapExactTokensForTokens) GetSignBytes() []byte {
 func (msg *MsgSwapExactTokensForTokens) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return ErrInvalidAddress
 	}
+	_, err = sdk.AccAddressFromBech32(msg.To)
+	if err != nil {
+		return ErrInvalidAddress
+	}
+
 	// deadline, err := time.Parse(DeadlineLayout, msg.Deadline)
 	// if deadline < .BlockTime() {
 

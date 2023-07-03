@@ -65,27 +65,7 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 		return nil, err
 	}
 
-	for i, j := 0, len(msg.Path)-1; i < j; i, j = i+1, j-1 {
-		msg.Path[i], msg.Path[j] = msg.Path[j], msg.Path[i]
-	}
-
-	tokenInAmount := msg.AmountOut
-	for i, tokenDenomOut := range msg.Path {
-		if i >= len(msg.Path)-1 {
-			break
-		}
-
-		tokenDenomIn := msg.Path[i+1]
-
-		tokenInAmount, err = k.SwapToken(ctx, msg.PoolId, tokenInAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_OUT)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	// calc fee and send it to feeCollector
-	fee := tokenInAmount * poolParam.SwapFee / types.TOTALPERCENT
-	tokenInAmount -= fee
+	tokenInAmount, fee, err := k.SwapExactAmountOut(ctx, msg.PoolId, msg.AmountOut, msg.Path)
 
 	// send fee token to fee collector
 	err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(

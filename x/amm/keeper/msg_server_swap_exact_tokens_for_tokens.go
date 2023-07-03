@@ -36,10 +36,6 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 		return nil, err
 	}
 
-	// calc fee and send it to feeCollector
-	fee := msg.AmountIn * poolParam.SwapFee / types.TOTALPERCENT
-	tokenInAmount := msg.AmountIn - fee
-
 	// get token sender
 	sender, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
@@ -58,6 +54,11 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 		panic(err)
 	}
 
+	tokenOutAmount, fee, err := k.SwapExactAmountIn(ctx, msg.PoolId, msg.AmountIn, msg.Path)
+	if err != nil {
+		return nil, err
+	}
+
 	// send fee token to fee collector
 	err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(
 		sdk.NewCoin(
@@ -73,25 +74,11 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(
 		sdk.NewCoin(
 			msg.Path[0],
-			sdk.NewInt(int64(tokenInAmount)),
+			sdk.NewInt(int64(msg.AmountIn-fee)),
 		),
 	))
 	if err != nil {
 		return nil, err
-	}
-
-	tokenOutAmount := tokenInAmount
-	for i, tokenDenomIn := range msg.Path {
-		if len(msg.Path)-1 == i {
-			break
-		}
-
-		tokenDenomOut := msg.Path[i+1]
-
-		tokenOutAmount, err = k.SwapToken(ctx, msg.PoolId, tokenOutAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_IN)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	// if result is below min value, then revert

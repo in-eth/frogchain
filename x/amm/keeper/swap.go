@@ -7,6 +7,75 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+func (k Keeper) SwapExactAmountIn(
+	ctx sdk.Context,
+	poolId uint64,
+	tokenInAmount uint64,
+	path []string,
+) (uint64, uint64, error) {
+	// get pool params
+	poolParam, err := k.GetPoolParamForId(ctx, poolId)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	// calc fee and send it to feeCollector
+	fee := tokenInAmount * poolParam.SwapFee / types.TOTALPERCENT
+	tokenInAmount -= fee
+
+	tokenOutAmount := tokenInAmount
+	for i, tokenDenomIn := range path {
+		if len(path)-1 == i {
+			break
+		}
+
+		tokenDenomOut := path[i+1]
+
+		tokenOutAmount, err = k.SwapToken(ctx, poolId, tokenOutAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_IN)
+		if err != nil {
+			return 0, 0, err
+		}
+	}
+
+	return tokenOutAmount, fee, err
+}
+
+func (k Keeper) SwapExactAmountOut(
+	ctx sdk.Context,
+	poolId uint64,
+	tokenOutAmount uint64,
+	path []string,
+) (uint64, uint64, error) {
+	poolParam, err := k.GetPoolParamForId(ctx, poolId)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
+		path[i], path[j] = path[j], path[i]
+	}
+
+	tokenInAmount := tokenOutAmount
+	for i, tokenDenomOut := range path {
+		if i >= len(path)-1 {
+			break
+		}
+
+		tokenDenomIn := path[i+1]
+
+		tokenInAmount, err = k.SwapToken(ctx, poolId, tokenInAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_OUT)
+		if err != nil {
+			return 0, 0, err
+		}
+	}
+
+	// calc fee and send it to feeCollector
+	fee := tokenInAmount * poolParam.SwapFee / (types.TOTALPERCENT - poolParam.SwapFee)
+	tokenInAmount += fee
+
+	return tokenInAmount, fee, err
+}
+
 // SwapToken swaps input token to output token
 // type = 1, 2
 // if type == 1, input exact amount
@@ -24,12 +93,19 @@ func (k Keeper) SwapToken(
 		return 0, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
 	}
 
+	if tokenDenomIn == tokenDenomOut {
+		return 0, types.ErrInvalidSwapDenom
+	}
+
 	inputId, outputId := int(0), int(0)
 	for i, poolAsset := range pool.PoolAssets {
 		if poolAsset.TokenDenom == tokenDenomIn {
 			inputId = i
 		} else if poolAsset.TokenDenom == tokenDenomOut {
 			outputId = i
+		}
+		if inputId != 0 && outputId != 0 {
+			break
 		}
 	}
 

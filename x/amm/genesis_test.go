@@ -7,6 +7,7 @@ import (
 	"frogchain/testutil/nullify"
 	"frogchain/x/amm"
 	"frogchain/x/amm/types"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,9 +18,55 @@ func TestGenesis(t *testing.T) {
 		PoolList: []types.Pool{
 			{
 				Id: 0,
+				PoolParam: types.PoolParam{
+					SwapFee: 1,
+					ExitFee: 1,
+				},
+				PoolAssets: []types.PoolToken{
+					types.PoolToken{
+						TokenDenom:   "coin",
+						TokenWeight:  1,
+						TokenReserve: 100,
+					},
+					types.PoolToken{
+						TokenDenom:   "val",
+						TokenWeight:  1,
+						TokenReserve: 100,
+					},
+				},
+				ShareToken: &types.PoolToken{
+					TokenDenom:   types.ShareTokenIndex(0),
+					TokenWeight:  1,
+					TokenReserve: 100,
+				},
+				MinimumLiquidity: 1000,
+				IsActivated:      true,
 			},
 			{
 				Id: 1,
+				PoolParam: types.PoolParam{
+					SwapFee: 1,
+					ExitFee: 1,
+				},
+				PoolAssets: []types.PoolToken{
+					types.PoolToken{
+						TokenDenom:   "coin",
+						TokenWeight:  1,
+						TokenReserve: 100,
+					},
+					types.PoolToken{
+						TokenDenom:   "val",
+						TokenWeight:  1,
+						TokenReserve: 100,
+					},
+				},
+				ShareToken: &types.PoolToken{
+					TokenDenom:   types.ShareTokenIndex(1),
+					TokenWeight:  1,
+					TokenReserve: 100,
+				},
+				MinimumLiquidity: 1000,
+				IsActivated:      true,
 			},
 		},
 		PoolCount: 2,

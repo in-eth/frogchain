@@ -24,6 +24,6 @@ func (k Keeper) GetPoolParam(goCtx context.Context, req *types.QueryGetPoolParam
 	}
 
 	return &types.QueryGetPoolParamResponse{
-		PoolParam: &poolParam,
+		PoolParam: poolParam,
 	}, nil
 }

@@ -120,6 +120,6 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	return &types.MsgAddLiquidityResponse{
-		ShareToken: &newShareToken,
+		ShareToken: newShareToken,
 	}, nil
 }

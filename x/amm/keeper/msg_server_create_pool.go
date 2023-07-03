@@ -14,7 +14,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 	// pool data
 	var pool = types.Pool{
-		PoolParam:   msg.PoolParam,
+		PoolParam:   *msg.PoolParam,
 		PoolAssets:  msg.PoolAssets,
 		IsActivated: true,
 	}
@@ -39,7 +39,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 		poolAsset := msg.PoolAssets[i]
 		poolAsset.TokenReserve = assetAmount
-		err := k.SetPoolToken(ctx, poolId, uint64(i), *poolAsset)
+		err := k.SetPoolToken(ctx, poolId, uint64(i), poolAsset)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +63,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		TokenWeight:  1,
 		TokenReserve: math.NewIntFromBigInt(shareAmount).Uint64(),
 	}
-	err := k.SetPoolShareToken(ctx, poolId, shareToken)
+	err := k.SetPoolShareToken(ctx, poolId, &shareToken)
 	if err != nil {
 		return nil, err
 	}
@@ -79,6 +79,10 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 
 	// minimun liquidity is truncated to maintain pool
 	minLiquidity := sdk.NewInt(types.MINIMUM_LIQUIDITY)
+
+	if shareAmount.Cmp(math.Int.BigInt(math.NewInt(types.MINIMUM_LIQUIDITY))) != 1 {
+		return nil, sdkError
+	}
 
 	// creator receive share token except minimum liquidity which is for maintaining pool
 	creatorShareAmount := shareAmount.Sub(shareAmount, math.Int.BigInt(minLiquidity))

@@ -1,10 +1,7 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgAddLiquidity = "add_liquidity"
@@ -44,16 +41,12 @@ func (msg *MsgAddLiquidity) GetSignBytes() []byte {
 func (msg *MsgAddLiquidity) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(ErrInvalidAddress, "invalid creator address (%s)", err)
+		return ErrInvalidAddress
 	}
 
 	for i, desiredAmount := range msg.DesiredAmounts {
-		if desiredAmount < msg.MinAmounts[i] {
-			return sdkerrors.Wrapf(
-				ErrInvalidAmount,
-				"invalid desired and min amounts (%s, %s)",
-				fmt.Sprint(desiredAmount),
-				fmt.Sprint(msg.MinAmounts[i]))
+		if desiredAmount < msg.MinAmounts[i] || desiredAmount == 0 || msg.MinAmounts[i] == 0 {
+			return ErrInvalidAmount
 		}
 	}
 	return nil

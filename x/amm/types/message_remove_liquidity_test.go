@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"frogchain/testutil/sample"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +19,7 @@ func TestMsgRemoveLiquidity_ValidateBasic(t *testing.T) {
 			msg: MsgRemoveLiquidity{
 				Creator: "invalid_address",
 			},
-			err: sdkerrors.ErrInvalidAddress,
+			err: ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgRemoveLiquidity{
