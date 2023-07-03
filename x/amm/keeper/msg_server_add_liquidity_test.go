@@ -9,37 +9,24 @@ import (
 	"frogchain/x/amm/keeper"
 	"frogchain/x/amm/types"
 
+	"frogchain/x/amm/testutil"
+
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )
 
-func setupMsgAddLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context) {
-	// *gomock.Controller, *testutil.MockBankKeeper) {
-	// ctrl := gomock.NewController(t)
-	// bankMock := testutil.NewMockBankKeeper(ctrl)
-	k, ctx := keepertest.AmmKeeperWithMocks(t, nil)
+func setupMsgAddLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context,
+	*gomock.Controller, *testutil.MockBankKeeper) {
+	ctrl := gomock.NewController(t)
+	bankMock := testutil.NewMockBankKeeper(ctrl)
+	k, ctx := keepertest.AmmKeeperWithMocks(t, bankMock)
 	amm.InitGenesis(ctx, *k, *types.DefaultGenesis())
 	server := keeper.NewMsgServerImpl(*k)
 	context := sdk.WrapSDKContext(ctx)
 
-	// bankMock.EXPECT().SendCoinsFromAccountToModule(ctx, alice, types.ModuleName, sdk.NewCoins(
-	// 	sdk.NewCoin(
-	// 		"token",
-	// 		sdk.NewInt(10),
-	// 	),
-	// 	sdk.NewCoin(
-	// 		"foocoin",
-	// 		sdk.NewInt(10),
-	// 	),
-	// ))
-
-	// bankMock.EXPECT().SendCoinsFromModuleToAccount(ctx, types.ModuleName, alice, sdk.NewCoins(
-	// 	sdk.NewCoin(
-	// 		types.ShareTokenIndex(1),
-	// 		sdk.NewInt(10),
-	// 	),
-	// ))
+	bankMock.ExpectAny(context)
 
 	server.CreatePool(context, &types.MsgCreatePool{
 		Creator: alice,
@@ -60,16 +47,15 @@ func setupMsgAddLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, context
 				TokenReserve: 0,
 			},
 		},
-		AssetAmounts: []uint64{10, 10},
+		AssetAmounts: []uint64{10000, 10000},
 	})
-	return server, *k, context //ctrl, bankMock
+	return server, *k, context, ctrl, bankMock
 }
 
 func TestMsgAddLiquidityNoKey(t *testing.T) {
-	// ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
-	ms, _, context := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
 	ctx := sdk.UnwrapSDKContext(context)
-	// defer ctrl.Finish()
+	defer ctrl.Finish()
 	createResponse, err := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
 		Creator:        alice,
 		PoolId:         2,
@@ -78,28 +64,46 @@ func TestMsgAddLiquidityNoKey(t *testing.T) {
 	})
 	require.Nil(t, createResponse)
 	require.Equal(t,
-		"key 1 doesn't exist: key not found",
+		"key 2 doesn't exist: key not found",
+		err.Error())
+}
+
+func TestMsgAddLiquidityNotCorrectAmountLength(t *testing.T) {
+	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ctx := sdk.UnwrapSDKContext(context)
+	defer ctrl.Finish()
+
+	addResponse, err := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
+		Creator:        alice,
+		PoolId:         0,
+		DesiredAmounts: []uint64{10, 10, 10},
+		MinAmounts:     []uint64{10, 10, 10},
+	})
+	require.Nil(t, addResponse)
+	require.Equal(t,
+		"invalid assets length",
 		err.Error())
 }
 
 func TestMsgAddLiquidity(t *testing.T) {
 	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
-	// ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
-	ms, _, context := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
 	ctx := sdk.UnwrapSDKContext(context)
-	// defer ctrl.Finish()
+	defer ctrl.Finish()
 
 	addResponse, _ := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
 		Creator:        alice,
-		PoolId:         1,
+		PoolId:         0,
 		DesiredAmounts: []uint64{10, 10},
 		MinAmounts:     []uint64{10, 10},
 	})
-	require.Nil(t, addResponse)
 
-	shareToken := sdk.NewCoin(types.ShareTokenIndex(1), math.NewInt(10))
+	shareToken := sdk.NewCoin(types.ShareTokenIndex(0), math.NewInt(10))
 
-	require.EqualValues(t, types.MsgAddLiquidityResponse{
+	response := &types.MsgAddLiquidityResponse{
 		ShareToken: shareToken,
-	}, *addResponse)
+	}
+
+	require.EqualValues(t, response, addResponse)
 }

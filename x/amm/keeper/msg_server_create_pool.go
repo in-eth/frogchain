@@ -80,6 +80,10 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	// minimun liquidity is truncated to maintain pool
 	minLiquidity := sdk.NewInt(types.MINIMUM_LIQUIDITY)
 
+	if shareAmount.Cmp(math.Int.BigInt(math.NewInt(types.MINIMUM_LIQUIDITY))) != 1 {
+		return nil, sdkError
+	}
+
 	// creator receive share token except minimum liquidity which is for maintaining pool
 	creatorShareAmount := shareAmount.Sub(shareAmount, math.Int.BigInt(minLiquidity))
 	creatorShareToken := sdk.NewCoins(

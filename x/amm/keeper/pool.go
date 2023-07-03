@@ -120,6 +120,10 @@ func (k Keeper) GetPoolTokenForId(ctx sdk.Context, poolId uint64, assetId uint64
 		return pool.PoolAssets[assetId], sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
 	}
 
+	if len(pool.PoolAssets) <= int(assetId) {
+		return types.PoolToken{}, types.ErrInvalidLength
+	}
+
 	return pool.PoolAssets[assetId], nil
 }
 
