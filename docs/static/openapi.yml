@@ -35464,7 +35464,7 @@ paths:
                       description: |-
                         Pool has my PoolAssets that has token and weight.
                         weight determines the value of token.
-                    mininumliquidity:
+                    minimumLiquidity:
                       type: string
                       format: uint64
                       title: >-
@@ -35679,7 +35679,7 @@ paths:
                     description: |-
                       Pool has my PoolAssets that has token and weight.
                       weight determines the value of token.
-                  mininumliquidity:
+                  minimumLiquidity:
                     type: string
                     format: uint64
                     title: >-
@@ -71460,7 +71460,7 @@ definitions:
         description: |-
           Pool has my PoolAssets that has token and weight.
           weight determines the value of token.
-      mininumliquidity:
+      minimumLiquidity:
         type: string
         format: uint64
         title: >-
@@ -71616,7 +71616,7 @@ definitions:
               description: |-
                 Pool has my PoolAssets that has token and weight.
                 weight determines the value of token.
-            mininumliquidity:
+            minimumLiquidity:
               type: string
               format: uint64
               title: >-
@@ -71812,7 +71812,7 @@ definitions:
             description: |-
               Pool has my PoolAssets that has token and weight.
               weight determines the value of token.
-          mininumliquidity:
+          minimumLiquidity:
             type: string
             format: uint64
             title: >-

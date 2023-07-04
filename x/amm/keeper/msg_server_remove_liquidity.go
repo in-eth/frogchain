@@ -53,8 +53,6 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 			return nil, err
 		}
 
-		fmt.Print(shareToken.TokenReserve)
-
 		// calculate token amount for liquidity
 		castAmount := liquidity * poolAsset.TokenReserve / shareToken.TokenReserve
 
