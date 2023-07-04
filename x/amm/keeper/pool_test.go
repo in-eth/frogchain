@@ -15,6 +15,28 @@ import (
 func createNPool(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Pool {
 	items := make([]types.Pool, n)
 	for i := range items {
+		items[i].PoolAssets = []types.PoolToken{
+			types.PoolToken{
+				TokenDenom:   "123",
+				TokenReserve: 10,
+			},
+			types.PoolToken{
+				TokenDenom:   "124",
+				TokenReserve: 50,
+			},
+		}
+
+		items[i].PoolParam = types.PoolParam{
+			SwapFee:      12,
+			ExitFee:      15,
+			FeeCollector: "user1",
+		}
+
+		items[i].ShareToken = &types.PoolToken{
+			TokenDenom:   types.ShareTokenIndex(uint64(i)),
+			TokenReserve: 50,
+		}
+
 		items[i].Id = keeper.AppendPool(ctx, items[i])
 	}
 	return items

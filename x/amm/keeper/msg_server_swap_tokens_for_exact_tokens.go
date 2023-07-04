@@ -24,9 +24,7 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 	if ctx.BlockTime().After(deadline) {
 		return nil, sdkerrors.Wrapf(
 			types.ErrDeadlinePassed,
-			types.ErrDeadlinePassed.Error(),
 			deadline.UTC().Format(types.DeadlineLayout),
-			ctx.BlockTime().UTC().Format(types.DeadlineLayout),
 		)
 	}
 
@@ -66,6 +64,9 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 	}
 
 	tokenInAmount, fee, err := k.SwapExactAmountOut(ctx, msg.PoolId, msg.AmountOut, msg.Path)
+	if err != nil {
+		return nil, err
+	}
 
 	// send fee token to fee collector
 	err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(
@@ -81,7 +82,7 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 	// send input token from sender to module
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(
 		sdk.NewCoin(
-			msg.Path[len(msg.Path)-1],
+			msg.Path[0],
 			sdk.NewInt(int64(tokenInAmount)),
 		),
 	))

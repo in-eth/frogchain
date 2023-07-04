@@ -59,7 +59,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 		// if input token amount is below min amount, then revert
 		if castAmount < minAmount {
 			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
-				"calculated amount is below minimum, %d, %d, %d",
+				"calculated amount is below minimum, %s, %s, %s",
 				fmt.Sprint(i),
 				fmt.Sprint(castAmount),
 				fmt.Sprint(minAmount),

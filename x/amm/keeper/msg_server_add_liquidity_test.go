@@ -86,6 +86,42 @@ func TestMsgAddLiquidityNotCorrectAmountLength(t *testing.T) {
 		err.Error())
 }
 
+func TestMsgAddLiquidityNoLiquidity(t *testing.T) {
+	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ctx := sdk.UnwrapSDKContext(context)
+	defer ctrl.Finish()
+
+	addResponse, err := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
+		Creator:        alice,
+		PoolId:         0,
+		DesiredAmounts: []uint64{0, 10},
+		MinAmounts:     []uint64{10, 10},
+	})
+	require.Nil(t, addResponse)
+	require.Equal(t,
+		"no liquidity with amounts you deposit: invalid amount",
+		err.Error())
+}
+
+func TestMsgAddLiquidityMinErr(t *testing.T) {
+	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ctx := sdk.UnwrapSDKContext(context)
+	defer ctrl.Finish()
+
+	addResponse, err := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
+		Creator:        alice,
+		PoolId:         0,
+		DesiredAmounts: []uint64{10, 10},
+		MinAmounts:     []uint64{11, 10},
+	})
+	require.Nil(t, addResponse)
+	require.Equal(t,
+		"calculated amount is below minimum, 0, 10, 11: invalid amount",
+		err.Error())
+}
+
 func TestMsgAddLiquidity(t *testing.T) {
 	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
 	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)

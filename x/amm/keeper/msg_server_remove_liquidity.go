@@ -39,6 +39,62 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		sdk.NewInt(int64(liquidity)),
 	)
 
+	if poolAssetsLen, _ := k.GetPoolAssetsLength(ctx, msg.PoolId); len(msg.MinAmounts) != poolAssetsLen {
+		return nil, types.ErrInvalidLength
+	}
+
+	// send assets from pool to account
+	receiveTokens := sdk.NewCoins()
+	returnVal := []sdk.Coin{}
+	for i, minAmount := range msg.MinAmounts {
+		// get pool asset
+		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
+		if err != nil {
+			return nil, err
+		}
+
+		fmt.Print(shareToken.TokenReserve)
+
+		// calculate token amount for liquidity
+		castAmount := liquidity * poolAsset.TokenReserve / shareToken.TokenReserve
+
+		if castAmount < minAmount {
+			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
+				"calculated amount is below minimum, %s, %s, %s",
+				fmt.Sprint(i),
+				fmt.Sprint(castAmount),
+				fmt.Sprint(minAmount),
+			)
+		}
+
+		receiveTokens.Add(
+			sdk.NewCoin(
+				poolAsset.TokenDenom,
+				math.NewInt(int64(castAmount)),
+			),
+		)
+
+		returnVal = append(returnVal, sdk.NewCoin(
+			poolAsset.TokenDenom,
+			math.NewInt(int64(castAmount)),
+		))
+
+		// update pool asset data
+		poolAsset.TokenReserve -= castAmount
+		k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
+	}
+
+	// send tokens from module to account
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(
+		ctx,
+		types.ModuleName,
+		liquidityProvider,
+		receiveTokens,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	//move share tokens from account to module
 	err = k.bankKeeper.SendCoinsFromAccountToModule(
 		ctx,
@@ -80,51 +136,7 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		return nil, err
 	}
 
-	// send assets from pool to account
-	receiveTokens := sdk.NewCoins()
-	for i, minAmount := range msg.MinAmounts {
-		// get pool asset
-		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
-		if err != nil {
-			return nil, err
-		}
-
-		// calculate token amount for liquidity
-		castAmount := liquidity * poolAsset.TokenReserve / shareToken.TokenReserve
-
-		if castAmount < minAmount {
-			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
-				"calculated amount is below minimum, %d, %d, %d",
-				fmt.Sprint(i),
-				fmt.Sprint(castAmount),
-				fmt.Sprint(minAmount),
-			)
-		}
-
-		receiveTokens.Add(
-			sdk.NewCoin(
-				poolAsset.TokenDenom,
-				math.NewInt(int64(castAmount)),
-			),
-		)
-
-		// update pool asset data
-		poolAsset.TokenReserve -= castAmount
-		k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
-	}
-
-	// send tokens from module to account
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(
-		ctx,
-		types.ModuleName,
-		liquidityProvider,
-		receiveTokens,
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	return &types.MsgRemoveLiquidityResponse{
-		ReceivedTokens: receiveTokens,
+		ReceivedTokens: returnVal,
 	}, nil
 }

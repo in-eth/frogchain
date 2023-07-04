@@ -6,6 +6,6 @@ import (
 
 const (
 	alice = testutil.Alice
-	// bob   = testutil.Bob
+	bob   = testutil.Bob
 	// carol = testutil.Carol
 )
