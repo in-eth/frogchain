@@ -59,7 +59,7 @@ func setupMsgRemoveLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, cont
 }
 
 func TestMsgRemoveLiquidityNoKey(t *testing.T) {
-	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgRemoveLiquidity(t)
 	ctx := sdk.UnwrapSDKContext(context)
 	defer ctrl.Finish()
 	removeResponse, err := ms.RemoveLiquidity(ctx, &types.MsgRemoveLiquidity{
@@ -76,7 +76,7 @@ func TestMsgRemoveLiquidityNoKey(t *testing.T) {
 }
 
 func TestMsgRemoveLiquidity(t *testing.T) {
-	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgRemoveLiquidity(t)
 	ctx := sdk.UnwrapSDKContext(context)
 	defer ctrl.Finish()
 	removeResponse, _ := ms.RemoveLiquidity(ctx, &types.MsgRemoveLiquidity{
