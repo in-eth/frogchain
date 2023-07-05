@@ -66,14 +66,21 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 			)
 		}
 
-		sendToken := sdk.NewCoin(
-			poolAsset.Denom,
-			sdk.NewInt(int64(msg.DesiredAmounts[i])),
+		castAmount := liquidityAmount * poolAsset.Amount.Uint64() / shareToken.Amount.Uint64()
+
+		collateral = collateral.Add(
+			sdk.NewCoin(
+				poolAsset.Denom,
+				sdk.NewInt(int64(msg.DesiredAmounts[i])),
+			),
 		)
 
-		collateral = collateral.Add(sendToken)
-
-		poolAsset = poolAsset.Add(sendToken)
+		poolAsset = poolAsset.Add(
+			sdk.NewCoin(
+				poolAsset.Denom,
+				sdk.NewInt(int64(castAmount)),
+			),
+		)
 		err = k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
 		if err != nil {
 			return nil, err
