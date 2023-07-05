@@ -28,14 +28,14 @@ func TestGetPoolShareTokenDenom(t *testing.T) {
 			request: &types.QueryGetPoolShareTokenDenomRequest{
 				Id: msgs[0].Id,
 			},
-			response: &types.QueryGetPoolShareTokenDenomResponse{ShareDenom: msgs[0].ShareToken.TokenDenom},
+			response: &types.QueryGetPoolShareTokenDenomResponse{ShareDenom: msgs[0].ShareToken.Denom},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetPoolShareTokenDenomRequest{
 				Id: msgs[1].Id,
 			},
-			response: &types.QueryGetPoolShareTokenDenomResponse{ShareDenom: msgs[1].ShareToken.TokenDenom},
+			response: &types.QueryGetPoolShareTokenDenomResponse{ShareDenom: msgs[1].ShareToken.Denom},
 		},
 		{
 			desc: "KeyNotFound",

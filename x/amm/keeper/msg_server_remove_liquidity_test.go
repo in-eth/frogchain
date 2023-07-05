@@ -30,23 +30,21 @@ func setupMsgRemoveLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, cont
 	server.CreatePool(context, &types.MsgCreatePool{
 		Creator: alice,
 		PoolParam: &types.PoolParam{
-			SwapFee:      1,
-			ExitFee:      1,
+			SwapFee:      0,
+			ExitFee:      0,
 			FeeCollector: alice,
 		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
+		PoolAssets: []sdk.Coin{
+			sdk.NewCoin(
+				"token",
+				sdk.NewInt(10000),
+			),
+			sdk.NewCoin(
+				"foocoin",
+				sdk.NewInt(10000),
+			),
 		},
-		AssetAmounts: []uint64{10000, 10000},
+		AssetWeights: []uint64{10, 10},
 	})
 
 	server.AddLiquidity(ctx, &types.MsgAddLiquidity{
@@ -88,8 +86,8 @@ func TestMsgRemoveLiquidity(t *testing.T) {
 
 	response := &types.MsgRemoveLiquidityResponse{
 		ReceivedTokens: []sdk.Coin{
-			sdk.NewCoin("token", sdk.NewInt(10)),
 			sdk.NewCoin("foocoin", sdk.NewInt(10)),
+			sdk.NewCoin("token", sdk.NewInt(10)),
 		},
 	}
 

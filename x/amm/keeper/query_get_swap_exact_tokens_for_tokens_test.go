@@ -29,8 +29,8 @@ func TestGetSwapExactTokensForTokens(t *testing.T) {
 				PoolId:   msgs[0].Id,
 				AmountIn: 10,
 				Path: []string{
-					"123",
-					"124",
+					"foocoin",
+					"token",
 				},
 			},
 			response: &types.QueryGetSwapExactTokensForTokensResponse{AmountOut: 25},
@@ -41,8 +41,8 @@ func TestGetSwapExactTokensForTokens(t *testing.T) {
 				PoolId:   msgs[1].Id,
 				AmountIn: 10,
 				Path: []string{
-					"123",
-					"124",
+					"foocoin",
+					"token",
 				},
 			},
 			response: &types.QueryGetSwapExactTokensForTokensResponse{AmountOut: 25},
@@ -53,8 +53,8 @@ func TestGetSwapExactTokensForTokens(t *testing.T) {
 				PoolId:   msgs[1].Id,
 				AmountIn: 10,
 				Path: []string{
-					"123",
-					"125",
+					"foocoin",
+					"token1",
 				},
 			},
 			err: types.ErrInvalidPath,

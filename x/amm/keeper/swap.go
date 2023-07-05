@@ -4,7 +4,6 @@ import (
 	"frogchain/x/amm/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k Keeper) SwapExactAmountIn(
@@ -88,9 +87,12 @@ func (k Keeper) SwapToken(
 	tokenDenomOut string,
 	swapType uint,
 ) (uint64, error) {
-	pool, found := k.GetPool(ctx, poolId)
-	if !found {
-		return 0, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", poolId)
+	poolAssets, err := k.GetAllPoolAssets(
+		ctx,
+		poolId,
+	)
+	if err != nil {
+		return 0, err
 	}
 
 	if tokenDenomIn == tokenDenomOut {
@@ -98,10 +100,10 @@ func (k Keeper) SwapToken(
 	}
 
 	inputId, outputId := int(-1), int(-1)
-	for i, poolAsset := range pool.PoolAssets {
-		if poolAsset.TokenDenom == tokenDenomIn {
+	for i, poolAsset := range poolAssets {
+		if poolAsset.Denom == tokenDenomIn {
 			inputId = i
-		} else if poolAsset.TokenDenom == tokenDenomOut {
+		} else if poolAsset.Denom == tokenDenomOut {
 			outputId = i
 		}
 		if inputId != -1 && outputId != -1 {
@@ -113,8 +115,8 @@ func (k Keeper) SwapToken(
 		return 0, types.ErrInvalidPath
 	}
 
-	reserve0 := pool.PoolAssets[inputId].TokenReserve
-	reserve1 := pool.PoolAssets[outputId].TokenReserve
+	reserve0 := poolAssets[inputId].Amount.Uint64()
+	reserve1 := poolAssets[outputId].Amount.Uint64()
 
 	tokenInAmount, tokenOutAmount := uint64(0), uint64(0)
 	if swapType == types.SWAP_EXACT_TOKEN_IN {
@@ -128,10 +130,11 @@ func (k Keeper) SwapToken(
 		tokenInAmount = (reserve0 * tokenOutAmount) / (reserve1 - tokenOutAmount)
 	}
 
-	pool.PoolAssets[inputId].TokenReserve += tokenInAmount
-	pool.PoolAssets[outputId].TokenReserve -= tokenOutAmount
+	inputAsset := poolAssets[inputId].AddAmount(sdk.NewInt(int64(tokenInAmount)))
+	outputAsset := poolAssets[outputId].SubAmount(sdk.NewInt(int64(tokenOutAmount)))
 
-	k.SetPool(ctx, pool)
+	k.SetPoolToken(ctx, poolId, uint64(inputId), inputAsset)
+	k.SetPoolToken(ctx, poolId, uint64(outputId), outputAsset)
 
 	if swapType == types.SWAP_EXACT_TOKEN_IN {
 		return tokenOutAmount, nil

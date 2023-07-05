@@ -24,6 +24,6 @@ func (k Keeper) GetPoolTotalLiquidity(goCtx context.Context, req *types.QueryGet
 	}
 
 	return &types.QueryGetPoolTotalLiquidityResponse{
-		TotalLiquidity: shareToken.TokenReserve,
+		TotalLiquidity: shareToken.Amount.Uint64(),
 	}, nil
 }

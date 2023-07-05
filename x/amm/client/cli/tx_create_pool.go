@@ -12,13 +12,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ = strconv.Itoa(0)
 
 func CmdCreatePool() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-pool [pool-param] [pool-assets] [asset-amounts]",
+		Use:   "create-pool [pool-param] [pool-assets] [asset-weights]",
 		Short: "Broadcast message create-pool",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -32,26 +34,20 @@ func CmdCreatePool() *cobra.Command {
 			}
 
 			// unmarshal PoolAssets
-			argCastPoolAssets := strings.Split(args[1], listSeparator)
-			argPoolAssets := make([]types.PoolToken, len(argCastPoolAssets))
-			for i, arg := range argCastPoolAssets {
-				argPoolAsset := new(types.PoolToken)
-				err = json.Unmarshal([]byte(arg), argPoolAssets[i])
-				if err != nil {
-					return err
-				}
-				argPoolAssets[i] = *argPoolAsset
+			argPoolAssets, err := sdk.ParseCoinsNormalized(args[1])
+			if err != nil {
+				return err
 			}
 
 			// get asset Amounts
-			argCastAssetAmounts := strings.Split(args[2], listSeparator)
-			argAssetAmounts := make([]uint64, len(argCastAssetAmounts))
-			for i, arg := range argCastAssetAmounts {
+			argCastAssetWeights := strings.Split(args[2], listSeparator)
+			argAssetWeights := make([]uint64, len(argCastAssetWeights))
+			for i, arg := range argCastAssetWeights {
 				value, err := cast.ToUint64E(arg)
 				if err != nil {
 					return err
 				}
-				argAssetAmounts[i] = value
+				argAssetWeights[i] = value
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -63,7 +59,7 @@ func CmdCreatePool() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				*argPoolParam,
 				argPoolAssets,
-				argAssetAmounts,
+				argAssetWeights,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

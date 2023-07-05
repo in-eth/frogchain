@@ -28,14 +28,14 @@ func TestGetPoolTotalLiquidity(t *testing.T) {
 			request: &types.QueryGetPoolTotalLiquidityRequest{
 				Id: msgs[0].Id,
 			},
-			response: &types.QueryGetPoolTotalLiquidityResponse{TotalLiquidity: msgs[0].ShareToken.TokenReserve},
+			response: &types.QueryGetPoolTotalLiquidityResponse{TotalLiquidity: msgs[0].ShareToken.Amount.Uint64()},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetPoolTotalLiquidityRequest{
 				Id: msgs[1].Id,
 			},
-			response: &types.QueryGetPoolTotalLiquidityResponse{TotalLiquidity: msgs[1].ShareToken.TokenReserve},
+			response: &types.QueryGetPoolTotalLiquidityResponse{TotalLiquidity: msgs[1].ShareToken.Amount.Uint64()},
 		},
 		{
 			desc: "KeyNotFound",

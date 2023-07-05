@@ -8,7 +8,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "frogchain/amm/params.proto";
 import "frogchain/amm/pool.proto";
 import "frogchain/amm/pool_param.proto";
-import "frogchain/amm/pool_token.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "frogchain/x/amm/types";
 
@@ -153,7 +153,7 @@ message QueryGetPoolAssetsRequest {
 }
 
 message QueryGetPoolAssetsResponse {
-  repeated PoolToken assets = 1 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin assets = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetSwapExactTokensForTokensRequest {

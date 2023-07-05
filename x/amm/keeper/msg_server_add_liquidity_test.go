@@ -35,19 +35,17 @@ func setupMsgAddLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, context
 			ExitFee:      1,
 			FeeCollector: alice,
 		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
+		PoolAssets: []sdk.Coin{
+			sdk.NewCoin(
+				"token",
+				sdk.NewInt(10000),
+			),
+			sdk.NewCoin(
+				"foocoin",
+				sdk.NewInt(10000),
+			),
 		},
-		AssetAmounts: []uint64{10000, 10000},
+		AssetWeights: []uint64{1, 1},
 	})
 	return server, *k, context, ctrl, bankMock
 }
@@ -80,6 +78,7 @@ func TestMsgAddLiquidityNotCorrectAmountLength(t *testing.T) {
 		DesiredAmounts: []uint64{10, 10, 10},
 		MinAmounts:     []uint64{10, 10, 10},
 	})
+
 	require.Nil(t, addResponse)
 	require.Equal(t,
 		"invalid assets length",

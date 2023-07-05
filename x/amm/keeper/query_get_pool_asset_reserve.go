@@ -24,6 +24,6 @@ func (k Keeper) GetPoolAssetReserve(goCtx context.Context, req *types.QueryGetPo
 	}
 
 	return &types.QueryGetPoolAssetReserveResponse{
-		Reserve: tokenAsset.TokenReserve,
+		Reserve: tokenAsset.Amount.Uint64(),
 	}, nil
 }

@@ -28,7 +28,7 @@ func TestGetPoolAssetReserve(t *testing.T) {
 				Id:      msgs[0].Id,
 				AssetId: 0,
 			},
-			response: &types.QueryGetPoolAssetReserveResponse{Reserve: msgs[0].PoolAssets[0].TokenReserve},
+			response: &types.QueryGetPoolAssetReserveResponse{Reserve: msgs[0].PoolAssets[0].Amount.Uint64()},
 		},
 		{
 			desc: "Second",
@@ -36,7 +36,7 @@ func TestGetPoolAssetReserve(t *testing.T) {
 				Id:      msgs[1].Id,
 				AssetId: 0,
 			},
-			response: &types.QueryGetPoolAssetReserveResponse{Reserve: msgs[1].PoolAssets[0].TokenReserve},
+			response: &types.QueryGetPoolAssetReserveResponse{Reserve: msgs[1].PoolAssets[0].Amount.Uint64()},
 		},
 		{
 			desc: "KeyNotFound",

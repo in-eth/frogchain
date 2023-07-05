@@ -40,19 +40,17 @@ func TestMsgCreatePoolNotEnoughCoin(t *testing.T) {
 			ExitFee:      1,
 			FeeCollector: alice,
 		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
+		PoolAssets: []sdk.Coin{
+			sdk.NewCoin(
+				"token",
+				sdk.NewInt(100),
+			),
+			sdk.NewCoin(
+				"foocoin",
+				sdk.NewInt(100),
+			),
 		},
-		AssetAmounts: []uint64{100, 100},
+		AssetWeights: []uint64{1, 1},
 	})
 	require.Nil(t, createResponse)
 	require.Equal(t,
@@ -72,19 +70,17 @@ func TestMsgCreatePool(t *testing.T) {
 			ExitFee:      1,
 			FeeCollector: alice,
 		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
+		PoolAssets: []sdk.Coin{
+			sdk.NewCoin(
+				"token",
+				sdk.NewInt(10000),
+			),
+			sdk.NewCoin(
+				"foocoin",
+				sdk.NewInt(10000),
+			),
 		},
-		AssetAmounts: []uint64{10000, 10000},
+		AssetWeights: []uint64{10, 10},
 	})
 
 	require.EqualValues(t, types.MsgCreatePoolResponse{

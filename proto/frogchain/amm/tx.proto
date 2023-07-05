@@ -3,7 +3,6 @@ syntax = "proto3";
 package frogchain.amm;
 
 import "frogchain/amm/pool_param.proto";
-import "frogchain/amm/pool_token.proto";
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
@@ -19,11 +18,11 @@ service Msg {
 }
 
 message MsgCreatePool {
-           string    creator      = 1;
-           PoolParam poolParam    = 2;
-  repeated PoolToken poolAssets   = 3 [(gogoproto.nullable) = false];
+           string                   creator      = 1;
+           PoolParam                poolParam    = 2;
+  repeated cosmos.base.v1beta1.Coin poolAssets   = 3 [(gogoproto.nullable) = false];
   // assetAmounts : amounts for sending assets to pool
-  repeated uint64    assetAmounts = 4 [(gogoproto.nullable) = false];
+  repeated uint64                   assetWeights = 4 [(gogoproto.nullable) = false];
 }
 
 message MsgCreatePoolResponse {

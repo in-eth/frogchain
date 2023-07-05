@@ -24,6 +24,6 @@ func (k Keeper) GetPoolTokenDenom(goCtx context.Context, req *types.QueryGetPool
 	}
 
 	return &types.QueryGetPoolTokenDenomResponse{
-		TokenDenom: tokenAsset.TokenDenom,
+		TokenDenom: tokenAsset.Denom,
 	}, nil
 }

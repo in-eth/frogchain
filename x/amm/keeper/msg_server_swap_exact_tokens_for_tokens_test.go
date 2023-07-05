@@ -34,19 +34,17 @@ func setupMsgExactTokensForTokens(t testing.TB) (types.MsgServer, keeper.Keeper,
 			ExitFee:      1,
 			FeeCollector: alice,
 		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
+		PoolAssets: []sdk.Coin{
+			sdk.NewCoin(
+				"token",
+				sdk.NewInt(10000),
+			),
+			sdk.NewCoin(
+				"foocoin",
+				sdk.NewInt(1000),
+			),
 		},
-		AssetAmounts: []uint64{10000, 10000},
+		AssetWeights: []uint64{1, 1},
 	})
 
 	return server, *k, context, ctrl, bankMock
@@ -121,15 +119,15 @@ func TestMsgSwapExactTokensForTokensPathIncorrect(t *testing.T) {
 		err.Error())
 }
 
-func TestMsgSwapExactTokensForTokensMinAmountExceeded(t *testing.T) {
+func TestMsgSwapExactTokensForTokensUnderMinAmount(t *testing.T) {
 	ms, _, context, ctrl, _ := setupMsgExactTokensForTokens(t)
 	ctx := sdk.UnwrapSDKContext(context)
 	defer ctrl.Finish()
 	swapResponse, err := ms.SwapExactTokensForTokens(ctx, &types.MsgSwapExactTokensForTokens{
 		Creator:      alice,
 		PoolId:       0,
-		AmountIn:     10,
-		AmountOutMin: 10,
+		AmountIn:     1000,
+		AmountOutMin: 100,
 		Path: []string{
 			"token",
 			"foocoin",
@@ -151,8 +149,8 @@ func TestMsgSwapExactTokensForTokens(t *testing.T) {
 	swapResponse, _ := ms.SwapExactTokensForTokens(ctx, &types.MsgSwapExactTokensForTokens{
 		Creator:      alice,
 		PoolId:       0,
-		AmountIn:     10,
-		AmountOutMin: 9,
+		AmountIn:     1000,
+		AmountOutMin: 90,
 		Path: []string{
 			"token",
 			"foocoin",
@@ -162,6 +160,6 @@ func TestMsgSwapExactTokensForTokens(t *testing.T) {
 	})
 
 	require.EqualValues(t, types.MsgSwapExactTokensForTokensResponse{
-		AmountOut: 9,
+		AmountOut: 90,
 	}, *swapResponse)
 }

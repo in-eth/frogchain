@@ -13,8 +13,6 @@ import (
 func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.MsgSwapTokensForExactTokens) (*types.MsgSwapTokensForExactTokensResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-
 	// check deadline is passed
 	deadline, err := time.Parse(types.DeadlineLayout, msg.Deadline)
 	if err != nil {

@@ -34,19 +34,17 @@ func setupMsgTokensForExactTokens(t testing.TB) (types.MsgServer, keeper.Keeper,
 			ExitFee:      1,
 			FeeCollector: alice,
 		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
+		PoolAssets: []sdk.Coin{
+			sdk.NewCoin(
+				"token",
+				sdk.NewInt(10000),
+			),
+			sdk.NewCoin(
+				"foocoin",
+				sdk.NewInt(10000),
+			),
 		},
-		AssetAmounts: []uint64{10000, 10000},
+		AssetWeights: []uint64{10, 10},
 	})
 
 	return server, *k, context, ctrl, bankMock

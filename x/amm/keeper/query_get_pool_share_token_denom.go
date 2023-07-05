@@ -24,6 +24,6 @@ func (k Keeper) GetPoolShareTokenDenom(goCtx context.Context, req *types.QueryGe
 	}
 
 	return &types.QueryGetPoolShareTokenDenomResponse{
-		ShareDenom: shareToken.TokenDenom,
+		ShareDenom: shareToken.Denom,
 	}, nil
 }

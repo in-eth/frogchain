@@ -80,6 +80,7 @@ func TestPoolQueryPaginated(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
 			resp, err := keeper.PoolAll(wctx, request(nil, uint64(i), uint64(step), false))
+
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Pool), step)
 			require.Subset(t,
@@ -93,6 +94,7 @@ func TestPoolQueryPaginated(t *testing.T) {
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
 			resp, err := keeper.PoolAll(wctx, request(next, 0, uint64(step), false))
+
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Pool), step)
 			require.Subset(t,

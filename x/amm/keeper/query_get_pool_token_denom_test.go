@@ -28,7 +28,7 @@ func TestGetPoolTokenDenom(t *testing.T) {
 				Id:      msgs[0].Id,
 				AssetId: 0,
 			},
-			response: &types.QueryGetPoolTokenDenomResponse{TokenDenom: msgs[0].PoolAssets[0].TokenDenom},
+			response: &types.QueryGetPoolTokenDenomResponse{TokenDenom: msgs[0].PoolAssets[0].Denom},
 		},
 		{
 			desc: "Second",
@@ -36,7 +36,7 @@ func TestGetPoolTokenDenom(t *testing.T) {
 				Id:      msgs[1].Id,
 				AssetId: 1,
 			},
-			response: &types.QueryGetPoolTokenDenomResponse{TokenDenom: msgs[1].PoolAssets[1].TokenDenom},
+			response: &types.QueryGetPoolTokenDenomResponse{TokenDenom: msgs[1].PoolAssets[1].Denom},
 		},
 		{
 			desc: "KeyNotFound",
