@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -39,10 +41,12 @@ func (msg *MsgCreatePool) GetSignBytes() []byte {
 }
 
 func (msg *MsgCreatePool) ValidateBasic() error {
+	fmt.Print(msg.Creator)
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return ErrInvalidAddress
 	}
+
 	_, err = sdk.AccAddressFromBech32(msg.PoolParam.FeeCollector)
 	if err != nil {
 		return ErrInvalidAddress

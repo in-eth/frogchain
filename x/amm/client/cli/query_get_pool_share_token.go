@@ -12,13 +12,13 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdGetPoolShareTokenDenom() *cobra.Command {
+func CmdGetPoolShareToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-pool-share-token-denom [id]",
-		Short: "Query get-pool-share-token-denom",
+		Use:   "get-pool-share-token [pool-id]",
+		Short: "Query get-pool-share-token",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			reqId, err := cast.ToUint64E(args[0])
+			reqPoolId, err := cast.ToUint64E(args[0])
 			if err != nil {
 				return err
 			}
@@ -30,12 +30,12 @@ func CmdGetPoolShareTokenDenom() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetPoolShareTokenDenomRequest{
+			params := &types.QueryGetPoolShareTokenRequest{
 
-				Id: reqId,
+				PoolId: reqPoolId,
 			}
 
-			res, err := queryClient.GetPoolShareTokenDenom(cmd.Context(), params)
+			res, err := queryClient.GetPoolShareToken(cmd.Context(), params)
 			if err != nil {
 				return err
 			}

@@ -7,44 +7,42 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func TestGetPoolAssetReserve(t *testing.T) {
+func TestGetPoolShareToken(t *testing.T) {
 	keeper, ctx := keepertest.AmmKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNPool(keeper, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetPoolAssetReserveRequest
-		response *types.QueryGetPoolAssetReserveResponse
+		request  *types.QueryGetPoolShareTokenRequest
+		response *types.QueryGetPoolShareTokenResponse
 		err      error
 	}{
 		{
 			desc: "First",
-			request: &types.QueryGetPoolAssetReserveRequest{
-				Id:      msgs[0].Id,
-				AssetId: 0,
+			request: &types.QueryGetPoolShareTokenRequest{
+				PoolId: msgs[0].Id,
 			},
-			response: &types.QueryGetPoolAssetReserveResponse{Reserve: msgs[0].PoolAssets[0].Amount.Uint64()},
+			response: &types.QueryGetPoolShareTokenResponse{ShareToken: msgs[0].ShareToken},
 		},
 		{
 			desc: "Second",
-			request: &types.QueryGetPoolAssetReserveRequest{
-				Id:      msgs[1].Id,
-				AssetId: 0,
+			request: &types.QueryGetPoolShareTokenRequest{
+				PoolId: msgs[1].Id,
 			},
-			response: &types.QueryGetPoolAssetReserveResponse{Reserve: msgs[1].PoolAssets[0].Amount.Uint64()},
+			response: &types.QueryGetPoolShareTokenResponse{ShareToken: msgs[1].ShareToken},
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.QueryGetPoolAssetReserveRequest{
-				Id:      0,
-				AssetId: 10000,
+			request: &types.QueryGetPoolShareTokenRequest{
+				PoolId: 10000,
 			},
-			err: types.ErrInvalidLength,
+			err: sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key 10000 doesn't exist"),
 		},
 		{
 			desc: "InvalidRequest",
@@ -52,7 +50,7 @@ func TestGetPoolAssetReserve(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.GetPoolAssetReserve(wctx, tc.request)
+			response, err := keeper.GetPoolShareToken(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

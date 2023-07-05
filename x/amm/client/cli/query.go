@@ -29,19 +29,15 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	cmd.AddCommand(CmdShowPool())
 	cmd.AddCommand(CmdGetPoolParam())
 
-	cmd.AddCommand(CmdGetPoolTotalLiquidity())
-
-	cmd.AddCommand(CmdGetPoolTokenDenom())
-
-	cmd.AddCommand(CmdGetPoolShareTokenDenom())
-
-	cmd.AddCommand(CmdGetPoolAssetReserve())
-
 	cmd.AddCommand(CmdGetPoolAssets())
 
 	cmd.AddCommand(CmdGetSwapExactTokensForTokens())
 
 	cmd.AddCommand(CmdGetSwapTokensForExactTokens())
+
+	cmd.AddCommand(CmdGetPoolShareToken())
+
+	cmd.AddCommand(CmdGetPoolAsset())
 
 	// this line is used by starport scaffolding # 1
 

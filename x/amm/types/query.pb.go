@@ -386,374 +386,6 @@ func (m *QueryGetPoolParamResponse) GetPoolParam() PoolParam {
 	return PoolParam{}
 }
 
-type QueryGetPoolTotalLiquidityRequest struct {
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (m *QueryGetPoolTotalLiquidityRequest) Reset()         { *m = QueryGetPoolTotalLiquidityRequest{} }
-func (m *QueryGetPoolTotalLiquidityRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolTotalLiquidityRequest) ProtoMessage()    {}
-func (*QueryGetPoolTotalLiquidityRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{8}
-}
-func (m *QueryGetPoolTotalLiquidityRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolTotalLiquidityRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolTotalLiquidityRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolTotalLiquidityRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolTotalLiquidityRequest.Merge(m, src)
-}
-func (m *QueryGetPoolTotalLiquidityRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolTotalLiquidityRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolTotalLiquidityRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolTotalLiquidityRequest proto.InternalMessageInfo
-
-func (m *QueryGetPoolTotalLiquidityRequest) GetId() uint64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-type QueryGetPoolTotalLiquidityResponse struct {
-	TotalLiquidity uint64 `protobuf:"varint,1,opt,name=totalLiquidity,proto3" json:"totalLiquidity,omitempty"`
-}
-
-func (m *QueryGetPoolTotalLiquidityResponse) Reset()         { *m = QueryGetPoolTotalLiquidityResponse{} }
-func (m *QueryGetPoolTotalLiquidityResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolTotalLiquidityResponse) ProtoMessage()    {}
-func (*QueryGetPoolTotalLiquidityResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{9}
-}
-func (m *QueryGetPoolTotalLiquidityResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolTotalLiquidityResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolTotalLiquidityResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolTotalLiquidityResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolTotalLiquidityResponse.Merge(m, src)
-}
-func (m *QueryGetPoolTotalLiquidityResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolTotalLiquidityResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolTotalLiquidityResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolTotalLiquidityResponse proto.InternalMessageInfo
-
-func (m *QueryGetPoolTotalLiquidityResponse) GetTotalLiquidity() uint64 {
-	if m != nil {
-		return m.TotalLiquidity
-	}
-	return 0
-}
-
-type QueryGetPoolTokenDenomRequest struct {
-	Id      uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	AssetId uint64 `protobuf:"varint,2,opt,name=assetId,proto3" json:"assetId,omitempty"`
-}
-
-func (m *QueryGetPoolTokenDenomRequest) Reset()         { *m = QueryGetPoolTokenDenomRequest{} }
-func (m *QueryGetPoolTokenDenomRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolTokenDenomRequest) ProtoMessage()    {}
-func (*QueryGetPoolTokenDenomRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{10}
-}
-func (m *QueryGetPoolTokenDenomRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolTokenDenomRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolTokenDenomRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolTokenDenomRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolTokenDenomRequest.Merge(m, src)
-}
-func (m *QueryGetPoolTokenDenomRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolTokenDenomRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolTokenDenomRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolTokenDenomRequest proto.InternalMessageInfo
-
-func (m *QueryGetPoolTokenDenomRequest) GetId() uint64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-func (m *QueryGetPoolTokenDenomRequest) GetAssetId() uint64 {
-	if m != nil {
-		return m.AssetId
-	}
-	return 0
-}
-
-type QueryGetPoolTokenDenomResponse struct {
-	TokenDenom string `protobuf:"bytes,1,opt,name=tokenDenom,proto3" json:"tokenDenom,omitempty"`
-}
-
-func (m *QueryGetPoolTokenDenomResponse) Reset()         { *m = QueryGetPoolTokenDenomResponse{} }
-func (m *QueryGetPoolTokenDenomResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolTokenDenomResponse) ProtoMessage()    {}
-func (*QueryGetPoolTokenDenomResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{11}
-}
-func (m *QueryGetPoolTokenDenomResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolTokenDenomResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolTokenDenomResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolTokenDenomResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolTokenDenomResponse.Merge(m, src)
-}
-func (m *QueryGetPoolTokenDenomResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolTokenDenomResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolTokenDenomResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolTokenDenomResponse proto.InternalMessageInfo
-
-func (m *QueryGetPoolTokenDenomResponse) GetTokenDenom() string {
-	if m != nil {
-		return m.TokenDenom
-	}
-	return ""
-}
-
-type QueryGetPoolShareTokenDenomRequest struct {
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (m *QueryGetPoolShareTokenDenomRequest) Reset()         { *m = QueryGetPoolShareTokenDenomRequest{} }
-func (m *QueryGetPoolShareTokenDenomRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolShareTokenDenomRequest) ProtoMessage()    {}
-func (*QueryGetPoolShareTokenDenomRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{12}
-}
-func (m *QueryGetPoolShareTokenDenomRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolShareTokenDenomRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolShareTokenDenomRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolShareTokenDenomRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolShareTokenDenomRequest.Merge(m, src)
-}
-func (m *QueryGetPoolShareTokenDenomRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolShareTokenDenomRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolShareTokenDenomRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolShareTokenDenomRequest proto.InternalMessageInfo
-
-func (m *QueryGetPoolShareTokenDenomRequest) GetId() uint64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-type QueryGetPoolShareTokenDenomResponse struct {
-	ShareDenom string `protobuf:"bytes,1,opt,name=shareDenom,proto3" json:"shareDenom,omitempty"`
-}
-
-func (m *QueryGetPoolShareTokenDenomResponse) Reset()         { *m = QueryGetPoolShareTokenDenomResponse{} }
-func (m *QueryGetPoolShareTokenDenomResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolShareTokenDenomResponse) ProtoMessage()    {}
-func (*QueryGetPoolShareTokenDenomResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{13}
-}
-func (m *QueryGetPoolShareTokenDenomResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolShareTokenDenomResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolShareTokenDenomResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolShareTokenDenomResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolShareTokenDenomResponse.Merge(m, src)
-}
-func (m *QueryGetPoolShareTokenDenomResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolShareTokenDenomResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolShareTokenDenomResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolShareTokenDenomResponse proto.InternalMessageInfo
-
-func (m *QueryGetPoolShareTokenDenomResponse) GetShareDenom() string {
-	if m != nil {
-		return m.ShareDenom
-	}
-	return ""
-}
-
-type QueryGetPoolAssetReserveRequest struct {
-	Id      uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	AssetId uint64 `protobuf:"varint,2,opt,name=assetId,proto3" json:"assetId,omitempty"`
-}
-
-func (m *QueryGetPoolAssetReserveRequest) Reset()         { *m = QueryGetPoolAssetReserveRequest{} }
-func (m *QueryGetPoolAssetReserveRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolAssetReserveRequest) ProtoMessage()    {}
-func (*QueryGetPoolAssetReserveRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{14}
-}
-func (m *QueryGetPoolAssetReserveRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolAssetReserveRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolAssetReserveRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolAssetReserveRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolAssetReserveRequest.Merge(m, src)
-}
-func (m *QueryGetPoolAssetReserveRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolAssetReserveRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolAssetReserveRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolAssetReserveRequest proto.InternalMessageInfo
-
-func (m *QueryGetPoolAssetReserveRequest) GetId() uint64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-func (m *QueryGetPoolAssetReserveRequest) GetAssetId() uint64 {
-	if m != nil {
-		return m.AssetId
-	}
-	return 0
-}
-
-type QueryGetPoolAssetReserveResponse struct {
-	Reserve uint64 `protobuf:"varint,1,opt,name=reserve,proto3" json:"reserve,omitempty"`
-}
-
-func (m *QueryGetPoolAssetReserveResponse) Reset()         { *m = QueryGetPoolAssetReserveResponse{} }
-func (m *QueryGetPoolAssetReserveResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetPoolAssetReserveResponse) ProtoMessage()    {}
-func (*QueryGetPoolAssetReserveResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{15}
-}
-func (m *QueryGetPoolAssetReserveResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetPoolAssetReserveResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetPoolAssetReserveResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetPoolAssetReserveResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetPoolAssetReserveResponse.Merge(m, src)
-}
-func (m *QueryGetPoolAssetReserveResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetPoolAssetReserveResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetPoolAssetReserveResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetPoolAssetReserveResponse proto.InternalMessageInfo
-
-func (m *QueryGetPoolAssetReserveResponse) GetReserve() uint64 {
-	if m != nil {
-		return m.Reserve
-	}
-	return 0
-}
-
 type QueryGetPoolAssetsRequest struct {
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
@@ -762,7 +394,7 @@ func (m *QueryGetPoolAssetsRequest) Reset()         { *m = QueryGetPoolAssetsReq
 func (m *QueryGetPoolAssetsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryGetPoolAssetsRequest) ProtoMessage()    {}
 func (*QueryGetPoolAssetsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{16}
+	return fileDescriptor_fd9aaeeea1ec1219, []int{8}
 }
 func (m *QueryGetPoolAssetsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -806,7 +438,7 @@ func (m *QueryGetPoolAssetsResponse) Reset()         { *m = QueryGetPoolAssetsRe
 func (m *QueryGetPoolAssetsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryGetPoolAssetsResponse) ProtoMessage()    {}
 func (*QueryGetPoolAssetsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{17}
+	return fileDescriptor_fd9aaeeea1ec1219, []int{9}
 }
 func (m *QueryGetPoolAssetsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -854,7 +486,7 @@ func (m *QueryGetSwapExactTokensForTokensRequest) Reset() {
 func (m *QueryGetSwapExactTokensForTokensRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryGetSwapExactTokensForTokensRequest) ProtoMessage()    {}
 func (*QueryGetSwapExactTokensForTokensRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{18}
+	return fileDescriptor_fd9aaeeea1ec1219, []int{10}
 }
 func (m *QueryGetSwapExactTokensForTokensRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -914,7 +546,7 @@ func (m *QueryGetSwapExactTokensForTokensResponse) Reset() {
 func (m *QueryGetSwapExactTokensForTokensResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryGetSwapExactTokensForTokensResponse) ProtoMessage()    {}
 func (*QueryGetSwapExactTokensForTokensResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{19}
+	return fileDescriptor_fd9aaeeea1ec1219, []int{11}
 }
 func (m *QueryGetSwapExactTokensForTokensResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -962,7 +594,7 @@ func (m *QueryGetSwapTokensForExactTokensRequest) Reset() {
 func (m *QueryGetSwapTokensForExactTokensRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryGetSwapTokensForExactTokensRequest) ProtoMessage()    {}
 func (*QueryGetSwapTokensForExactTokensRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{20}
+	return fileDescriptor_fd9aaeeea1ec1219, []int{12}
 }
 func (m *QueryGetSwapTokensForExactTokensRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1022,7 +654,7 @@ func (m *QueryGetSwapTokensForExactTokensResponse) Reset() {
 func (m *QueryGetSwapTokensForExactTokensResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryGetSwapTokensForExactTokensResponse) ProtoMessage()    {}
 func (*QueryGetSwapTokensForExactTokensResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd9aaeeea1ec1219, []int{21}
+	return fileDescriptor_fd9aaeeea1ec1219, []int{13}
 }
 func (m *QueryGetSwapTokensForExactTokensResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1058,6 +690,190 @@ func (m *QueryGetSwapTokensForExactTokensResponse) GetAmountIn() uint64 {
 	return 0
 }
 
+type QueryGetPoolShareTokenRequest struct {
+	PoolId uint64 `protobuf:"varint,1,opt,name=poolId,proto3" json:"poolId,omitempty"`
+}
+
+func (m *QueryGetPoolShareTokenRequest) Reset()         { *m = QueryGetPoolShareTokenRequest{} }
+func (m *QueryGetPoolShareTokenRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPoolShareTokenRequest) ProtoMessage()    {}
+func (*QueryGetPoolShareTokenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fd9aaeeea1ec1219, []int{14}
+}
+func (m *QueryGetPoolShareTokenRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetPoolShareTokenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetPoolShareTokenRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetPoolShareTokenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPoolShareTokenRequest.Merge(m, src)
+}
+func (m *QueryGetPoolShareTokenRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetPoolShareTokenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPoolShareTokenRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetPoolShareTokenRequest proto.InternalMessageInfo
+
+func (m *QueryGetPoolShareTokenRequest) GetPoolId() uint64 {
+	if m != nil {
+		return m.PoolId
+	}
+	return 0
+}
+
+type QueryGetPoolShareTokenResponse struct {
+	ShareToken types.Coin `protobuf:"bytes,1,opt,name=shareToken,proto3" json:"shareToken"`
+}
+
+func (m *QueryGetPoolShareTokenResponse) Reset()         { *m = QueryGetPoolShareTokenResponse{} }
+func (m *QueryGetPoolShareTokenResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPoolShareTokenResponse) ProtoMessage()    {}
+func (*QueryGetPoolShareTokenResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fd9aaeeea1ec1219, []int{15}
+}
+func (m *QueryGetPoolShareTokenResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetPoolShareTokenResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetPoolShareTokenResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetPoolShareTokenResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPoolShareTokenResponse.Merge(m, src)
+}
+func (m *QueryGetPoolShareTokenResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetPoolShareTokenResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPoolShareTokenResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetPoolShareTokenResponse proto.InternalMessageInfo
+
+func (m *QueryGetPoolShareTokenResponse) GetShareToken() types.Coin {
+	if m != nil {
+		return m.ShareToken
+	}
+	return types.Coin{}
+}
+
+type QueryGetPoolAssetRequest struct {
+	PoolId  uint64 `protobuf:"varint,1,opt,name=poolId,proto3" json:"poolId,omitempty"`
+	AssetId uint64 `protobuf:"varint,2,opt,name=assetId,proto3" json:"assetId,omitempty"`
+}
+
+func (m *QueryGetPoolAssetRequest) Reset()         { *m = QueryGetPoolAssetRequest{} }
+func (m *QueryGetPoolAssetRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPoolAssetRequest) ProtoMessage()    {}
+func (*QueryGetPoolAssetRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fd9aaeeea1ec1219, []int{16}
+}
+func (m *QueryGetPoolAssetRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetPoolAssetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetPoolAssetRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetPoolAssetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPoolAssetRequest.Merge(m, src)
+}
+func (m *QueryGetPoolAssetRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetPoolAssetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPoolAssetRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetPoolAssetRequest proto.InternalMessageInfo
+
+func (m *QueryGetPoolAssetRequest) GetPoolId() uint64 {
+	if m != nil {
+		return m.PoolId
+	}
+	return 0
+}
+
+func (m *QueryGetPoolAssetRequest) GetAssetId() uint64 {
+	if m != nil {
+		return m.AssetId
+	}
+	return 0
+}
+
+type QueryGetPoolAssetResponse struct {
+	PoolAsset types.Coin `protobuf:"bytes,1,opt,name=poolAsset,proto3" json:"poolAsset"`
+}
+
+func (m *QueryGetPoolAssetResponse) Reset()         { *m = QueryGetPoolAssetResponse{} }
+func (m *QueryGetPoolAssetResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPoolAssetResponse) ProtoMessage()    {}
+func (*QueryGetPoolAssetResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fd9aaeeea1ec1219, []int{17}
+}
+func (m *QueryGetPoolAssetResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetPoolAssetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetPoolAssetResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetPoolAssetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPoolAssetResponse.Merge(m, src)
+}
+func (m *QueryGetPoolAssetResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetPoolAssetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPoolAssetResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetPoolAssetResponse proto.InternalMessageInfo
+
+func (m *QueryGetPoolAssetResponse) GetPoolAsset() types.Coin {
+	if m != nil {
+		return m.PoolAsset
+	}
+	return types.Coin{}
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "frogchain.amm.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "frogchain.amm.QueryParamsResponse")
@@ -1067,95 +883,82 @@ func init() {
 	proto.RegisterType((*QueryAllPoolResponse)(nil), "frogchain.amm.QueryAllPoolResponse")
 	proto.RegisterType((*QueryGetPoolParamRequest)(nil), "frogchain.amm.QueryGetPoolParamRequest")
 	proto.RegisterType((*QueryGetPoolParamResponse)(nil), "frogchain.amm.QueryGetPoolParamResponse")
-	proto.RegisterType((*QueryGetPoolTotalLiquidityRequest)(nil), "frogchain.amm.QueryGetPoolTotalLiquidityRequest")
-	proto.RegisterType((*QueryGetPoolTotalLiquidityResponse)(nil), "frogchain.amm.QueryGetPoolTotalLiquidityResponse")
-	proto.RegisterType((*QueryGetPoolTokenDenomRequest)(nil), "frogchain.amm.QueryGetPoolTokenDenomRequest")
-	proto.RegisterType((*QueryGetPoolTokenDenomResponse)(nil), "frogchain.amm.QueryGetPoolTokenDenomResponse")
-	proto.RegisterType((*QueryGetPoolShareTokenDenomRequest)(nil), "frogchain.amm.QueryGetPoolShareTokenDenomRequest")
-	proto.RegisterType((*QueryGetPoolShareTokenDenomResponse)(nil), "frogchain.amm.QueryGetPoolShareTokenDenomResponse")
-	proto.RegisterType((*QueryGetPoolAssetReserveRequest)(nil), "frogchain.amm.QueryGetPoolAssetReserveRequest")
-	proto.RegisterType((*QueryGetPoolAssetReserveResponse)(nil), "frogchain.amm.QueryGetPoolAssetReserveResponse")
 	proto.RegisterType((*QueryGetPoolAssetsRequest)(nil), "frogchain.amm.QueryGetPoolAssetsRequest")
 	proto.RegisterType((*QueryGetPoolAssetsResponse)(nil), "frogchain.amm.QueryGetPoolAssetsResponse")
 	proto.RegisterType((*QueryGetSwapExactTokensForTokensRequest)(nil), "frogchain.amm.QueryGetSwapExactTokensForTokensRequest")
 	proto.RegisterType((*QueryGetSwapExactTokensForTokensResponse)(nil), "frogchain.amm.QueryGetSwapExactTokensForTokensResponse")
 	proto.RegisterType((*QueryGetSwapTokensForExactTokensRequest)(nil), "frogchain.amm.QueryGetSwapTokensForExactTokensRequest")
 	proto.RegisterType((*QueryGetSwapTokensForExactTokensResponse)(nil), "frogchain.amm.QueryGetSwapTokensForExactTokensResponse")
+	proto.RegisterType((*QueryGetPoolShareTokenRequest)(nil), "frogchain.amm.QueryGetPoolShareTokenRequest")
+	proto.RegisterType((*QueryGetPoolShareTokenResponse)(nil), "frogchain.amm.QueryGetPoolShareTokenResponse")
+	proto.RegisterType((*QueryGetPoolAssetRequest)(nil), "frogchain.amm.QueryGetPoolAssetRequest")
+	proto.RegisterType((*QueryGetPoolAssetResponse)(nil), "frogchain.amm.QueryGetPoolAssetResponse")
 }
 
 func init() { proto.RegisterFile("frogchain/amm/query.proto", fileDescriptor_fd9aaeeea1ec1219) }
 
 var fileDescriptor_fd9aaeeea1ec1219 = []byte{
-	// 1093 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x97, 0xdf, 0x6e, 0x1b, 0x45,
-	0x14, 0xc6, 0xb3, 0xae, 0x71, 0xc8, 0x81, 0x46, 0x62, 0x12, 0x17, 0x67, 0xdb, 0xba, 0xe9, 0x84,
-	0x36, 0x26, 0x6d, 0x77, 0xf3, 0x4f, 0xe9, 0x4d, 0x2e, 0x68, 0x21, 0x29, 0x69, 0x83, 0x1a, 0x1c,
-	0xb8, 0x00, 0x09, 0x59, 0x93, 0x78, 0xea, 0xac, 0x6a, 0xef, 0x6c, 0x76, 0xd7, 0x4d, 0xa3, 0x28,
-	0x37, 0xdc, 0x83, 0x40, 0x88, 0x17, 0xe0, 0x11, 0x10, 0x12, 0xaf, 0xd0, 0xcb, 0x4a, 0xdc, 0x70,
-	0x85, 0x50, 0xc2, 0x83, 0xa0, 0x9d, 0x39, 0x6b, 0xef, 0xd8, 0xbb, 0xeb, 0xe4, 0xce, 0x33, 0x73,
-	0xce, 0xf9, 0x7e, 0xe7, 0xec, 0xee, 0x7c, 0x09, 0xcc, 0xbc, 0xf0, 0x45, 0x6b, 0xff, 0x80, 0x39,
-	0xae, 0xcd, 0x3a, 0x1d, 0xfb, 0xb0, 0xcb, 0xfd, 0x63, 0xcb, 0xf3, 0x45, 0x28, 0xc8, 0xd5, 0xde,
-	0x91, 0xc5, 0x3a, 0x1d, 0x73, 0xba, 0x25, 0x5a, 0x42, 0x9e, 0xd8, 0xd1, 0x2f, 0x15, 0x64, 0xde,
-	0x68, 0x09, 0xd1, 0x6a, 0x73, 0x9b, 0x79, 0x8e, 0xcd, 0x5c, 0x57, 0x84, 0x2c, 0x74, 0x84, 0x1b,
-	0xe0, 0xe9, 0xc2, 0xbe, 0x08, 0x3a, 0x22, 0xb0, 0xf7, 0x58, 0xc0, 0x55, 0x6d, 0xfb, 0xd5, 0xd2,
-	0x1e, 0x0f, 0xd9, 0x92, 0xed, 0xb1, 0x96, 0xe3, 0xca, 0x60, 0x8c, 0x35, 0x75, 0x12, 0x8f, 0xf9,
-	0xac, 0x13, 0xd7, 0xa9, 0x0c, 0x9c, 0x09, 0xd1, 0xc6, 0x93, 0xea, 0xf0, 0x49, 0x43, 0xa6, 0xc6,
-	0xe7, 0x49, 0x82, 0x58, 0x7b, 0x5f, 0x38, 0xa8, 0x4a, 0xa7, 0x81, 0x7c, 0x19, 0x71, 0xed, 0x48,
-	0xb9, 0x3a, 0x3f, 0xec, 0xf2, 0x20, 0xa4, 0x4f, 0x61, 0x4a, 0xdb, 0x0d, 0x3c, 0xe1, 0x06, 0x9c,
-	0xac, 0x40, 0x49, 0x61, 0x55, 0x8c, 0x59, 0xa3, 0xf6, 0xde, 0x72, 0xd9, 0xd2, 0x46, 0x64, 0xa9,
-	0xf0, 0xc7, 0xc5, 0x37, 0xff, 0xdc, 0x1a, 0xab, 0x63, 0x28, 0xbd, 0x83, 0xb5, 0x9e, 0xf0, 0x70,
-	0x47, 0x88, 0x36, 0x4a, 0x90, 0x49, 0x28, 0x38, 0x4d, 0x59, 0xa7, 0x58, 0x2f, 0x38, 0x4d, 0xba,
-	0x01, 0xd3, 0x7a, 0x18, 0x6a, 0x3e, 0x80, 0x62, 0xb4, 0x46, 0xc5, 0xa9, 0x41, 0x45, 0x21, 0xda,
-	0xa8, 0x27, 0xc3, 0xe8, 0x77, 0xa8, 0xf6, 0xa8, 0xdd, 0x4e, 0xaa, 0x6d, 0x02, 0xf4, 0x07, 0x8e,
-	0xb5, 0xee, 0x5a, 0x6a, 0x36, 0x56, 0x34, 0x1b, 0x4b, 0x3d, 0x79, 0x9c, 0x90, 0xb5, 0xc3, 0x5a,
-	0x1c, 0x73, 0xeb, 0x89, 0x4c, 0xfa, 0xa3, 0x81, 0x98, 0xbd, 0xfa, 0x43, 0x98, 0x57, 0x2e, 0x80,
-	0x49, 0x9e, 0x68, 0x3c, 0x05, 0xc9, 0x33, 0x3f, 0x92, 0x47, 0x69, 0x69, 0x40, 0x0b, 0x50, 0x49,
-	0x8e, 0x4d, 0x3e, 0x81, 0xac, 0x11, 0x7f, 0x03, 0x33, 0x29, 0xb1, 0xd8, 0xc0, 0x3a, 0x4c, 0x78,
-	0xf1, 0x26, 0x0e, 0xa8, 0x92, 0xd2, 0x85, 0x3c, 0xc7, 0x56, 0xfa, 0x09, 0x74, 0x05, 0x6e, 0x27,
-	0x4b, 0x7f, 0x25, 0x42, 0xd6, 0xde, 0x76, 0x0e, 0xbb, 0x4e, 0xd3, 0x09, 0x8f, 0xb3, 0x78, 0xb6,
-	0x81, 0xe6, 0x25, 0x21, 0xd8, 0x5d, 0x98, 0x0c, 0xb5, 0x13, 0xac, 0x30, 0xb0, 0x4b, 0xb7, 0xe0,
-	0xa6, 0x5e, 0xed, 0x25, 0x77, 0x3f, 0xe3, 0xae, 0xc8, 0x1a, 0x07, 0xa9, 0xc0, 0x38, 0x0b, 0x02,
-	0x1e, 0x6e, 0x35, 0xe5, 0x03, 0x28, 0xd6, 0xe3, 0x25, 0xfd, 0x04, 0xaa, 0x59, 0xa5, 0x10, 0xaa,
-	0x0a, 0x10, 0xf6, 0x76, 0x65, 0xcd, 0x89, 0x7a, 0x62, 0x87, 0xae, 0xea, 0xad, 0xed, 0x1e, 0x30,
-	0x9f, 0x8f, 0x24, 0xa2, 0x1b, 0x30, 0x97, 0x9b, 0xd5, 0x17, 0x0f, 0xa2, 0x23, 0x4d, 0xbc, 0xbf,
-	0x43, 0x9f, 0xc1, 0xad, 0x64, 0x99, 0x47, 0x51, 0x57, 0x75, 0x1e, 0x70, 0xff, 0x15, 0xbf, 0xfc,
-	0x2c, 0xd6, 0x61, 0x36, 0xbb, 0x18, 0x02, 0x55, 0x60, 0xdc, 0x57, 0x5b, 0x58, 0x32, 0x5e, 0xd2,
-	0x7b, 0xfa, 0x2b, 0x27, 0xb3, 0x83, 0xac, 0xf6, 0xbf, 0x06, 0x33, 0x2d, 0x18, 0x45, 0x1e, 0x42,
-	0x49, 0x32, 0x05, 0xf8, 0x8d, 0xcd, 0x68, 0x9f, 0x4b, 0xfc, 0xa1, 0x7c, 0x2a, 0x1c, 0x37, 0xbe,
-	0x80, 0x54, 0x38, 0x3d, 0x82, 0xf9, 0xb8, 0xec, 0xee, 0x11, 0xf3, 0x36, 0x5e, 0xb3, 0xfd, 0x50,
-	0x4e, 0x35, 0xd8, 0x14, 0xbe, 0xfa, 0x11, 0x13, 0x5d, 0x83, 0x52, 0xf4, 0x4e, 0x6f, 0xc5, 0x54,
-	0xb8, 0x22, 0x26, 0xbc, 0xcb, 0x3a, 0xa2, 0xeb, 0x86, 0x5b, 0x2e, 0xce, 0xa7, 0xb7, 0x26, 0x15,
-	0x28, 0x7a, 0x2c, 0x3c, 0xa8, 0x5c, 0x99, 0xbd, 0x52, 0x9b, 0x88, 0x3f, 0xf2, 0x68, 0x87, 0x7e,
-	0x0e, 0xb5, 0xd1, 0xc2, 0xd8, 0xdd, 0x0d, 0x98, 0x50, 0x15, 0x9f, 0x77, 0x43, 0x14, 0xef, 0x6f,
-	0xd0, 0x63, 0xbd, 0x85, 0x5e, 0x91, 0x44, 0xc9, 0x51, 0x2d, 0x68, 0x02, 0x85, 0x01, 0x81, 0x9c,
-	0x26, 0x36, 0xf5, 0x26, 0xd2, 0xa5, 0xb1, 0x89, 0xe4, 0x98, 0x0c, 0x7d, 0x4c, 0xcb, 0xbf, 0x4e,
-	0xc2, 0x3b, 0xb2, 0x10, 0x71, 0xa1, 0xa4, 0x8c, 0x82, 0xdc, 0x1e, 0xb8, 0x60, 0x86, 0x9d, 0xc8,
-	0xa4, 0x79, 0x21, 0x4a, 0x96, 0xde, 0xfc, 0xfe, 0xaf, 0xff, 0x7e, 0x29, 0x7c, 0x48, 0xca, 0x76,
-	0x9a, 0x85, 0x92, 0x43, 0x75, 0x35, 0x93, 0xd4, 0x52, 0xba, 0x2b, 0x99, 0x73, 0xb9, 0x31, 0xa8,
-	0x37, 0x2b, 0xf5, 0x4c, 0x52, 0xb1, 0x87, 0xcd, 0xd7, 0x3e, 0x71, 0x9a, 0xa7, 0x44, 0xc0, 0xb8,
-	0x7c, 0x83, 0xdb, 0x19, 0xaa, 0xba, 0x3b, 0xa5, 0xab, 0x0e, 0x38, 0x0c, 0xbd, 0x2e, 0x55, 0xcb,
-	0x64, 0x2a, 0x45, 0x95, 0xfc, 0x60, 0xc0, 0xfb, 0xc9, 0x6b, 0x9d, 0xcc, 0xe7, 0x34, 0x92, 0x34,
-	0x09, 0xb3, 0x36, 0x3a, 0x10, 0x01, 0x16, 0x24, 0xc0, 0x47, 0x84, 0x0e, 0x00, 0xb4, 0x78, 0xd8,
-	0xe8, 0xff, 0xdd, 0xa1, 0x06, 0xf0, 0xbb, 0x01, 0xe5, 0xd4, 0x6b, 0x9d, 0x2c, 0xe6, 0xe8, 0xa5,
-	0xda, 0x86, 0xb9, 0x74, 0x89, 0x0c, 0x44, 0x5d, 0x95, 0xa8, 0x16, 0xb9, 0x9f, 0x85, 0x2a, 0xbd,
-	0xa3, 0xd1, 0x8e, 0x13, 0x15, 0xf4, 0x6f, 0x06, 0x7c, 0x30, 0x74, 0xe5, 0x93, 0xfb, 0xb9, 0xf2,
-	0x03, 0x57, 0xba, 0xf9, 0xe0, 0x82, 0xd1, 0x08, 0xba, 0x28, 0x41, 0x17, 0x48, 0x2d, 0x1b, 0xf4,
-	0x25, 0x77, 0x1b, 0xcd, 0x28, 0x49, 0x41, 0xfe, 0x69, 0xc0, 0xb5, 0x74, 0x7f, 0x20, 0x79, 0x83,
-	0x4a, 0x77, 0x20, 0x73, 0xf9, 0x32, 0x29, 0xc8, 0xbc, 0x26, 0x99, 0x17, 0x89, 0x95, 0xc5, 0x2c,
-	0xad, 0x68, 0x98, 0xfc, 0x0f, 0x03, 0xa6, 0x52, 0x5c, 0x84, 0x58, 0x39, 0x0c, 0x29, 0xde, 0x65,
-	0xda, 0x17, 0x8e, 0x47, 0xe0, 0x75, 0x09, 0xbc, 0x46, 0x56, 0xb3, 0x80, 0xa5, 0x51, 0x34, 0xd0,
-	0xb3, 0x24, 0xac, 0x7d, 0x82, 0xfe, 0x77, 0x4a, 0x7e, 0x36, 0xe0, 0xaa, 0xe6, 0x48, 0xa4, 0x36,
-	0x0a, 0xa0, 0x77, 0x7b, 0x7d, 0x7c, 0x81, 0x48, 0x84, 0xbc, 0x27, 0x21, 0xef, 0x90, 0xb9, 0x5c,
-	0xc8, 0x40, 0x8d, 0xf2, 0xcc, 0x80, 0xeb, 0x39, 0xae, 0x42, 0xd6, 0x32, 0x74, 0x47, 0xf8, 0x9f,
-	0xf9, 0xf0, 0xd2, 0x79, 0x48, 0x5f, 0x97, 0xf4, 0xdb, 0xe4, 0x69, 0x0a, 0x7d, 0x70, 0xc4, 0xbc,
-	0x06, 0x8f, 0xb2, 0xd5, 0x3b, 0x11, 0x34, 0x5e, 0x08, 0x1f, 0x7f, 0xda, 0x27, 0xca, 0x9e, 0xa2,
-	0x81, 0xa3, 0x53, 0x9c, 0xda, 0x27, 0x91, 0xf1, 0x9c, 0x92, 0xf3, 0x7e, 0x93, 0x69, 0xae, 0x93,
-	0xdb, 0x64, 0x8e, 0x43, 0xe6, 0x36, 0x99, 0x67, 0x6f, 0x74, 0x57, 0x36, 0xf9, 0x05, 0x79, 0x96,
-	0xd5, 0x64, 0xa2, 0xbd, 0x64, 0xbf, 0x43, 0x4d, 0x3e, 0xef, 0x86, 0x71, 0x97, 0x8f, 0xed, 0x37,
-	0x67, 0x55, 0xe3, 0xed, 0x59, 0xd5, 0xf8, 0xf7, 0xac, 0x6a, 0xfc, 0x74, 0x5e, 0x1d, 0x7b, 0x7b,
-	0x5e, 0x1d, 0xfb, 0xfb, 0xbc, 0x3a, 0xf6, 0x6d, 0xb9, 0xaf, 0xf2, 0x5a, 0xea, 0x84, 0xc7, 0x1e,
-	0x0f, 0xf6, 0x4a, 0xf2, 0x1f, 0xb7, 0x95, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff, 0xdf, 0xa2, 0xd0,
-	0xc4, 0xba, 0x0e, 0x00, 0x00,
+	// 955 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x56, 0xcd, 0x6f, 0xdc, 0x44,
+	0x14, 0x8f, 0x37, 0xcb, 0x96, 0xbc, 0x52, 0x24, 0x26, 0x09, 0x38, 0x6e, 0x6b, 0xc2, 0x94, 0x92,
+	0x25, 0x6d, 0x6d, 0x9a, 0x22, 0xc2, 0x01, 0x84, 0x5a, 0xd4, 0x94, 0x94, 0xa2, 0x86, 0x0d, 0x1c,
+	0xa8, 0x84, 0x56, 0x93, 0xc4, 0x75, 0x2c, 0x76, 0x3d, 0xce, 0xda, 0x4b, 0x1a, 0x45, 0x7b, 0xe1,
+	0x0e, 0xa2, 0xe2, 0xc8, 0x9d, 0xbf, 0xa5, 0xc7, 0x4a, 0x5c, 0x38, 0x21, 0xb4, 0xcb, 0x1f, 0x82,
+	0x3c, 0xf3, 0xfc, 0x31, 0xbb, 0xfe, 0x58, 0x6e, 0xeb, 0x99, 0xf7, 0xde, 0xef, 0xc3, 0x33, 0x3f,
+	0x2f, 0xac, 0x3d, 0x1d, 0x70, 0xf7, 0xf0, 0x98, 0x79, 0xbe, 0xcd, 0xfa, 0x7d, 0xfb, 0x64, 0xe8,
+	0x0c, 0xce, 0xac, 0x60, 0xc0, 0x23, 0x4e, 0x2e, 0xa5, 0x5b, 0x16, 0xeb, 0xf7, 0x8d, 0x15, 0x97,
+	0xbb, 0x5c, 0xec, 0xd8, 0xf1, 0x2f, 0x59, 0x64, 0x5c, 0x71, 0x39, 0x77, 0x7b, 0x8e, 0xcd, 0x02,
+	0xcf, 0x66, 0xbe, 0xcf, 0x23, 0x16, 0x79, 0xdc, 0x0f, 0x71, 0x77, 0xf3, 0x90, 0x87, 0x7d, 0x1e,
+	0xda, 0x07, 0x2c, 0x74, 0xe4, 0x6c, 0xfb, 0xc7, 0xdb, 0x07, 0x4e, 0xc4, 0x6e, 0xdb, 0x01, 0x73,
+	0x3d, 0x5f, 0x14, 0x63, 0xad, 0xa1, 0x32, 0x09, 0xd8, 0x80, 0xf5, 0x93, 0x39, 0xfa, 0xd4, 0x1e,
+	0xe7, 0x3d, 0xdc, 0x31, 0x67, 0x77, 0xba, 0xa2, 0x35, 0xd9, 0xcf, 0x33, 0x48, 0xb0, 0x0f, 0xb9,
+	0x87, 0xa8, 0x74, 0x05, 0xc8, 0xd7, 0x31, 0xaf, 0x3d, 0x01, 0xd7, 0x71, 0x4e, 0x86, 0x4e, 0x18,
+	0xd1, 0x87, 0xb0, 0xac, 0xac, 0x86, 0x01, 0xf7, 0x43, 0x87, 0xdc, 0x81, 0x96, 0xa4, 0xa5, 0x6b,
+	0xeb, 0x5a, 0xfb, 0xe2, 0xd6, 0xaa, 0xa5, 0x58, 0x64, 0xc9, 0xf2, 0x7b, 0xcd, 0x17, 0x7f, 0xbf,
+	0xbd, 0xd0, 0xc1, 0x52, 0x7a, 0x1d, 0x67, 0x3d, 0x70, 0xa2, 0x3d, 0xce, 0x7b, 0x08, 0x41, 0x5e,
+	0x87, 0x86, 0x77, 0x24, 0xe6, 0x34, 0x3b, 0x0d, 0xef, 0x88, 0xde, 0x87, 0x15, 0xb5, 0x0c, 0x31,
+	0x6f, 0x41, 0x33, 0x7e, 0x46, 0xc4, 0xe5, 0x69, 0x44, 0xce, 0x7b, 0x88, 0x27, 0xca, 0xe8, 0xf7,
+	0x88, 0x76, 0xb7, 0xd7, 0xcb, 0xa3, 0xed, 0x00, 0x64, 0x86, 0xe3, 0xac, 0xf7, 0x2c, 0xe9, 0x8d,
+	0x15, 0x7b, 0x63, 0xc9, 0x37, 0x8f, 0x0e, 0x59, 0x7b, 0xcc, 0x75, 0xb0, 0xb7, 0x93, 0xeb, 0xa4,
+	0xbf, 0x68, 0x48, 0x33, 0x9d, 0x3f, 0x43, 0x73, 0x71, 0x0e, 0x9a, 0xe4, 0x81, 0xc2, 0xa7, 0x21,
+	0xf8, 0x6c, 0xd4, 0xf2, 0x91, 0x58, 0x0a, 0xa1, 0x4d, 0xd0, 0xf3, 0xb6, 0x89, 0x37, 0x50, 0x66,
+	0xf1, 0x77, 0xb0, 0x56, 0x50, 0x8b, 0x02, 0x3e, 0x81, 0xa5, 0x20, 0x59, 0x44, 0x83, 0xf4, 0x02,
+	0x15, 0x62, 0x1f, 0xa5, 0x64, 0x0d, 0xf4, 0x86, 0x3a, 0xfa, 0x6e, 0x18, 0x3a, 0x51, 0x58, 0xc6,
+	0xe3, 0x5b, 0x30, 0x8a, 0x8a, 0x91, 0xc8, 0x36, 0xb4, 0x98, 0x58, 0x41, 0x2f, 0xd7, 0x14, 0x5b,
+	0x12, 0x43, 0x3e, 0xe7, 0x9e, 0x9f, 0x1c, 0x34, 0x59, 0x4e, 0x4f, 0x61, 0x23, 0x19, 0xbb, 0x7f,
+	0xca, 0x82, 0xfb, 0xcf, 0xd8, 0x61, 0xf4, 0x0d, 0xff, 0xc1, 0xf1, 0xc3, 0x1d, 0x3e, 0x90, 0x3f,
+	0x12, 0x46, 0x6f, 0x42, 0x2b, 0xe6, 0xbe, 0x9b, 0xb0, 0xc2, 0x27, 0x62, 0xc0, 0xab, 0xac, 0xcf,
+	0x87, 0x7e, 0xb4, 0x2b, 0x5f, 0x4a, 0xb3, 0x93, 0x3e, 0x13, 0x1d, 0x9a, 0x01, 0x8b, 0x8e, 0xf5,
+	0xc5, 0xf5, 0xc5, 0xf6, 0x52, 0xf2, 0x32, 0xe3, 0x15, 0xfa, 0x05, 0xb4, 0xeb, 0x81, 0x51, 0xdd,
+	0x15, 0x58, 0x92, 0x13, 0x1f, 0x0f, 0x23, 0x04, 0xcf, 0x16, 0xe8, 0x99, 0x2a, 0x21, 0x1d, 0x92,
+	0x1b, 0x59, 0x27, 0x41, 0x01, 0x68, 0x4c, 0x01, 0x54, 0x88, 0xd8, 0x51, 0x45, 0x14, 0x43, 0xa3,
+	0x88, 0xbc, 0x4d, 0x9a, 0x6a, 0x13, 0xdd, 0x86, 0xab, 0xf9, 0x97, 0xbb, 0x7f, 0xcc, 0x06, 0x8e,
+	0x68, 0xaf, 0x21, 0x4e, 0x19, 0x98, 0x65, 0x8d, 0x08, 0xfb, 0x19, 0x40, 0x98, 0xae, 0xe2, 0x19,
+	0xad, 0x3d, 0x1d, 0xb9, 0x16, 0xfa, 0x48, 0xbd, 0x2c, 0xe2, 0xe0, 0xd5, 0xf9, 0xa9, 0xc3, 0x05,
+	0x71, 0xbe, 0x76, 0x8f, 0xd0, 0xcd, 0xe4, 0x91, 0x3e, 0x29, 0x38, 0xf3, 0x29, 0xd7, 0x4f, 0xe5,
+	0x75, 0x12, 0x8b, 0xf3, 0x52, 0xcd, 0x3a, 0xb6, 0x9e, 0x5f, 0x84, 0x57, 0xc4, 0x70, 0xe2, 0x43,
+	0x4b, 0xc6, 0x2a, 0x79, 0x67, 0xea, 0x3a, 0xce, 0xe6, 0xb6, 0x41, 0xab, 0x4a, 0x24, 0x33, 0x7a,
+	0xf5, 0xa7, 0x3f, 0xff, 0xfd, 0xad, 0xf1, 0x16, 0x59, 0xb5, 0x8b, 0x3e, 0x38, 0xe4, 0x44, 0x06,
+	0x19, 0x29, 0x1c, 0xa5, 0x66, 0xb8, 0x71, 0xad, 0xb2, 0x06, 0xf1, 0xd6, 0x05, 0x9e, 0x41, 0x74,
+	0x7b, 0xf6, 0x53, 0x65, 0x9f, 0x7b, 0x47, 0x23, 0xc2, 0xe1, 0x82, 0x30, 0xb0, 0x57, 0x82, 0xaa,
+	0x66, 0x79, 0x31, 0xea, 0x54, 0x1e, 0xd3, 0xcb, 0x02, 0x75, 0x95, 0x2c, 0x17, 0xa0, 0x92, 0x9f,
+	0x35, 0x78, 0x2d, 0x1f, 0x82, 0x64, 0xa3, 0x42, 0x48, 0x3e, 0x52, 0x8d, 0x76, 0x7d, 0x21, 0x12,
+	0xd8, 0x14, 0x04, 0xde, 0x25, 0x74, 0x8a, 0x80, 0xeb, 0x44, 0xdd, 0xec, 0x2b, 0x2d, 0x0d, 0x78,
+	0xae, 0xc1, 0x25, 0x25, 0x0c, 0x49, 0x15, 0x8e, 0x12, 0xae, 0xc6, 0xfb, 0x73, 0x54, 0x22, 0xa5,
+	0x1b, 0x82, 0xd2, 0x75, 0x72, 0xad, 0x8c, 0x92, 0x0c, 0x52, 0xc9, 0x69, 0xac, 0xc1, 0xe5, 0x8a,
+	0x40, 0x23, 0x1f, 0x95, 0xe0, 0xd6, 0x44, 0xaf, 0xb1, 0xfd, 0xbf, 0xfb, 0x90, 0x7d, 0x47, 0xb0,
+	0x7f, 0x44, 0x1e, 0x16, 0xb0, 0x0f, 0x4f, 0x59, 0xd0, 0x75, 0xe2, 0xee, 0x6e, 0x24, 0xba, 0xba,
+	0x4f, 0xf9, 0x00, 0x7f, 0xda, 0xe7, 0xf2, 0x26, 0x8f, 0xec, 0xf3, 0x24, 0xa4, 0x46, 0xf6, 0x79,
+	0x9c, 0x79, 0x23, 0x32, 0xc9, 0x44, 0x16, 0x05, 0x5e, 0xa5, 0xc8, 0x8a, 0x70, 0xae, 0x14, 0x59,
+	0x95, 0xac, 0x74, 0x5f, 0x88, 0xfc, 0x8a, 0x7c, 0x59, 0x26, 0x32, 0x27, 0x2f, 0xaf, 0x77, 0x46,
+	0xe4, 0xe3, 0x61, 0x94, 0xaa, 0xfc, 0x43, 0x83, 0x37, 0x66, 0x52, 0x95, 0xdc, 0xac, 0x38, 0x38,
+	0x33, 0xa9, 0x6d, 0xdc, 0x9a, 0xb3, 0x1a, 0x75, 0x7c, 0x28, 0x74, 0x58, 0xe4, 0x66, 0xd9, 0x51,
+	0x13, 0xa9, 0x2c, 0xc9, 0xa7, 0xdc, 0xc9, 0xef, 0xd9, 0xbd, 0x14, 0x47, 0xb7, 0xf2, 0x5e, 0xe6,
+	0xd3, 0xdb, 0x68, 0xd7, 0x17, 0x22, 0xb3, 0x8f, 0x05, 0xb3, 0x2d, 0xf2, 0x41, 0xe5, 0x25, 0xc8,
+	0xfb, 0x29, 0xe3, 0x7e, 0x74, 0xcf, 0x7e, 0x31, 0x36, 0xb5, 0x97, 0x63, 0x53, 0xfb, 0x67, 0x6c,
+	0x6a, 0xbf, 0x4e, 0xcc, 0x85, 0x97, 0x13, 0x73, 0xe1, 0xaf, 0x89, 0xb9, 0xf0, 0x64, 0x35, 0x1b,
+	0xf5, 0x4c, 0x0c, 0x8b, 0xce, 0x02, 0x27, 0x3c, 0x68, 0x89, 0xbf, 0xd8, 0x77, 0xfe, 0x0b, 0x00,
+	0x00, 0xff, 0xff, 0xae, 0x6a, 0xfe, 0xa6, 0x64, 0x0c, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1177,20 +980,16 @@ type QueryClient interface {
 	PoolAll(ctx context.Context, in *QueryAllPoolRequest, opts ...grpc.CallOption) (*QueryAllPoolResponse, error)
 	// Queries a list of GetPoolParam items.
 	GetPoolParam(ctx context.Context, in *QueryGetPoolParamRequest, opts ...grpc.CallOption) (*QueryGetPoolParamResponse, error)
-	// Queries a list of GetPoolTotalLiquidity items.
-	GetPoolTotalLiquidity(ctx context.Context, in *QueryGetPoolTotalLiquidityRequest, opts ...grpc.CallOption) (*QueryGetPoolTotalLiquidityResponse, error)
-	// Queries a list of GetPoolTokenDenom items.
-	GetPoolTokenDenom(ctx context.Context, in *QueryGetPoolTokenDenomRequest, opts ...grpc.CallOption) (*QueryGetPoolTokenDenomResponse, error)
-	// Queries a list of GetPoolShareTokenDenom items.
-	GetPoolShareTokenDenom(ctx context.Context, in *QueryGetPoolShareTokenDenomRequest, opts ...grpc.CallOption) (*QueryGetPoolShareTokenDenomResponse, error)
-	// Queries a list of GetPoolAssetReserve items.
-	GetPoolAssetReserve(ctx context.Context, in *QueryGetPoolAssetReserveRequest, opts ...grpc.CallOption) (*QueryGetPoolAssetReserveResponse, error)
 	// Queries a list of GetPoolAssets items.
 	GetPoolAssets(ctx context.Context, in *QueryGetPoolAssetsRequest, opts ...grpc.CallOption) (*QueryGetPoolAssetsResponse, error)
 	// Queries a list of GetSwapExactTokensForTokens items.
 	GetSwapExactTokensForTokens(ctx context.Context, in *QueryGetSwapExactTokensForTokensRequest, opts ...grpc.CallOption) (*QueryGetSwapExactTokensForTokensResponse, error)
 	// Queries a list of GetSwapTokensForExactTokens items.
 	GetSwapTokensForExactTokens(ctx context.Context, in *QueryGetSwapTokensForExactTokensRequest, opts ...grpc.CallOption) (*QueryGetSwapTokensForExactTokensResponse, error)
+	// Queries a list of GetPoolShareToken items.
+	GetPoolShareToken(ctx context.Context, in *QueryGetPoolShareTokenRequest, opts ...grpc.CallOption) (*QueryGetPoolShareTokenResponse, error)
+	// Queries a list of GetPoolAsset items.
+	GetPoolAsset(ctx context.Context, in *QueryGetPoolAssetRequest, opts ...grpc.CallOption) (*QueryGetPoolAssetResponse, error)
 }
 
 type queryClient struct {
@@ -1237,42 +1036,6 @@ func (c *queryClient) GetPoolParam(ctx context.Context, in *QueryGetPoolParamReq
 	return out, nil
 }
 
-func (c *queryClient) GetPoolTotalLiquidity(ctx context.Context, in *QueryGetPoolTotalLiquidityRequest, opts ...grpc.CallOption) (*QueryGetPoolTotalLiquidityResponse, error) {
-	out := new(QueryGetPoolTotalLiquidityResponse)
-	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolTotalLiquidity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) GetPoolTokenDenom(ctx context.Context, in *QueryGetPoolTokenDenomRequest, opts ...grpc.CallOption) (*QueryGetPoolTokenDenomResponse, error) {
-	out := new(QueryGetPoolTokenDenomResponse)
-	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolTokenDenom", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) GetPoolShareTokenDenom(ctx context.Context, in *QueryGetPoolShareTokenDenomRequest, opts ...grpc.CallOption) (*QueryGetPoolShareTokenDenomResponse, error) {
-	out := new(QueryGetPoolShareTokenDenomResponse)
-	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolShareTokenDenom", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) GetPoolAssetReserve(ctx context.Context, in *QueryGetPoolAssetReserveRequest, opts ...grpc.CallOption) (*QueryGetPoolAssetReserveResponse, error) {
-	out := new(QueryGetPoolAssetReserveResponse)
-	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolAssetReserve", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *queryClient) GetPoolAssets(ctx context.Context, in *QueryGetPoolAssetsRequest, opts ...grpc.CallOption) (*QueryGetPoolAssetsResponse, error) {
 	out := new(QueryGetPoolAssetsResponse)
 	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolAssets", in, out, opts...)
@@ -1300,6 +1063,24 @@ func (c *queryClient) GetSwapTokensForExactTokens(ctx context.Context, in *Query
 	return out, nil
 }
 
+func (c *queryClient) GetPoolShareToken(ctx context.Context, in *QueryGetPoolShareTokenRequest, opts ...grpc.CallOption) (*QueryGetPoolShareTokenResponse, error) {
+	out := new(QueryGetPoolShareTokenResponse)
+	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolShareToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GetPoolAsset(ctx context.Context, in *QueryGetPoolAssetRequest, opts ...grpc.CallOption) (*QueryGetPoolAssetResponse, error) {
+	out := new(QueryGetPoolAssetResponse)
+	err := c.cc.Invoke(ctx, "/frogchain.amm.Query/GetPoolAsset", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
@@ -1309,20 +1090,16 @@ type QueryServer interface {
 	PoolAll(context.Context, *QueryAllPoolRequest) (*QueryAllPoolResponse, error)
 	// Queries a list of GetPoolParam items.
 	GetPoolParam(context.Context, *QueryGetPoolParamRequest) (*QueryGetPoolParamResponse, error)
-	// Queries a list of GetPoolTotalLiquidity items.
-	GetPoolTotalLiquidity(context.Context, *QueryGetPoolTotalLiquidityRequest) (*QueryGetPoolTotalLiquidityResponse, error)
-	// Queries a list of GetPoolTokenDenom items.
-	GetPoolTokenDenom(context.Context, *QueryGetPoolTokenDenomRequest) (*QueryGetPoolTokenDenomResponse, error)
-	// Queries a list of GetPoolShareTokenDenom items.
-	GetPoolShareTokenDenom(context.Context, *QueryGetPoolShareTokenDenomRequest) (*QueryGetPoolShareTokenDenomResponse, error)
-	// Queries a list of GetPoolAssetReserve items.
-	GetPoolAssetReserve(context.Context, *QueryGetPoolAssetReserveRequest) (*QueryGetPoolAssetReserveResponse, error)
 	// Queries a list of GetPoolAssets items.
 	GetPoolAssets(context.Context, *QueryGetPoolAssetsRequest) (*QueryGetPoolAssetsResponse, error)
 	// Queries a list of GetSwapExactTokensForTokens items.
 	GetSwapExactTokensForTokens(context.Context, *QueryGetSwapExactTokensForTokensRequest) (*QueryGetSwapExactTokensForTokensResponse, error)
 	// Queries a list of GetSwapTokensForExactTokens items.
 	GetSwapTokensForExactTokens(context.Context, *QueryGetSwapTokensForExactTokensRequest) (*QueryGetSwapTokensForExactTokensResponse, error)
+	// Queries a list of GetPoolShareToken items.
+	GetPoolShareToken(context.Context, *QueryGetPoolShareTokenRequest) (*QueryGetPoolShareTokenResponse, error)
+	// Queries a list of GetPoolAsset items.
+	GetPoolAsset(context.Context, *QueryGetPoolAssetRequest) (*QueryGetPoolAssetResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -1341,18 +1118,6 @@ func (*UnimplementedQueryServer) PoolAll(ctx context.Context, req *QueryAllPoolR
 func (*UnimplementedQueryServer) GetPoolParam(ctx context.Context, req *QueryGetPoolParamRequest) (*QueryGetPoolParamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPoolParam not implemented")
 }
-func (*UnimplementedQueryServer) GetPoolTotalLiquidity(ctx context.Context, req *QueryGetPoolTotalLiquidityRequest) (*QueryGetPoolTotalLiquidityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPoolTotalLiquidity not implemented")
-}
-func (*UnimplementedQueryServer) GetPoolTokenDenom(ctx context.Context, req *QueryGetPoolTokenDenomRequest) (*QueryGetPoolTokenDenomResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPoolTokenDenom not implemented")
-}
-func (*UnimplementedQueryServer) GetPoolShareTokenDenom(ctx context.Context, req *QueryGetPoolShareTokenDenomRequest) (*QueryGetPoolShareTokenDenomResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPoolShareTokenDenom not implemented")
-}
-func (*UnimplementedQueryServer) GetPoolAssetReserve(ctx context.Context, req *QueryGetPoolAssetReserveRequest) (*QueryGetPoolAssetReserveResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPoolAssetReserve not implemented")
-}
 func (*UnimplementedQueryServer) GetPoolAssets(ctx context.Context, req *QueryGetPoolAssetsRequest) (*QueryGetPoolAssetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPoolAssets not implemented")
 }
@@ -1361,6 +1126,12 @@ func (*UnimplementedQueryServer) GetSwapExactTokensForTokens(ctx context.Context
 }
 func (*UnimplementedQueryServer) GetSwapTokensForExactTokens(ctx context.Context, req *QueryGetSwapTokensForExactTokensRequest) (*QueryGetSwapTokensForExactTokensResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSwapTokensForExactTokens not implemented")
+}
+func (*UnimplementedQueryServer) GetPoolShareToken(ctx context.Context, req *QueryGetPoolShareTokenRequest) (*QueryGetPoolShareTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPoolShareToken not implemented")
+}
+func (*UnimplementedQueryServer) GetPoolAsset(ctx context.Context, req *QueryGetPoolAssetRequest) (*QueryGetPoolAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPoolAsset not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -1439,78 +1210,6 @@ func _Query_GetPoolParam_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_GetPoolTotalLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetPoolTotalLiquidityRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).GetPoolTotalLiquidity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/frogchain.amm.Query/GetPoolTotalLiquidity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetPoolTotalLiquidity(ctx, req.(*QueryGetPoolTotalLiquidityRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_GetPoolTokenDenom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetPoolTokenDenomRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).GetPoolTokenDenom(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/frogchain.amm.Query/GetPoolTokenDenom",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetPoolTokenDenom(ctx, req.(*QueryGetPoolTokenDenomRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_GetPoolShareTokenDenom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetPoolShareTokenDenomRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).GetPoolShareTokenDenom(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/frogchain.amm.Query/GetPoolShareTokenDenom",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetPoolShareTokenDenom(ctx, req.(*QueryGetPoolShareTokenDenomRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_GetPoolAssetReserve_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetPoolAssetReserveRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).GetPoolAssetReserve(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/frogchain.amm.Query/GetPoolAssetReserve",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetPoolAssetReserve(ctx, req.(*QueryGetPoolAssetReserveRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Query_GetPoolAssets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryGetPoolAssetsRequest)
 	if err := dec(in); err != nil {
@@ -1565,6 +1264,42 @@ func _Query_GetSwapTokensForExactTokens_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetPoolShareToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetPoolShareTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetPoolShareToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/frogchain.amm.Query/GetPoolShareToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetPoolShareToken(ctx, req.(*QueryGetPoolShareTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GetPoolAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetPoolAssetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetPoolAsset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/frogchain.amm.Query/GetPoolAsset",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetPoolAsset(ctx, req.(*QueryGetPoolAssetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "frogchain.amm.Query",
 	HandlerType: (*QueryServer)(nil),
@@ -1586,22 +1321,6 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_GetPoolParam_Handler,
 		},
 		{
-			MethodName: "GetPoolTotalLiquidity",
-			Handler:    _Query_GetPoolTotalLiquidity_Handler,
-		},
-		{
-			MethodName: "GetPoolTokenDenom",
-			Handler:    _Query_GetPoolTokenDenom_Handler,
-		},
-		{
-			MethodName: "GetPoolShareTokenDenom",
-			Handler:    _Query_GetPoolShareTokenDenom_Handler,
-		},
-		{
-			MethodName: "GetPoolAssetReserve",
-			Handler:    _Query_GetPoolAssetReserve_Handler,
-		},
-		{
 			MethodName: "GetPoolAssets",
 			Handler:    _Query_GetPoolAssets_Handler,
 		},
@@ -1612,6 +1331,14 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSwapTokensForExactTokens",
 			Handler:    _Query_GetSwapTokensForExactTokens_Handler,
+		},
+		{
+			MethodName: "GetPoolShareToken",
+			Handler:    _Query_GetPoolShareToken_Handler,
+		},
+		{
+			MethodName: "GetPoolAsset",
+			Handler:    _Query_GetPoolAsset_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1880,244 +1607,6 @@ func (m *QueryGetPoolParamResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetPoolTotalLiquidityRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolTotalLiquidityRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolTotalLiquidityRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Id != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolTotalLiquidityResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolTotalLiquidityResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolTotalLiquidityResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.TotalLiquidity != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.TotalLiquidity))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolTokenDenomRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolTokenDenomRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolTokenDenomRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AssetId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.AssetId))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Id != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolTokenDenomResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolTokenDenomResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolTokenDenomResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.TokenDenom) > 0 {
-		i -= len(m.TokenDenom)
-		copy(dAtA[i:], m.TokenDenom)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.TokenDenom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolShareTokenDenomRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolShareTokenDenomRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolShareTokenDenomRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Id != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolShareTokenDenomResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolShareTokenDenomResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolShareTokenDenomResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ShareDenom) > 0 {
-		i -= len(m.ShareDenom)
-		copy(dAtA[i:], m.ShareDenom)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ShareDenom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolAssetReserveRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolAssetReserveRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolAssetReserveRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AssetId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.AssetId))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Id != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetPoolAssetReserveResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetPoolAssetReserveResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetPoolAssetReserveResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Reserve != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Reserve))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *QueryGetPoolAssetsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2323,6 +1812,133 @@ func (m *QueryGetSwapTokensForExactTokensResponse) MarshalToSizedBuffer(dAtA []b
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryGetPoolShareTokenRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetPoolShareTokenRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetPoolShareTokenRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetPoolShareTokenResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetPoolShareTokenResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetPoolShareTokenResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.ShareToken.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetPoolAssetRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetPoolAssetRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetPoolAssetRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AssetId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.AssetId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.PoolId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetPoolAssetResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetPoolAssetResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetPoolAssetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.PoolAsset.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -2432,110 +2048,6 @@ func (m *QueryGetPoolParamResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetPoolTotalLiquidityRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Id != 0 {
-		n += 1 + sovQuery(uint64(m.Id))
-	}
-	return n
-}
-
-func (m *QueryGetPoolTotalLiquidityResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.TotalLiquidity != 0 {
-		n += 1 + sovQuery(uint64(m.TotalLiquidity))
-	}
-	return n
-}
-
-func (m *QueryGetPoolTokenDenomRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Id != 0 {
-		n += 1 + sovQuery(uint64(m.Id))
-	}
-	if m.AssetId != 0 {
-		n += 1 + sovQuery(uint64(m.AssetId))
-	}
-	return n
-}
-
-func (m *QueryGetPoolTokenDenomResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.TokenDenom)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryGetPoolShareTokenDenomRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Id != 0 {
-		n += 1 + sovQuery(uint64(m.Id))
-	}
-	return n
-}
-
-func (m *QueryGetPoolShareTokenDenomResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ShareDenom)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryGetPoolAssetReserveRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Id != 0 {
-		n += 1 + sovQuery(uint64(m.Id))
-	}
-	if m.AssetId != 0 {
-		n += 1 + sovQuery(uint64(m.AssetId))
-	}
-	return n
-}
-
-func (m *QueryGetPoolAssetReserveResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Reserve != 0 {
-		n += 1 + sovQuery(uint64(m.Reserve))
-	}
-	return n
-}
-
 func (m *QueryGetPoolAssetsRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2626,6 +2138,55 @@ func (m *QueryGetSwapTokensForExactTokensResponse) Size() (n int) {
 	if m.AmountIn != 0 {
 		n += 1 + sovQuery(uint64(m.AmountIn))
 	}
+	return n
+}
+
+func (m *QueryGetPoolShareTokenRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		n += 1 + sovQuery(uint64(m.PoolId))
+	}
+	return n
+}
+
+func (m *QueryGetPoolShareTokenResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.ShareToken.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryGetPoolAssetRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		n += 1 + sovQuery(uint64(m.PoolId))
+	}
+	if m.AssetId != 0 {
+		n += 1 + sovQuery(uint64(m.AssetId))
+	}
+	return n
+}
+
+func (m *QueryGetPoolAssetResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.PoolAsset.Size()
+	n += 1 + l + sovQuery(uint64(l))
 	return n
 }
 
@@ -3278,622 +2839,6 @@ func (m *QueryGetPoolParamResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetPoolTotalLiquidityRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolTotalLiquidityRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolTotalLiquidityRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolTotalLiquidityResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolTotalLiquidityResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolTotalLiquidityResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TotalLiquidity", wireType)
-			}
-			m.TotalLiquidity = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TotalLiquidity |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolTokenDenomRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolTokenDenomRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolTokenDenomRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AssetId", wireType)
-			}
-			m.AssetId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AssetId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolTokenDenomResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolTokenDenomResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolTokenDenomResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenDenom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TokenDenom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolShareTokenDenomRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolShareTokenDenomRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolShareTokenDenomRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolShareTokenDenomResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolShareTokenDenomResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolShareTokenDenomResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ShareDenom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ShareDenom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolAssetReserveRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolAssetReserveRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolAssetReserveRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AssetId", wireType)
-			}
-			m.AssetId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AssetId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetPoolAssetReserveResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetPoolAssetReserveResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetPoolAssetReserveResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Reserve", wireType)
-			}
-			m.Reserve = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Reserve |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *QueryGetPoolAssetsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -4404,6 +3349,329 @@ func (m *QueryGetSwapTokensForExactTokensResponse) Unmarshal(dAtA []byte) error 
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetPoolShareTokenRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetPoolShareTokenRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetPoolShareTokenRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+			}
+			m.PoolId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetPoolShareTokenResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetPoolShareTokenResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetPoolShareTokenResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShareToken", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ShareToken.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetPoolAssetRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetPoolAssetRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetPoolAssetRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+			}
+			m.PoolId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssetId", wireType)
+			}
+			m.AssetId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AssetId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetPoolAssetResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetPoolAssetResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetPoolAssetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolAsset", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.PoolAsset.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
