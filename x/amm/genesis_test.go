@@ -9,6 +9,8 @@ import (
 	"frogchain/x/amm/types"
 
 	"github.com/stretchr/testify/require"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestGenesis(t *testing.T) {
@@ -22,23 +24,11 @@ func TestGenesis(t *testing.T) {
 					SwapFee: 1,
 					ExitFee: 1,
 				},
-				PoolAssets: []types.PoolToken{
-					types.PoolToken{
-						TokenDenom:   "coin",
-						TokenWeight:  1,
-						TokenReserve: 100,
-					},
-					types.PoolToken{
-						TokenDenom:   "val",
-						TokenWeight:  1,
-						TokenReserve: 100,
-					},
+				PoolAssets: []sdk.Coin{
+					sdk.NewCoin("coin", sdk.NewInt(100)),
+					sdk.NewCoin("val", sdk.NewInt(100)),
 				},
-				ShareToken: &types.PoolToken{
-					TokenDenom:   types.ShareTokenIndex(0),
-					TokenWeight:  1,
-					TokenReserve: 100,
-				},
+				ShareToken:       sdk.NewCoin(types.ShareTokenIndex(0), sdk.NewInt(100)),
 				MinimumLiquidity: 1000,
 				IsActivated:      true,
 			},
@@ -48,23 +38,11 @@ func TestGenesis(t *testing.T) {
 					SwapFee: 1,
 					ExitFee: 1,
 				},
-				PoolAssets: []types.PoolToken{
-					types.PoolToken{
-						TokenDenom:   "coin",
-						TokenWeight:  1,
-						TokenReserve: 100,
-					},
-					types.PoolToken{
-						TokenDenom:   "val",
-						TokenWeight:  1,
-						TokenReserve: 100,
-					},
+				PoolAssets: []sdk.Coin{
+					sdk.NewCoin("coin", sdk.NewInt(100)),
+					sdk.NewCoin("val", sdk.NewInt(100)),
 				},
-				ShareToken: &types.PoolToken{
-					TokenDenom:   types.ShareTokenIndex(1),
-					TokenWeight:  1,
-					TokenReserve: 100,
-				},
+				ShareToken:       sdk.NewCoin(types.ShareTokenIndex(0), sdk.NewInt(100)),
 				MinimumLiquidity: 1000,
 				IsActivated:      true,
 			},

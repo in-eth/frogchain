@@ -12,13 +12,13 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdGetPoolAssetReserve() *cobra.Command {
+func CmdGetPoolAsset() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-pool-asset-reserve [id] [asset-id]",
-		Short: "Query get-pool-asset-reserve",
+		Use:   "get-pool-asset [pool-id] [asset-id]",
+		Short: "Query get-pool-asset",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			reqId, err := cast.ToUint64E(args[0])
+			reqPoolId, err := cast.ToUint64E(args[0])
 			if err != nil {
 				return err
 			}
@@ -34,13 +34,13 @@ func CmdGetPoolAssetReserve() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetPoolAssetReserveRequest{
+			params := &types.QueryGetPoolAssetRequest{
 
-				Id:      reqId,
+				PoolId:  reqPoolId,
 				AssetId: reqAssetId,
 			}
 
-			res, err := queryClient.GetPoolAssetReserve(cmd.Context(), params)
+			res, err := queryClient.GetPoolAsset(cmd.Context(), params)
 			if err != nil {
 				return err
 			}

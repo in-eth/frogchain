@@ -1,11 +1,8 @@
 frogchain query amm list-pool
 frogchain query amm show-pool [id]
 frogchain query amm get-pool-param [id]
-frogchain query amm get-pool-share-token-denom [id]
-frogchain query amm get-pool-total-liquidity [id]
+frogchain query amm get-pool-share-token [id]
 frogchain query amm get-pool-assets [id]
-frogchain query amm get-pool-token-denom [id] [asset-id]
-frogchain query amm get-pool-asset-reserve [id] [asset-id]
 frogchain query amm get-swap-exact-tokens-for-tokens [pool-id] [amount-in] [path]
 frogchain query amm get-swap-tokens-for-exact-tokens [pool-id] [amount-out] [path]
 

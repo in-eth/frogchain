@@ -8,6 +8,7 @@ import (
 	"frogchain/x/amm/keeper"
 	"frogchain/x/amm/types"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -15,6 +16,21 @@ import (
 func createNPool(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Pool {
 	items := make([]types.Pool, n)
 	for i := range items {
+		items[i].PoolAssets = []sdk.Coin{
+			sdk.NewCoin("foocoin", math.NewInt(10000)),
+			sdk.NewCoin("token", math.NewInt(10000)),
+		}
+
+		items[i].PoolParam = types.PoolParam{
+			SwapFee:      12,
+			ExitFee:      15,
+			FeeCollector: "user1",
+		}
+
+		items[i].ShareToken = sdk.NewCoin(types.ShareTokenIndex(uint64(i)), sdk.NewInt(50))
+
+		items[i].AssetWeights = []uint64{1, 1}
+
 		items[i].Id = keeper.AppendPool(ctx, items[i])
 	}
 	return items

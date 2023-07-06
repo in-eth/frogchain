@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -8,12 +10,12 @@ const TypeMsgCreatePool = "create_pool"
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolParam PoolParam, poolAssets []PoolToken, assetAmounts []uint64) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolParam PoolParam, poolAssets []sdk.Coin, assetWeights []uint64) *MsgCreatePool {
 	return &MsgCreatePool{
 		Creator:      creator,
 		PoolParam:    &poolParam,
 		PoolAssets:   poolAssets,
-		AssetAmounts: assetAmounts,
+		AssetWeights: assetWeights,
 	}
 }
 
@@ -39,10 +41,12 @@ func (msg *MsgCreatePool) GetSignBytes() []byte {
 }
 
 func (msg *MsgCreatePool) ValidateBasic() error {
+	fmt.Print(msg.Creator)
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return ErrInvalidAddress
 	}
+
 	_, err = sdk.AccAddressFromBech32(msg.PoolParam.FeeCollector)
 	if err != nil {
 		return ErrInvalidAddress
@@ -61,30 +65,15 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	if len(msg.PoolAssets) == 1 {
 		return ErrInvalidAssets
 	}
-
-	for i := 0; i < len(msg.PoolAssets); i++ {
-		for j := i + 1; j < len(msg.PoolAssets); j++ {
-			if msg.PoolAssets[i].TokenDenom == msg.PoolAssets[j].TokenDenom {
-				return ErrDuplicateAssets
-			}
-		}
-	}
-
-	if len(msg.PoolAssets) != len(msg.AssetAmounts) {
+	if len(msg.PoolAssets) != len(msg.AssetWeights) {
 		return ErrInvalidLength
 	}
 
-	for _, poolAsset := range msg.PoolAssets {
-		weight := poolAsset.TokenWeight
+	for _, weight := range msg.AssetWeights {
 		if weight == 0 {
 			return ErrWeightZero
 		}
 	}
 
-	for _, assetAmount := range msg.AssetAmounts {
-		if assetAmount == 0 {
-			return ErrInvalidAmount
-		}
-	}
 	return nil
 }

@@ -41,7 +41,6 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
-	PoolKey      = "Pool/"
 	PoolCountKey = "Pool/count/"
 )
 

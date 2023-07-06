@@ -34923,19 +34923,31 @@ paths:
           format: int64
       tags:
         - Query
-  /frogchain/amm/get_pool_asset_reserve/{id}/{assetId}:
+  /frogchain/amm/get_pool_asset/{poolId}/{assetId}:
     get:
-      summary: Queries a list of GetPoolAssetReserve items.
-      operationId: FrogchainAmmGetPoolAssetReserve
+      summary: Queries a list of GetPoolAsset items.
+      operationId: FrogchainAmmGetPoolAsset
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              reserve:
-                type: string
-                format: uint64
+              poolAsset:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
         default:
           description: An unexpected error response.
           schema:
@@ -34955,7 +34967,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: id
+        - name: poolId
           in: path
           required: true
           type: string
@@ -34982,21 +34994,18 @@ paths:
                 items:
                   type: object
                   properties:
-                    tokenDenom:
+                    denom:
                       type: string
-                    tokenWeight:
+                    amount:
                       type: string
-                      format: uint64
-                      title: token weight represents the value of token
-                    tokenReserve:
-                      type: string
-                      format: uint64
-                      title: >-
-                        token reserve represents the reserve amount of the pool
-                        in the module
-                  description: |-
-                    Pool has my PoolAssets that has token and weight.
-                    weight determines the value of token.
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
         default:
           description: An unexpected error response.
           schema:
@@ -35102,18 +35111,31 @@ paths:
           format: uint64
       tags:
         - Query
-  /frogchain/amm/get_pool_share_token_denom/{id}:
+  /frogchain/amm/get_pool_share_token/{poolId}:
     get:
-      summary: Queries a list of GetPoolShareTokenDenom items.
-      operationId: FrogchainAmmGetPoolShareTokenDenom
+      summary: Queries a list of GetPoolShareToken items.
+      operationId: FrogchainAmmGetPoolShareToken
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              shareDenom:
-                type: string
+              shareToken:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
         default:
           description: An unexpected error response.
           schema:
@@ -35133,89 +35155,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          format: uint64
-      tags:
-        - Query
-  /frogchain/amm/get_pool_token_denom/{id}:
-    get:
-      summary: Queries a list of GetPoolTokenDenom items.
-      operationId: FrogchainAmmGetPoolTokenDenom
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              tokenDenom:
-                type: string
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          format: uint64
-        - name: assetId
-          in: query
-          required: false
-          type: string
-          format: uint64
-      tags:
-        - Query
-  /frogchain/amm/get_pool_total_liquidity/{id}:
-    get:
-      summary: Queries a list of GetPoolTotalLiquidity items.
-      operationId: FrogchainAmmGetPoolTotalLiquidity
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              totalLiquidity:
-                type: string
-                format: uint64
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: id
+        - name: poolId
           in: path
           required: true
           type: string
@@ -35429,42 +35369,42 @@ paths:
                       items:
                         type: object
                         properties:
-                          tokenDenom:
+                          denom:
                             type: string
-                          tokenWeight:
+                          amount:
                             type: string
-                            format: uint64
-                            title: token weight represents the value of token
-                          tokenReserve:
-                            type: string
-                            format: uint64
-                            title: >-
-                              token reserve represents the reserve amount of the
-                              pool in the module
-                        description: |-
-                          Pool has my PoolAssets that has token and weight.
-                          weight determines the value of token.
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
                       title: assets in the pool
+                    assetWeights:
+                      type: array
+                      items:
+                        type: string
+                        format: uint64
                     shareToken:
-                      title: LP token
                       type: object
                       properties:
-                        tokenDenom:
+                        denom:
                           type: string
-                        tokenWeight:
+                        amount:
                           type: string
-                          format: uint64
-                          title: token weight represents the value of token
-                        tokenReserve:
-                          type: string
-                          format: uint64
-                          title: >-
-                            token reserve represents the reserve amount of the
-                            pool in the module
-                      description: |-
-                        Pool has my PoolAssets that has token and weight.
-                        weight determines the value of token.
-                    mininumliquidity:
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                      title: LP token
+                    minimumLiquidity:
                       type: string
                       format: uint64
                       title: >-
@@ -35644,42 +35584,41 @@ paths:
                     items:
                       type: object
                       properties:
-                        tokenDenom:
+                        denom:
                           type: string
-                        tokenWeight:
+                        amount:
                           type: string
-                          format: uint64
-                          title: token weight represents the value of token
-                        tokenReserve:
-                          type: string
-                          format: uint64
-                          title: >-
-                            token reserve represents the reserve amount of the
-                            pool in the module
-                      description: |-
-                        Pool has my PoolAssets that has token and weight.
-                        weight determines the value of token.
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                     title: assets in the pool
+                  assetWeights:
+                    type: array
+                    items:
+                      type: string
+                      format: uint64
                   shareToken:
-                    title: LP token
                     type: object
                     properties:
-                      tokenDenom:
+                      denom:
                         type: string
-                      tokenWeight:
+                      amount:
                         type: string
-                        format: uint64
-                        title: token weight represents the value of token
-                      tokenReserve:
-                        type: string
-                        format: uint64
-                        title: >-
-                          token reserve represents the reserve amount of the
-                          pool in the module
-                    description: |-
-                      Pool has my PoolAssets that has token and weight.
-                      weight determines the value of token.
-                  mininumliquidity:
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                    title: LP token
+                  minimumLiquidity:
                     type: string
                     format: uint64
                     title: >-
@@ -71425,42 +71364,35 @@ definitions:
         items:
           type: object
           properties:
-            tokenDenom:
+            denom:
               type: string
-            tokenWeight:
+            amount:
               type: string
-              format: uint64
-              title: token weight represents the value of token
-            tokenReserve:
-              type: string
-              format: uint64
-              title: >-
-                token reserve represents the reserve amount of the pool in the
-                module
           description: |-
-            Pool has my PoolAssets that has token and weight.
-            weight determines the value of token.
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
         title: assets in the pool
+      assetWeights:
+        type: array
+        items:
+          type: string
+          format: uint64
       shareToken:
-        title: LP token
         type: object
         properties:
-          tokenDenom:
+          denom:
             type: string
-          tokenWeight:
+          amount:
             type: string
-            format: uint64
-            title: token weight represents the value of token
-          tokenReserve:
-            type: string
-            format: uint64
-            title: >-
-              token reserve represents the reserve amount of the pool in the
-              module
         description: |-
-          Pool has my PoolAssets that has token and weight.
-          weight determines the value of token.
-      mininumliquidity:
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+        title: LP token
+      minimumLiquidity:
         type: string
         format: uint64
         title: >-
@@ -71507,22 +71439,6 @@ definitions:
     description: >-
       PoolParams defined the parameters that will be managed by the token
       holders of the pool.
-  frogchain.amm.PoolToken:
-    type: object
-    properties:
-      tokenDenom:
-        type: string
-      tokenWeight:
-        type: string
-        format: uint64
-        title: token weight represents the value of token
-      tokenReserve:
-        type: string
-        format: uint64
-        title: token reserve represents the reserve amount of the pool in the module
-    description: |-
-      Pool has my PoolAssets that has token and weight.
-      weight determines the value of token.
   frogchain.amm.QueryAllPoolResponse:
     type: object
     properties:
@@ -71581,42 +71497,41 @@ definitions:
               items:
                 type: object
                 properties:
-                  tokenDenom:
+                  denom:
                     type: string
-                  tokenWeight:
+                  amount:
                     type: string
-                    format: uint64
-                    title: token weight represents the value of token
-                  tokenReserve:
-                    type: string
-                    format: uint64
-                    title: >-
-                      token reserve represents the reserve amount of the pool in
-                      the module
-                description: |-
-                  Pool has my PoolAssets that has token and weight.
-                  weight determines the value of token.
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
               title: assets in the pool
+            assetWeights:
+              type: array
+              items:
+                type: string
+                format: uint64
             shareToken:
-              title: LP token
               type: object
               properties:
-                tokenDenom:
+                denom:
                   type: string
-                tokenWeight:
+                amount:
                   type: string
-                  format: uint64
-                  title: token weight represents the value of token
-                tokenReserve:
-                  type: string
-                  format: uint64
-                  title: >-
-                    token reserve represents the reserve amount of the pool in
-                    the module
-              description: |-
-                Pool has my PoolAssets that has token and weight.
-                weight determines the value of token.
-            mininumliquidity:
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+              title: LP token
+            minimumLiquidity:
               type: string
               format: uint64
               title: >-
@@ -71651,12 +71566,21 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
-  frogchain.amm.QueryGetPoolAssetReserveResponse:
+  frogchain.amm.QueryGetPoolAssetResponse:
     type: object
     properties:
-      reserve:
-        type: string
-        format: uint64
+      poolAsset:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
   frogchain.amm.QueryGetPoolAssetsResponse:
     type: object
     properties:
@@ -71665,21 +71589,15 @@ definitions:
         items:
           type: object
           properties:
-            tokenDenom:
+            denom:
               type: string
-            tokenWeight:
+            amount:
               type: string
-              format: uint64
-              title: token weight represents the value of token
-            tokenReserve:
-              type: string
-              format: uint64
-              title: >-
-                token reserve represents the reserve amount of the pool in the
-                module
           description: |-
-            Pool has my PoolAssets that has token and weight.
-            weight determines the value of token.
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
   frogchain.amm.QueryGetPoolParamResponse:
     type: object
     properties:
@@ -71777,42 +71695,41 @@ definitions:
             items:
               type: object
               properties:
-                tokenDenom:
+                denom:
                   type: string
-                tokenWeight:
+                amount:
                   type: string
-                  format: uint64
-                  title: token weight represents the value of token
-                tokenReserve:
-                  type: string
-                  format: uint64
-                  title: >-
-                    token reserve represents the reserve amount of the pool in
-                    the module
-              description: |-
-                Pool has my PoolAssets that has token and weight.
-                weight determines the value of token.
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
             title: assets in the pool
+          assetWeights:
+            type: array
+            items:
+              type: string
+              format: uint64
           shareToken:
-            title: LP token
             type: object
             properties:
-              tokenDenom:
+              denom:
                 type: string
-              tokenWeight:
+              amount:
                 type: string
-                format: uint64
-                title: token weight represents the value of token
-              tokenReserve:
-                type: string
-                format: uint64
-                title: >-
-                  token reserve represents the reserve amount of the pool in the
-                  module
-            description: |-
-              Pool has my PoolAssets that has token and weight.
-              weight determines the value of token.
-          mininumliquidity:
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+            title: LP token
+          minimumLiquidity:
             type: string
             format: uint64
             title: >-
@@ -71821,22 +71738,21 @@ definitions:
           isActivated:
             type: boolean
             title: Pool activate state
-  frogchain.amm.QueryGetPoolShareTokenDenomResponse:
+  frogchain.amm.QueryGetPoolShareTokenResponse:
     type: object
     properties:
-      shareDenom:
-        type: string
-  frogchain.amm.QueryGetPoolTokenDenomResponse:
-    type: object
-    properties:
-      tokenDenom:
-        type: string
-  frogchain.amm.QueryGetPoolTotalLiquidityResponse:
-    type: object
-    properties:
-      totalLiquidity:
-        type: string
-        format: uint64
+      shareToken:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
   frogchain.amm.QueryGetSwapExactTokensForTokensResponse:
     type: object
     properties:

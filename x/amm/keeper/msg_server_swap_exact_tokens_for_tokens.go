@@ -24,9 +24,7 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	if ctx.BlockTime().After(deadline) {
 		return nil, sdkerrors.Wrapf(
 			types.ErrDeadlinePassed,
-			types.ErrDeadlinePassed.Error(),
 			deadline.UTC().Format(types.DeadlineLayout),
-			ctx.BlockTime().UTC().Format(types.DeadlineLayout),
 		)
 	}
 
@@ -37,22 +35,13 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	}
 
 	// get token sender
-	sender, err := sdk.AccAddressFromBech32(msg.Creator)
-	if err != nil {
-		panic(err)
-	}
+	sender, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	// get token sender
-	tokenReceiver, err := sdk.AccAddressFromBech32(msg.To)
-	if err != nil {
-		panic(err)
-	}
+	tokenReceiver, _ := sdk.AccAddressFromBech32(msg.To)
 
 	// get fee collector
-	feeCollector, err := sdk.AccAddressFromBech32(poolParam.FeeCollector)
-	if err != nil {
-		panic(err)
-	}
+	feeCollector, _ := sdk.AccAddressFromBech32(poolParam.FeeCollector)
 
 	tokenOutAmount, fee, err := k.SwapExactAmountIn(ctx, msg.PoolId, msg.AmountIn, msg.Path)
 	if err != nil {
@@ -60,14 +49,16 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	}
 
 	// send fee token to fee collector
-	err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(
-		sdk.NewCoin(
-			msg.Path[0],
-			sdk.NewInt(int64(fee)),
-		),
-	))
-	if err != nil {
-		return nil, err
+	if fee > 0 {
+		err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(
+			sdk.NewCoin(
+				msg.Path[0],
+				sdk.NewInt(int64(fee)),
+			),
+		))
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// send input token from sender to module
@@ -83,7 +74,7 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 
 	// if result is below min value, then revert
 	if tokenOutAmount < msg.AmountOutMin {
-		return nil, err
+		return nil, types.ErrUnderMinAmount
 	}
 
 	// send output token from module to `to` receiver
@@ -93,6 +84,7 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 			sdk.NewInt(int64(tokenOutAmount)),
 		),
 	))
+
 	if err != nil {
 		return nil, err
 	}

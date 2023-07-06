@@ -9,9 +9,11 @@ import (
 )
 
 func (escrow *MockBankKeeper) ExpectAny(context context.Context) {
+	escrow.EXPECT().SendCoins(sdk.UnwrapSDKContext(context), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 	escrow.EXPECT().SendCoinsFromAccountToModule(sdk.UnwrapSDKContext(context), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 	escrow.EXPECT().SendCoinsFromModuleToAccount(sdk.UnwrapSDKContext(context), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 	escrow.EXPECT().MintCoins(sdk.UnwrapSDKContext(context), gomock.Any(), gomock.Any()).AnyTimes()
+	escrow.EXPECT().BurnCoins(sdk.UnwrapSDKContext(context), gomock.Any(), gomock.Any()).AnyTimes()
 }
 
 func coinsOf(tokenDenom string, amount uint64) sdk.Coins {

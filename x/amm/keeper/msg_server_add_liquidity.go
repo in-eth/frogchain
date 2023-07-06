@@ -14,8 +14,6 @@ import (
 func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidity) (*types.MsgAddLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-
 	// get share token from pool with pool id
 	shareToken, err := k.GetPoolShareTokenForId(ctx, msg.PoolId)
 	if err != nil {
@@ -29,13 +27,18 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	// liquidity amount is the minimum value of the list with this formula
 	// liquidityAmount = tokenAmountIn * shareTokenAmount / tokenAmount
 	liquidityAmount := uint64(math.MaxUint64)
+
+	if assetLength, _ := k.GetPoolAssetsLength(ctx, msg.PoolId); assetLength < len(msg.DesiredAmounts) {
+		return nil, types.ErrInvalidLength
+	}
+
 	for i, desiredAmount := range msg.DesiredAmounts {
 		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
 		if err != nil {
 			return nil, err
 		}
 
-		castAmount := desiredAmount * shareToken.TokenReserve / poolAsset.TokenReserve
+		castAmount := desiredAmount * shareToken.Amount.Uint64() / poolAsset.Amount.Uint64()
 		if liquidityAmount > castAmount {
 			liquidityAmount = castAmount
 		}
@@ -53,27 +56,31 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 			return nil, err
 		}
 
-		// input token amount calculated by liquidity amount
-		castAmount := liquidityAmount * poolAsset.TokenReserve / shareToken.TokenReserve
-
 		// if input token amount is below min amount, then revert
-		if castAmount < minAmount {
+		if msg.DesiredAmounts[i] < minAmount {
 			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
-				"calculated amount is below minimum, %d, %d, %d",
+				"calculated amount is below minimum, %s, %s, %s",
 				fmt.Sprint(i),
-				fmt.Sprint(castAmount),
+				fmt.Sprint(msg.DesiredAmounts[i]),
 				fmt.Sprint(minAmount),
 			)
 		}
 
-		collateral.Add(
+		castAmount := liquidityAmount * poolAsset.Amount.Uint64() / shareToken.Amount.Uint64()
+
+		collateral = collateral.Add(
 			sdk.NewCoin(
-				poolAsset.TokenDenom,
-				sdk.NewInt(int64(castAmount)),
+				poolAsset.Denom,
+				sdk.NewInt(int64(msg.DesiredAmounts[i])),
 			),
 		)
 
-		poolAsset.TokenReserve += castAmount
+		poolAsset = poolAsset.Add(
+			sdk.NewCoin(
+				poolAsset.Denom,
+				sdk.NewInt(int64(castAmount)),
+			),
+		)
 		err = k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
 		if err != nil {
 			return nil, err
@@ -93,7 +100,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 
 	// mint new share token, amount is liquidityAmount
 	newShareToken := sdk.NewCoin(
-		shareToken.TokenDenom,
+		shareToken.Denom,
 		sdk.NewInt(int64(liquidityAmount)),
 	)
 
@@ -102,7 +109,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 		return nil, err
 	}
 
-	shareToken.TokenReserve += liquidityAmount
+	shareToken = shareToken.Add(newShareToken)
 	err = k.SetPoolShareToken(ctx, msg.PoolId, shareToken)
 	if err != nil {
 		return nil, err

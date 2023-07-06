@@ -10,20 +10,19 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) GetPoolAssetReserve(goCtx context.Context, req *types.QueryGetPoolAssetReserveRequest) (*types.QueryGetPoolAssetReserveResponse, error) {
+func (k Keeper) GetPoolShareToken(goCtx context.Context, req *types.QueryGetPoolShareTokenRequest) (*types.QueryGetPoolShareTokenResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Process the query
-	tokenAsset, err := k.GetPoolTokenForId(ctx, req.Id, req.AssetId)
+	shareToken, err := k.GetPoolShareTokenForId(ctx, req.PoolId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &types.QueryGetPoolAssetReserveResponse{
-		Reserve: tokenAsset.TokenReserve,
+	return &types.QueryGetPoolShareTokenResponse{
+		ShareToken: shareToken,
 	}, nil
 }

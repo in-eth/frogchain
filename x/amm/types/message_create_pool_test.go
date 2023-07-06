@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestMsgCreatePool_ValidateBasic(t *testing.T) {
@@ -53,7 +55,7 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			},
 			err: ErrFeeOverflow,
 		}, {
-			name: "assets not enough",
+			name: "invalid weights length",
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
@@ -61,60 +63,17 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []PoolToken{
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
+				PoolAssets: []sdk.Coin{
+					sdk.NewCoin(
+						"token",
+						sdk.NewInt(10),
+					),
+					sdk.NewCoin(
+						"foocoin",
+						sdk.NewInt(10),
+					),
 				},
-			},
-			err: ErrInvalidAssets,
-		}, {
-			name: "same assets exist in assets",
-			msg: MsgCreatePool{
-				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
-					FeeCollector: sample.AccAddress(),
-				},
-				PoolAssets: []PoolToken{
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-				},
-			},
-			err: ErrDuplicateAssets,
-		}, {
-			name: "invalid amounts length",
-			msg: MsgCreatePool{
-				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
-					FeeCollector: sample.AccAddress(),
-				},
-				PoolAssets: []PoolToken{
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-					PoolToken{
-						TokenDenom:   "124",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-				},
-				AssetAmounts: []uint64{10},
+				AssetWeights: []uint64{1},
 			},
 			err: ErrInvalidLength,
 		}, {
@@ -126,46 +85,20 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []PoolToken{
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  0,
-						TokenReserve: 0,
-					},
-					PoolToken{
-						TokenDenom:   "124",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
+				PoolAssets: []sdk.Coin{
+					sdk.NewCoin(
+						"token",
+						sdk.NewInt(10),
+					),
+					sdk.NewCoin(
+						"foocoin",
+						sdk.NewInt(10),
+					),
 				},
-				AssetAmounts: []uint64{10, 10},
+				AssetWeights: []uint64{0, 1},
 			},
 
 			err: ErrWeightZero,
-		}, {
-			name: "invalid asset amounts",
-			msg: MsgCreatePool{
-				Creator: sample.AccAddress(),
-				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
-					FeeCollector: sample.AccAddress(),
-				},
-				PoolAssets: []PoolToken{
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-					PoolToken{
-						TokenDenom:   "124",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-				},
-				AssetAmounts: []uint64{0, 10},
-			},
-			err: ErrInvalidAmount,
 		}, {
 			name: "valid address",
 			msg: MsgCreatePool{
@@ -175,19 +108,17 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 					ExitFee:      10,
 					FeeCollector: sample.AccAddress(),
 				},
-				PoolAssets: []PoolToken{
-					PoolToken{
-						TokenDenom:   "123",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
-					PoolToken{
-						TokenDenom:   "124",
-						TokenWeight:  1,
-						TokenReserve: 0,
-					},
+				PoolAssets: []sdk.Coin{
+					sdk.NewCoin(
+						"token",
+						sdk.NewInt(10),
+					),
+					sdk.NewCoin(
+						"foocoin",
+						sdk.NewInt(10),
+					),
 				},
-				AssetAmounts: []uint64{10, 10},
+				AssetWeights: []uint64{1, 1},
 			},
 		},
 	}

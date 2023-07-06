@@ -28,27 +28,8 @@ func setupMsgAddLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, context
 
 	bankMock.ExpectAny(context)
 
-	server.CreatePool(context, &types.MsgCreatePool{
-		Creator: alice,
-		PoolParam: &types.PoolParam{
-			SwapFee:      1,
-			ExitFee:      1,
-			FeeCollector: alice,
-		},
-		PoolAssets: []types.PoolToken{
-			types.PoolToken{
-				TokenDenom:   "token",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-			types.PoolToken{
-				TokenDenom:   "foocoin",
-				TokenWeight:  1,
-				TokenReserve: 0,
-			},
-		},
-		AssetAmounts: []uint64{10000, 10000},
-	})
+	createNPool(k, ctx, 2)
+
 	return server, *k, context, ctrl, bankMock
 }
 
@@ -80,9 +61,46 @@ func TestMsgAddLiquidityNotCorrectAmountLength(t *testing.T) {
 		DesiredAmounts: []uint64{10, 10, 10},
 		MinAmounts:     []uint64{10, 10, 10},
 	})
+
 	require.Nil(t, addResponse)
 	require.Equal(t,
 		"invalid assets length",
+		err.Error())
+}
+
+func TestMsgAddLiquidityNoLiquidity(t *testing.T) {
+	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ctx := sdk.UnwrapSDKContext(context)
+	defer ctrl.Finish()
+
+	addResponse, err := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
+		Creator:        alice,
+		PoolId:         0,
+		DesiredAmounts: []uint64{0, 10},
+		MinAmounts:     []uint64{10, 10},
+	})
+	require.Nil(t, addResponse)
+	require.Equal(t,
+		"no liquidity with amounts you deposit: invalid amount",
+		err.Error())
+}
+
+func TestMsgAddLiquidityMinErr(t *testing.T) {
+	// ms, keeper, context, ctrl, bank := setupMsgAddLiquidity(t)
+	ms, _, context, ctrl, _ := setupMsgAddLiquidity(t)
+	ctx := sdk.UnwrapSDKContext(context)
+	defer ctrl.Finish()
+
+	addResponse, err := ms.AddLiquidity(ctx, &types.MsgAddLiquidity{
+		Creator:        alice,
+		PoolId:         0,
+		DesiredAmounts: []uint64{10, 10},
+		MinAmounts:     []uint64{11, 10},
+	})
+	require.Nil(t, addResponse)
+	require.Equal(t,
+		"calculated amount is below minimum, 0, 10, 11: invalid amount",
 		err.Error())
 }
 
