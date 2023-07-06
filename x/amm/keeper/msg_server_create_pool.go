@@ -7,7 +7,6 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
@@ -70,7 +69,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	minLiquidity := pool.MinimumLiquidity
 
 	if shareAmount.Uint64() <= minLiquidity {
-		return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
+		return nil, ErrorWrap(types.ErrInvalidAmount,
 			"not enough coins for minimum liquidity",
 		)
 	}
@@ -89,6 +88,11 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	if sdkError != nil {
 		return nil, sdkError
 	}
+
+	// emit mint event
+	ctx.EventManager().EmitEvent(
+		types.NewCreatePoolEvent(creator, poolId, creatorShareToken[0]),
+	)
 
 	return &types.MsgCreatePoolResponse{
 		Id: poolId,

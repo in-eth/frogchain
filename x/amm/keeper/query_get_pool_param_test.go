@@ -42,7 +42,7 @@ func TestGetPoolParam(t *testing.T) {
 			request: &types.QueryGetPoolParamRequest{
 				Id: 10000,
 			},
-			err: sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key 10000 doesn't exist"),
+			err: ErrorWrap(sdkerrors.ErrKeyNotFound, "key 10000 doesn't exist"),
 		},
 		{
 			desc: "InvalidRequest",
