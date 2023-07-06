@@ -8,7 +8,6 @@ import (
 	"frogchain/x/amm/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidity) (*types.MsgAddLiquidityResponse, error) {
@@ -45,7 +44,7 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	}
 
 	if liquidityAmount == 0 {
-		return nil, sdkerrors.Wrapf(types.ErrInvalidAmount, "no liquidity with amounts you deposit")
+		return nil, ErrorWrap(types.ErrInvalidAmount, "no liquidity with amounts you deposit")
 	}
 
 	// calculate asset amounts from account to pool and update pool data
@@ -56,17 +55,17 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 			return nil, err
 		}
 
+		castAmount := liquidityAmount * poolAsset.Amount.Uint64() / shareToken.Amount.Uint64()
+
 		// if input token amount is below min amount, then revert
-		if msg.DesiredAmounts[i] < minAmount {
-			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
+		if castAmount < minAmount {
+			return nil, ErrorWrap(types.ErrInvalidAmount,
 				"calculated amount is below minimum, %s, %s, %s",
 				fmt.Sprint(i),
-				fmt.Sprint(msg.DesiredAmounts[i]),
+				fmt.Sprint(castAmount),
 				fmt.Sprint(minAmount),
 			)
 		}
-
-		castAmount := liquidityAmount * poolAsset.Amount.Uint64() / shareToken.Amount.Uint64()
 
 		collateral = collateral.Add(
 			sdk.NewCoin(
@@ -125,6 +124,11 @@ func (k msgServer) AddLiquidity(goCtx context.Context, msg *types.MsgAddLiquidit
 	if err != nil {
 		return nil, err
 	}
+
+	// emit mint event
+	ctx.EventManager().EmitEvent(
+		types.NewAddLiquidityEvent(liquidityProvider, msg.PoolId, newShareToken),
+	)
 
 	return &types.MsgAddLiquidityResponse{
 		ShareToken: newShareToken,

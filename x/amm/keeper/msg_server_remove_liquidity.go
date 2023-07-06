@@ -8,7 +8,6 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLiquidity) (*types.MsgRemoveLiquidityResponse, error) {
@@ -54,7 +53,7 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		castAmount := liquidity * poolAsset.Amount.Uint64() / shareToken.Amount.Uint64()
 
 		if castAmount < minAmount {
-			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
+			return nil, ErrorWrap(types.ErrInvalidAmount,
 				"calculated amount is below minimum, %s, %s, %s",
 				fmt.Sprint(i),
 				fmt.Sprint(castAmount),
@@ -125,6 +124,11 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	if err != nil {
 		return nil, err
 	}
+
+	// emit mint event
+	ctx.EventManager().EmitEvent(
+		types.NewRemoveLiquidityEvent(liquidityProvider, msg.PoolId, receiveTokens),
+	)
 
 	return &types.MsgRemoveLiquidityResponse{
 		ReceivedTokens: receiveTokens,

@@ -7,7 +7,6 @@ import (
 	"frogchain/x/amm/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.MsgSwapExactTokensForTokens) (*types.MsgSwapExactTokensForTokensResponse, error) {
@@ -22,7 +21,7 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	}
 
 	if ctx.BlockTime().After(deadline) {
-		return nil, sdkerrors.Wrapf(
+		return nil, ErrorWrap(
 			types.ErrDeadlinePassed,
 			deadline.UTC().Format(types.DeadlineLayout),
 		)
@@ -88,6 +87,11 @@ func (k msgServer) SwapExactTokensForTokens(goCtx context.Context, msg *types.Ms
 	if err != nil {
 		return nil, err
 	}
+
+	// emit mint event
+	ctx.EventManager().EmitEvent(
+		types.NewSwapExactTokensForTokensEvent(sender, msg.PoolId, tokenOutAmount),
+	)
 
 	return &types.MsgSwapExactTokensForTokensResponse{
 		AmountOut: tokenOutAmount,
