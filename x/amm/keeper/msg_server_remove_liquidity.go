@@ -14,8 +14,6 @@ import (
 func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLiquidity) (*types.MsgRemoveLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-
 	// get pool param
 	poolParam, err := k.GetPoolParamForId(ctx, msg.PoolId)
 	if err != nil {

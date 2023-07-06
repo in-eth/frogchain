@@ -17,8 +17,8 @@ func createNPool(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Pool {
 	items := make([]types.Pool, n)
 	for i := range items {
 		items[i].PoolAssets = []sdk.Coin{
-			sdk.NewCoin("foocoin", math.NewInt(10)),
-			sdk.NewCoin("token", math.NewInt(50)),
+			sdk.NewCoin("foocoin", math.NewInt(10000)),
+			sdk.NewCoin("token", math.NewInt(10000)),
 		}
 
 		items[i].PoolParam = types.PoolParam{
@@ -28,6 +28,8 @@ func createNPool(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Pool {
 		}
 
 		items[i].ShareToken = sdk.NewCoin(types.ShareTokenIndex(uint64(i)), sdk.NewInt(50))
+
+		items[i].AssetWeights = []uint64{1, 1}
 
 		items[i].Id = keeper.AppendPool(ctx, items[i])
 	}

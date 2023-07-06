@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	keepertest "frogchain/testutil/keeper"
@@ -27,32 +28,8 @@ func setupMsgRemoveLiquidity(t testing.TB) (types.MsgServer, keeper.Keeper, cont
 
 	bankMock.ExpectAny(context)
 
-	server.CreatePool(context, &types.MsgCreatePool{
-		Creator: alice,
-		PoolParam: &types.PoolParam{
-			SwapFee:      0,
-			ExitFee:      0,
-			FeeCollector: alice,
-		},
-		PoolAssets: []sdk.Coin{
-			sdk.NewCoin(
-				"token",
-				sdk.NewInt(10000),
-			),
-			sdk.NewCoin(
-				"foocoin",
-				sdk.NewInt(10000),
-			),
-		},
-		AssetWeights: []uint64{10, 10},
-	})
+	createNPool(k, ctx, 1)
 
-	server.AddLiquidity(ctx, &types.MsgAddLiquidity{
-		Creator:        bob,
-		PoolId:         0,
-		DesiredAmounts: []uint64{10, 10},
-		MinAmounts:     []uint64{10, 10},
-	})
 	return server, *k, context, ctrl, bankMock
 }
 
@@ -77,12 +54,14 @@ func TestMsgRemoveLiquidity(t *testing.T) {
 	ms, _, context, ctrl, _ := setupMsgRemoveLiquidity(t)
 	ctx := sdk.UnwrapSDKContext(context)
 	defer ctrl.Finish()
-	removeResponse, _ := ms.RemoveLiquidity(ctx, &types.MsgRemoveLiquidity{
+	removeResponse, err := ms.RemoveLiquidity(ctx, &types.MsgRemoveLiquidity{
 		Creator:    alice,
 		PoolId:     0,
 		Liquidity:  10,
 		MinAmounts: []uint64{10, 10},
 	})
+
+	fmt.Print(err)
 
 	response := &types.MsgRemoveLiquidityResponse{
 		ReceivedTokens: []sdk.Coin{

@@ -27,25 +27,7 @@ func setupMsgTokensForExactTokens(t testing.TB) (types.MsgServer, keeper.Keeper,
 
 	bankMock.ExpectAny(context)
 
-	server.CreatePool(context, &types.MsgCreatePool{
-		Creator: alice,
-		PoolParam: &types.PoolParam{
-			SwapFee:      1,
-			ExitFee:      1,
-			FeeCollector: alice,
-		},
-		PoolAssets: []sdk.Coin{
-			sdk.NewCoin(
-				"token",
-				sdk.NewInt(10000),
-			),
-			sdk.NewCoin(
-				"foocoin",
-				sdk.NewInt(10000),
-			),
-		},
-		AssetWeights: []uint64{10, 10},
-	})
+	createNPool(k, ctx, 2)
 
 	return server, *k, context, ctrl, bankMock
 }
