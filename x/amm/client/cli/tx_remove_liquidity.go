@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
@@ -30,19 +31,13 @@ func CmdRemoveLiquidity() *cobra.Command {
 			}
 
 			// get liquidity amount to burn
-			argLiquidity, err := cast.ToUint64E(args[1])
-			if err != nil {
-				return err
-			}
+			argLiquidity := sdk.MustNewDecFromStr(args[1])
 
 			// get min token amounts to get
 			argCastMinAmounts := strings.Split(args[2], listSeparator)
-			argMinAmounts := make([]uint64, len(argCastMinAmounts))
+			argMinAmounts := make([]sdk.Dec, len(argCastMinAmounts))
 			for i, arg := range argCastMinAmounts {
-				value, err := cast.ToUint64E(arg)
-				if err != nil {
-					return err
-				}
+				value := sdk.MustNewDecFromStr(arg)
 				argMinAmounts[i] = value
 			}
 

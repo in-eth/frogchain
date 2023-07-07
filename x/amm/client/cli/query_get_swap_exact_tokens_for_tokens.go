@@ -4,11 +4,14 @@ import (
 	"strconv"
 
 	"frogchain/x/amm/types"
+	"strings"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"strings"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -23,7 +26,7 @@ func CmdGetSwapExactTokensForTokens() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			reqAmountIn, err := cast.ToUint64E(args[1])
+			reqAmountIn, err := sdk.NewDecFromStr(args[1])
 			if err != nil {
 				return err
 			}

@@ -10,7 +10,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -41,9 +40,9 @@ func CmdCreatePool() *cobra.Command {
 
 			// get asset Amounts
 			argCastAssetWeights := strings.Split(args[2], listSeparator)
-			argAssetWeights := make([]uint64, len(argCastAssetWeights))
+			argAssetWeights := make([]sdk.Dec, len(argCastAssetWeights))
 			for i, arg := range argCastAssetWeights {
-				value, err := cast.ToUint64E(arg)
+				value, err := sdk.NewDecFromStr(arg)
 				if err != nil {
 					return err
 				}

@@ -5,6 +5,7 @@ import (
 
 	"frogchain/testutil/sample"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,8 +20,8 @@ func TestMsgSwapExactTokensForTokens_ValidateBasic(t *testing.T) {
 			msg: MsgSwapExactTokensForTokens{
 				Creator:      "invalid_address",
 				PoolId:       1,
-				AmountIn:     10,
-				AmountOutMin: 100,
+				AmountIn:     sdk.NewDec(10),
+				AmountOutMin: sdk.NewDec(100),
 				Path:         []string{"1"},
 				To:           "invalid_address",
 			},
@@ -30,8 +31,8 @@ func TestMsgSwapExactTokensForTokens_ValidateBasic(t *testing.T) {
 			msg: MsgSwapExactTokensForTokens{
 				Creator:      sample.AccAddress(),
 				PoolId:       1,
-				AmountIn:     10,
-				AmountOutMin: 100,
+				AmountIn:     sdk.NewDec(10),
+				AmountOutMin: sdk.NewDec(100),
 				Path:         []string{"1"},
 				To:           "invalid_address",
 			},
@@ -41,8 +42,8 @@ func TestMsgSwapExactTokensForTokens_ValidateBasic(t *testing.T) {
 			msg: MsgSwapExactTokensForTokens{
 				Creator:      sample.AccAddress(),
 				PoolId:       1,
-				AmountIn:     10,
-				AmountOutMin: 100,
+				AmountIn:     sdk.NewDec(10),
+				AmountOutMin: sdk.NewDec(100),
 				Path:         []string{"1"},
 				To:           sample.AccAddress(),
 			},
@@ -52,8 +53,8 @@ func TestMsgSwapExactTokensForTokens_ValidateBasic(t *testing.T) {
 			msg: MsgSwapExactTokensForTokens{
 				Creator:      sample.AccAddress(),
 				PoolId:       1,
-				AmountIn:     10,
-				AmountOutMin: 100,
+				AmountIn:     sdk.NewDec(10),
+				AmountOutMin: sdk.NewDec(100),
 				Path:         []string{"1", "2"},
 				To:           sample.AccAddress(),
 			},

@@ -27,31 +27,31 @@ func TestGetSwapTokensForExactTokens(t *testing.T) {
 			desc: "First",
 			request: &types.QueryGetSwapTokensForExactTokensRequest{
 				PoolId:    msgs[0].Id,
-				AmountOut: 5,
+				AmountOut: sdk.NewDec(5),
 				Path: []string{
 					"foocoin",
 					"token",
 				},
 			},
-			response: &types.QueryGetSwapTokensForExactTokensResponse{AmountIn: 1},
+			response: &types.QueryGetSwapTokensForExactTokensResponse{AmountIn: 5},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetSwapTokensForExactTokensRequest{
 				PoolId:    msgs[1].Id,
-				AmountOut: 5,
+				AmountOut: sdk.NewDec(5),
 				Path: []string{
 					"foocoin",
 					"token",
 				},
 			},
-			response: &types.QueryGetSwapTokensForExactTokensResponse{AmountIn: 1},
+			response: &types.QueryGetSwapTokensForExactTokensResponse{AmountIn: 5},
 		},
 		{
 			desc: "Invalidpatth",
 			request: &types.QueryGetSwapTokensForExactTokensRequest{
 				PoolId:    msgs[1].Id,
-				AmountOut: 5,
+				AmountOut: sdk.NewDec(5),
 				Path: []string{
 					"foocoin",
 					"125",
@@ -63,7 +63,7 @@ func TestGetSwapTokensForExactTokens(t *testing.T) {
 			desc: "ExceedBalance",
 			request: &types.QueryGetSwapTokensForExactTokensRequest{
 				PoolId:    msgs[1].Id,
-				AmountOut: 11,
+				AmountOut: sdk.NewDec(100000),
 				Path: []string{
 					"token",
 					"foocoin",

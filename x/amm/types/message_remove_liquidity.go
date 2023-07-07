@@ -8,7 +8,7 @@ const TypeMsgRemoveLiquidity = "remove_liquidity"
 
 var _ sdk.Msg = &MsgRemoveLiquidity{}
 
-func NewMsgRemoveLiquidity(creator string, poolId uint64, liquidity uint64, minAmounts []uint64) *MsgRemoveLiquidity {
+func NewMsgRemoveLiquidity(creator string, poolId uint64, liquidity sdk.Dec, minAmounts []sdk.Dec) *MsgRemoveLiquidity {
 	return &MsgRemoveLiquidity{
 		Creator:    creator,
 		PoolId:     poolId,

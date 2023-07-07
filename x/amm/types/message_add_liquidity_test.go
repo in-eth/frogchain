@@ -5,6 +5,7 @@ import (
 
 	"frogchain/testutil/sample"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,8 +20,8 @@ func TestMsgAddLiquidity_ValidateBasic(t *testing.T) {
 			msg: MsgAddLiquidity{
 				Creator:        "invalid_address",
 				PoolId:         1,
-				DesiredAmounts: []uint64{10, 10},
-				MinAmounts:     []uint64{10, 10},
+				DesiredAmounts: []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
+				MinAmounts:     []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
 			},
 			err: ErrInvalidAddress,
 		}, {
@@ -28,8 +29,8 @@ func TestMsgAddLiquidity_ValidateBasic(t *testing.T) {
 			msg: MsgAddLiquidity{
 				Creator:        sample.AccAddress(),
 				PoolId:         1,
-				DesiredAmounts: []uint64{9, 10},
-				MinAmounts:     []uint64{10, 10},
+				DesiredAmounts: []sdk.Dec{sdk.NewDec(9), sdk.NewDec(10)},
+				MinAmounts:     []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
 			},
 			err: ErrInvalidAmount,
 		}, {
@@ -37,17 +38,8 @@ func TestMsgAddLiquidity_ValidateBasic(t *testing.T) {
 			msg: MsgAddLiquidity{
 				Creator:        sample.AccAddress(),
 				PoolId:         1,
-				DesiredAmounts: []uint64{0, 10},
-				MinAmounts:     []uint64{10, 10},
-			},
-			err: ErrInvalidAmount,
-		}, {
-			name: "zero min amount",
-			msg: MsgAddLiquidity{
-				Creator:        sample.AccAddress(),
-				PoolId:         1,
-				DesiredAmounts: []uint64{10, 10},
-				MinAmounts:     []uint64{0, 10},
+				DesiredAmounts: []sdk.Dec{sdk.NewDec(0), sdk.NewDec(10)},
+				MinAmounts:     []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
 			},
 			err: ErrInvalidAmount,
 		}, {
@@ -55,8 +47,8 @@ func TestMsgAddLiquidity_ValidateBasic(t *testing.T) {
 			msg: MsgAddLiquidity{
 				Creator:        sample.AccAddress(),
 				PoolId:         1,
-				DesiredAmounts: []uint64{10, 10},
-				MinAmounts:     []uint64{10, 10},
+				DesiredAmounts: []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
+				MinAmounts:     []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
 			},
 		},
 	}

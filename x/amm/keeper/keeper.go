@@ -7,7 +7,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"frogchain/x/amm/types"
@@ -49,12 +48,4 @@ func NewKeeper(
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
-}
-
-func ErrorWrap(err error, format string, args ...interface{}) error {
-	return sdkerrors.Wrapf(
-		err,
-		format,
-		args,
-	)
 }

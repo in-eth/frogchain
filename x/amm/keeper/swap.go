@@ -3,24 +3,25 @@ package keeper
 import (
 	"frogchain/x/amm/types"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (k Keeper) SwapExactAmountIn(
 	ctx sdk.Context,
 	poolId uint64,
-	tokenInAmount uint64,
+	tokenInAmount sdk.Dec,
 	path []string,
-) (uint64, uint64, error) {
+) (sdk.Dec, sdk.Dec, error) {
 	// get pool params
 	poolParam, err := k.GetPoolParamForId(ctx, poolId)
 	if err != nil {
-		return 0, 0, err
+		return sdk.NewDec(0), sdk.NewDec(0), err
 	}
 
 	// calc fee and send it to feeCollector
-	fee := tokenInAmount * poolParam.SwapFee / types.TOTALPERCENT
-	tokenInAmount -= fee
+	fee := tokenInAmount.Mul(poolParam.SwapFee).QuoRoundUp(sdk.NewDec(types.TOTALPERCENT))
+	tokenInAmount = tokenInAmount.Sub(fee)
 
 	tokenOutAmount := tokenInAmount
 	for i, tokenDenomIn := range path {
@@ -32,7 +33,7 @@ func (k Keeper) SwapExactAmountIn(
 
 		tokenOutAmount, err = k.SwapToken(ctx, poolId, tokenOutAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_IN)
 		if err != nil {
-			return 0, 0, err
+			return sdk.NewDec(0), sdk.NewDec(0), err
 		}
 	}
 
@@ -42,12 +43,12 @@ func (k Keeper) SwapExactAmountIn(
 func (k Keeper) SwapExactAmountOut(
 	ctx sdk.Context,
 	poolId uint64,
-	tokenOutAmount uint64,
+	tokenOutAmount sdk.Dec,
 	path []string,
-) (uint64, uint64, error) {
+) (sdk.Dec, sdk.Dec, error) {
 	poolParam, err := k.GetPoolParamForId(ctx, poolId)
 	if err != nil {
-		return 0, 0, err
+		return sdk.NewDec(0), sdk.NewDec(0), err
 	}
 
 	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
@@ -64,13 +65,14 @@ func (k Keeper) SwapExactAmountOut(
 
 		tokenInAmount, err = k.SwapToken(ctx, poolId, tokenInAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_OUT)
 		if err != nil {
-			return 0, 0, err
+			return sdk.NewDec(0), sdk.NewDec(0), err
 		}
 	}
 
 	// calc fee and send it to feeCollector
-	fee := tokenInAmount * poolParam.SwapFee / (types.TOTALPERCENT - poolParam.SwapFee)
-	tokenInAmount += fee
+	fee := tokenInAmount.Mul(poolParam.SwapFee).QuoRoundUp(sdk.NewDec(types.TOTALPERCENT).Sub(poolParam.SwapFee))
+
+	tokenInAmount = tokenInAmount.Add(math.LegacyDec(fee.RoundInt()))
 
 	return tokenInAmount, fee, err
 }
@@ -82,21 +84,21 @@ func (k Keeper) SwapExactAmountOut(
 func (k Keeper) SwapToken(
 	ctx sdk.Context,
 	poolId uint64,
-	tokenAmount uint64,
+	tokenAmount sdk.Dec,
 	tokenDenomIn string,
 	tokenDenomOut string,
 	swapType uint,
-) (uint64, error) {
+) (sdk.Dec, error) {
 	poolAssets, err := k.GetAllPoolAssets(
 		ctx,
 		poolId,
 	)
 	if err != nil {
-		return 0, err
+		return sdk.NewDec(0), err
 	}
 
 	if tokenDenomIn == tokenDenomOut {
-		return 0, types.ErrInvalidSwapDenom
+		return sdk.NewDec(0), types.ErrInvalidSwapDenom
 	}
 
 	inputId, outputId := int(-1), int(-1)
@@ -112,26 +114,26 @@ func (k Keeper) SwapToken(
 	}
 
 	if inputId == -1 || outputId == -1 {
-		return 0, types.ErrInvalidPath
+		return sdk.NewDec(0), types.ErrInvalidPath
 	}
 
-	reserve0 := poolAssets[inputId].Amount.Uint64()
-	reserve1 := poolAssets[outputId].Amount.Uint64()
+	reserve0 := sdk.NewDecFromInt(poolAssets[inputId].Amount)
+	reserve1 := sdk.NewDecFromInt(poolAssets[outputId].Amount)
 
-	tokenInAmount, tokenOutAmount := uint64(0), uint64(0)
+	tokenInAmount, tokenOutAmount := sdk.NewDec(0), sdk.NewDec(0)
 	if swapType == types.SWAP_EXACT_TOKEN_IN {
 		tokenInAmount = tokenAmount
-		tokenOutAmount = (reserve1 * tokenInAmount) / (reserve0 + tokenInAmount)
+		tokenOutAmount = reserve1.Mul(tokenInAmount).Quo(reserve0.Add(tokenInAmount))
 	} else if swapType == types.SWAP_EXACT_TOKEN_OUT {
 		tokenOutAmount = tokenAmount
-		if tokenOutAmount >= reserve1 {
-			return 0, types.ErrInvalidSwapAmount
+		if tokenOutAmount.GTE(reserve1) {
+			return sdk.NewDec(0), types.ErrInvalidSwapAmount
 		}
-		tokenInAmount = (reserve0 * tokenOutAmount) / (reserve1 - tokenOutAmount)
+		tokenInAmount = reserve0.Mul(tokenOutAmount).Quo(reserve1.Sub(tokenOutAmount))
 	}
 
-	inputAsset := poolAssets[inputId].AddAmount(sdk.NewInt(int64(tokenInAmount)))
-	outputAsset := poolAssets[outputId].SubAmount(sdk.NewInt(int64(tokenOutAmount)))
+	inputAsset := poolAssets[inputId].AddAmount(tokenInAmount.RoundInt())
+	outputAsset := poolAssets[outputId].SubAmount(tokenOutAmount.TruncateInt())
 
 	k.SetPoolToken(ctx, poolId, uint64(inputId), inputAsset)
 	k.SetPoolToken(ctx, poolId, uint64(outputId), outputAsset)

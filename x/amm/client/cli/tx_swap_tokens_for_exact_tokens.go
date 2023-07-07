@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
@@ -29,7 +30,7 @@ func CmdSwapTokensForExactTokens() *cobra.Command {
 			}
 
 			// get output token amount out
-			argAmountOut, err := cast.ToUint64E(args[1])
+			argAmountOut := sdk.MustNewDecFromStr(args[1])
 			if err != nil {
 				return err
 			}
@@ -41,7 +42,10 @@ func CmdSwapTokensForExactTokens() *cobra.Command {
 			argTo := args[3]
 
 			// get swap deadline
-			argDeadline := args[4]
+			argDeadline, err := cast.ToTimeE(args[4])
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {

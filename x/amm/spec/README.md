@@ -3,6 +3,8 @@
 sidebar_position: 1
 ---
 
+Ignite CLI version:		v0.27.1
+
 # `x/amm`
 
 ## Abstract

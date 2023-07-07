@@ -1,120 +1,100 @@
 package keeper_test
 
 import (
-	"context"
 	"testing"
 
-	keepertest "frogchain/testutil/keeper"
-	"frogchain/x/amm"
-	"frogchain/x/amm/keeper"
 	"frogchain/x/amm/types"
 
-	"frogchain/x/amm/testutil"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 )
 
-func setupMsgTokensForExactTokens(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context,
-	*gomock.Controller, *testutil.MockBankKeeper) {
-	ctrl := gomock.NewController(t)
-	bankMock := testutil.NewMockBankKeeper(ctrl)
-	k, ctx := keepertest.AmmKeeperWithMocks(t, bankMock)
-	amm.InitGenesis(ctx, *k, *types.DefaultGenesis())
-	server := keeper.NewMsgServerImpl(*k)
-	context := sdk.WrapSDKContext(ctx)
-
-	bankMock.ExpectAny(context)
-
-	createNPool(k, ctx, 2)
-
-	return server, *k, context, ctrl, bankMock
-}
-
-func TestMsgSwapTokensForExactTokensNoKey(t *testing.T) {
-	ms, _, context, ctrl, _ := setupMsgTokensForExactTokens(t)
-	ctx := sdk.UnwrapSDKContext(context)
-	defer ctrl.Finish()
-	swapResponse, err := ms.SwapTokensForExactTokens(ctx, &types.MsgSwapTokensForExactTokens{
-		Creator:   alice,
-		PoolId:    1,
-		AmountOut: 10,
-		Path: []string{
-			"token",
-			"foocoin",
-		},
-		To:       alice,
-		Deadline: ctx.BlockTime().UTC().Format(types.DeadlineLayout),
-	})
-
-	require.Nil(t, swapResponse)
-	require.Equal(t,
-		"key 1 doesn't exist: key not found",
-		err.Error())
-}
-
-func TestMsgSwapTokensForExactTokensAfterDeadline(t *testing.T) {
-	ms, _, context, ctrl, _ := setupMsgTokensForExactTokens(t)
-	ctx := sdk.UnwrapSDKContext(context)
-	defer ctrl.Finish()
-	swapResponse, err := ms.SwapTokensForExactTokens(ctx, &types.MsgSwapTokensForExactTokens{
-		Creator:   alice,
-		PoolId:    0,
-		AmountOut: 10,
-		Path: []string{
-			"token",
-			"foocoin",
-		},
-		To:       alice,
-		Deadline: ctx.BlockTime().Add(-100).UTC().Format(types.DeadlineLayout),
-	})
-
-	require.Nil(t, swapResponse)
-	require.Equal(t,
-		"0000-12-31 23:59:59.9999999 +0000 UTC: deadline is passed",
-		err.Error())
-}
-
-func TestMsgSwapTokensForExactTokensPathIncorrect(t *testing.T) {
-	ms, _, context, ctrl, _ := setupMsgTokensForExactTokens(t)
-	ctx := sdk.UnwrapSDKContext(context)
-	defer ctrl.Finish()
-	swapResponse, err := ms.SwapTokensForExactTokens(ctx, &types.MsgSwapTokensForExactTokens{
-		Creator:   alice,
-		PoolId:    0,
-		AmountOut: 10,
-		Path: []string{
-			"token1",
-			"foocoin",
-		},
-		To:       alice,
-		Deadline: ctx.BlockTime().UTC().Format(types.DeadlineLayout),
-	})
-
-	require.Nil(t, swapResponse)
-	require.Equal(t,
-		"invalid path for swap",
-		err.Error())
-}
-
 func TestMsgSwapTokensForExactTokens(t *testing.T) {
-	ms, _, context, ctrl, _ := setupMsgTokensForExactTokens(t)
+	ms, _, context, ctrl, _ := setupMsgManagePools(t, true)
 	ctx := sdk.UnwrapSDKContext(context)
 	defer ctrl.Finish()
-	swapResponse, _ := ms.SwapTokensForExactTokens(ctx, &types.MsgSwapTokensForExactTokens{
-		Creator:   alice,
-		PoolId:    0,
-		AmountOut: 20,
-		Path: []string{
-			"token",
-			"foocoin",
-		},
-		To:       alice,
-		Deadline: ctx.BlockTime().UTC().Format(types.DeadlineLayout),
-	})
 
-	require.EqualValues(t, types.MsgSwapTokensForExactTokensResponse{
-		AmountIn: 20,
-	}, *swapResponse)
+	tests := []struct {
+		desc             string
+		msg              types.MsgSwapTokensForExactTokens
+		expectedResponse types.MsgSwapTokensForExactTokensResponse
+		err              error
+	}{
+		{
+			desc: "invalid pool id",
+			msg: types.MsgSwapTokensForExactTokens{
+				Creator: alice,
+				PoolId:  1,
+			},
+			err: sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "key 1 doesn't exist"),
+		}, {
+			desc: "deadline passed",
+			msg: types.MsgSwapTokensForExactTokens{
+				Creator:  alice,
+				PoolId:   0,
+				Deadline: ctx.BlockTime().Add(-100),
+			},
+			err: sdkerrors.Wrapf(
+				types.ErrDeadlinePassed,
+				ctx.BlockTime().Add(-100).String(),
+			),
+		}, {
+			desc: "in and out token denom is equal",
+			msg: types.MsgSwapTokensForExactTokens{
+				Creator:   alice,
+				PoolId:    0,
+				AmountOut: sdk.NewDec(10),
+				Path:      []string{"foocoin", "foocoin"},
+				To:        alice,
+				Deadline:  ctx.BlockTime(),
+			},
+			err: types.ErrInvalidSwapDenom,
+		}, {
+			desc: "invalid path",
+			msg: types.MsgSwapTokensForExactTokens{
+				Creator:   alice,
+				PoolId:    0,
+				AmountOut: sdk.NewDec(10),
+				Path:      []string{"foocoin", "token1"},
+				To:        alice,
+				Deadline:  ctx.BlockTime(),
+			},
+			err: types.ErrInvalidPath,
+		}, {
+			desc: "out amount exceed pool balance",
+			msg: types.MsgSwapTokensForExactTokens{
+				Creator:   alice,
+				PoolId:    0,
+				AmountOut: sdk.NewDec(1000),
+				Path:      []string{"foocoin", "token"},
+				To:        alice,
+				Deadline:  ctx.BlockTime(),
+			},
+			err: types.ErrInvalidSwapAmount,
+		}, {
+			desc: "valid params",
+			msg: types.MsgSwapTokensForExactTokens{
+				Creator:   alice,
+				PoolId:    0,
+				AmountOut: sdk.NewDec(100),
+				Path:      []string{"foocoin", "token"},
+				To:        alice,
+				Deadline:  ctx.BlockTime(),
+			},
+			err:              nil,
+			expectedResponse: types.MsgSwapTokensForExactTokensResponse{AmountIn: 15000},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.desc, func(t *testing.T) {
+			response, err := ms.SwapTokensForExactTokens(ctx, &tt.msg)
+			if tt.err != nil {
+				require.ErrorIs(t, err, tt.err)
+			} else {
+				require.NoError(t, err)
+				require.EqualValues(t, &tt.expectedResponse, response)
+			}
+		})
+	}
 }

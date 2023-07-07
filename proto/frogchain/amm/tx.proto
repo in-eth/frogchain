@@ -5,6 +5,7 @@ package frogchain.amm;
 import "frogchain/amm/pool_param.proto";
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "frogchain/x/amm/types";
 
@@ -22,7 +23,10 @@ message MsgCreatePool {
            PoolParam                poolParam    = 2;
   repeated cosmos.base.v1beta1.Coin poolAssets   = 3 [(gogoproto.nullable) = false];
   // assetAmounts : amounts for sending assets to pool
-  repeated uint64                   assetWeights = 4 [(gogoproto.nullable) = false];
+  repeated string                   assetWeights = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 }
 
 message MsgCreatePoolResponse {
@@ -32,8 +36,14 @@ message MsgCreatePoolResponse {
 message MsgAddLiquidity {
            string creator        = 1;
            uint64 poolId         = 2;
-  repeated uint64 desiredAmounts = 3 [(gogoproto.nullable) = false];
-  repeated uint64 minAmounts     = 4 [(gogoproto.nullable) = false];
+  repeated string desiredAmounts = 3 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  repeated string minAmounts     = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 }
 
 message MsgAddLiquidityResponse {
@@ -43,8 +53,14 @@ message MsgAddLiquidityResponse {
 message MsgRemoveLiquidity {
            string creator       = 1;
            uint64 poolId        = 2;
-           uint64 liquidity     = 3;
-  repeated uint64 minAmounts    = 4 [(gogoproto.nullable) = false];
+           string liquidity     = 3 [
+            (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+            (gogoproto.nullable) = false
+           ];
+  repeated string minAmounts    = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 }
 
 message MsgRemoveLiquidityResponse {
@@ -53,13 +69,22 @@ message MsgRemoveLiquidityResponse {
 
 // SwapExactTokensForTokens message is for providing exact tokens to get tokens
 message MsgSwapExactTokensForTokens {
-           string creator      = 1;
-           uint64 poolId       = 2;
-           uint64 amountIn     = 3;
-           uint64 amountOutMin = 4;
-  repeated string path         = 5 [(gogoproto.nullable) = false];
-           string to           = 6;
-           string deadline     = 7;
+           string                    creator      = 1;
+           uint64                    poolId       = 2;
+           string                    amountIn     = 3 [
+            (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+            (gogoproto.nullable) = false
+           ];
+           string                    amountOutMin = 4 [
+            (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+            (gogoproto.nullable) = false
+           ];
+  repeated string                    path         = 5 [(gogoproto.nullable) = false];
+           string                    to           = 6;
+           google.protobuf.Timestamp deadline     = 7 [
+             (gogoproto.nullable) = false,
+             (gogoproto.stdtime) = true
+           ];
 }
 
 message MsgSwapExactTokensForTokensResponse {
@@ -68,12 +93,18 @@ message MsgSwapExactTokensForTokensResponse {
 
 // SwapExactTokensForTokens message is for providing tokens to get exact tokens
 message MsgSwapTokensForExactTokens {
-           string creator   = 1;
-           uint64 poolId    = 2;
-           uint64 amountOut = 3;
-  repeated string path      = 4 [(gogoproto.nullable) = false];
-           string to        = 5;
-           string deadline  = 6;
+           string                    creator   = 1;
+           uint64                    poolId    = 2;
+           string                    amountOut = 3 [
+            (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+            (gogoproto.nullable) = false
+           ];
+  repeated string                    path      = 4 [(gogoproto.nullable) = false];
+           string                    to        = 5;
+           google.protobuf.Timestamp deadline  = 6 [
+             (gogoproto.nullable) = false,
+             (gogoproto.stdtime) = true
+           ];
 }
 
 message MsgSwapTokensForExactTokensResponse {

@@ -15,13 +15,19 @@ message Pool {
 
   // assets in the pool
   repeated cosmos.base.v1beta1.Coin poolAssets    = 3 [(gogoproto.nullable) = false]; 
-  repeated uint64                   assetWeights  = 4 [(gogoproto.nullable) = false];
+  repeated string                   assetWeights  = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 
   // LP token
   cosmos.base.v1beta1.Coin shareToken = 5 [(gogoproto.nullable) = false]; 
 
   // min liquidity is the minimum amount of share token to maintain the pool
-  uint64 minimumLiquidity = 6;
+  string minimumLiquidity = 6 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 
   // Pool activate state
   bool isActivated = 7; 

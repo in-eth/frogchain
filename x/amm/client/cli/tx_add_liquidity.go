@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
@@ -30,9 +31,9 @@ func CmdAddLiquidity() *cobra.Command {
 
 			// get desired token amounts to add liquidity
 			argCastDesiredAmounts := strings.Split(args[1], listSeparator)
-			argDesiredAmounts := make([]uint64, len(argCastDesiredAmounts))
+			argDesiredAmounts := make([]sdk.Dec, len(argCastDesiredAmounts))
 			for i, arg := range argCastDesiredAmounts {
-				value, err := cast.ToUint64E(arg)
+				value, err := sdk.NewDecFromStr(arg)
 				if err != nil {
 					return err
 				}
@@ -41,9 +42,9 @@ func CmdAddLiquidity() *cobra.Command {
 
 			// get minimum token amounts to add liquidity
 			argCastMinAmounts := strings.Split(args[2], listSeparator)
-			argMinAmounts := make([]uint64, len(argCastMinAmounts))
+			argMinAmounts := make([]sdk.Dec, len(argCastMinAmounts))
 			for i, arg := range argCastMinAmounts {
-				value, err := cast.ToUint64E(arg)
+				value, err := sdk.NewDecFromStr(arg)
 				if err != nil {
 					return err
 				}

@@ -2,6 +2,8 @@ syntax = "proto3";
 package frogchain.amm;
 
 option go_package = "frogchain/x/amm/types";
+import "gogoproto/gogo.proto"; 
+import "cosmos_proto/cosmos.proto"; 
 
 // PoolParams defined the parameters that will be managed by the token holders of the pool.
 message PoolParam {
@@ -9,7 +11,10 @@ message PoolParam {
   // 100% of the swap fee goes to the liquidity providers — the amount of the 
   // underlying token that can beredeemed by each pool token increases.
   // this represents the percent * 10^6 for the float. (0 ~ 10^8)
-  uint64 swapFee = 1; 
+  string swapFee = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 
   // When exiting a pool, the user provides the minimum amount of tokens they are 
   // willing to receive as they are returning their shares of the pool. However, 
@@ -17,7 +22,10 @@ message PoolParam {
   // which is set as a param of the pool. The user's share tokens burnt as result. 
   // Exiting the pool using a single asset is also possible.
   // this represents the percent * 10^6 for the float. (0 ~ 10^8)
-  uint64 exitFee = 2; 
+  string exitFee = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 
   // feeCollector is an address which receive fees(for swap and exit)
   string feeCollector = 3;

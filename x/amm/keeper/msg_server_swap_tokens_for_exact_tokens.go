@@ -2,28 +2,15 @@ package keeper
 
 import (
 	"context"
-	"time"
 
 	"frogchain/x/amm/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.MsgSwapTokensForExactTokens) (*types.MsgSwapTokensForExactTokensResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// check deadline is passed
-	deadline, err := time.Parse(types.DeadlineLayout, msg.Deadline)
-	if err != nil {
-		return nil, err
-	}
-
-	if ctx.BlockTime().After(deadline) {
-		return nil, ErrorWrap(
-			types.ErrDeadlinePassed,
-			deadline.UTC().Format(types.DeadlineLayout),
-		)
-	}
 
 	// get pool param
 	poolParam, err := k.GetPoolParamForId(ctx, msg.PoolId)
@@ -31,34 +18,22 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 		return nil, err
 	}
 
-	// get token sender
-	sender, err := sdk.AccAddressFromBech32(msg.Creator)
-	if err != nil {
-		panic(err)
+	// check deadline is passed
+	if msg.Deadline.Before(ctx.BlockTime()) {
+		return nil, sdkerrors.Wrapf(
+			types.ErrDeadlinePassed,
+			msg.Deadline.String(),
+		)
 	}
+
+	// get token sender
+	sender := sdk.MustAccAddressFromBech32(msg.Creator)
 
 	// get token receiver
-	tokenReceiver, err := sdk.AccAddressFromBech32(msg.To)
-	if err != nil {
-		panic(err)
-	}
+	tokenReceiver := sdk.MustAccAddressFromBech32(msg.To)
 
 	// get fee collector
-	feeCollector, err := sdk.AccAddressFromBech32(poolParam.FeeCollector)
-	if err != nil {
-		panic(err)
-	}
-
-	// send output token from module to receiver
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, tokenReceiver, sdk.NewCoins(
-		sdk.NewCoin(
-			msg.Path[len(msg.Path)-1],
-			sdk.NewInt(int64(msg.AmountOut)),
-		),
-	))
-	if err != nil {
-		return nil, err
-	}
+	feeCollector := sdk.MustAccAddressFromBech32(poolParam.FeeCollector)
 
 	tokenInAmount, fee, err := k.SwapExactAmountOut(ctx, msg.PoolId, msg.AmountOut, msg.Path)
 	if err != nil {
@@ -69,7 +44,7 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 	err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(
 		sdk.NewCoin(
 			msg.Path[len(msg.Path)-1],
-			sdk.NewInt(int64(fee)),
+			fee.RoundInt(),
 		),
 	))
 	if err != nil {
@@ -80,7 +55,18 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(
 		sdk.NewCoin(
 			msg.Path[0],
-			sdk.NewInt(int64(tokenInAmount)),
+			tokenInAmount.RoundInt(),
+		),
+	))
+	if err != nil {
+		return nil, err
+	}
+
+	// send output token from module to receiver
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, tokenReceiver, sdk.NewCoins(
+		sdk.NewCoin(
+			msg.Path[len(msg.Path)-1],
+			msg.AmountOut.TruncateInt(),
 		),
 	))
 	if err != nil {
@@ -89,10 +75,10 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 
 	// emit mint event
 	ctx.EventManager().EmitEvent(
-		types.NewSwapTokensForExactTokensEvent(sender, msg.PoolId, tokenInAmount),
+		types.NewSwapTokensForExactTokensEvent(sender, msg.PoolId, tokenInAmount.BigInt().Uint64()),
 	)
 
 	return &types.MsgSwapTokensForExactTokensResponse{
-		AmountIn: tokenInAmount,
+		AmountIn: tokenInAmount.RoundInt().Uint64(),
 	}, nil
 }

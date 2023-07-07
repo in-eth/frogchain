@@ -6,6 +6,7 @@ import (
 	"frogchain/testutil/sample"
 	ammsimulation "frogchain/x/amm/simulation"
 	"frogchain/x/amm/types"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -23,24 +24,19 @@ var (
 )
 
 const (
-	opWeightMsgCreatePool = "op_weight_msg_create_pool"
-	// TODO: Determine the simulation weight value
+	opWeightMsgCreatePool          = "op_weight_msg_create_pool"
 	defaultWeightMsgCreatePool int = 100
 
-	opWeightMsgAddLiquidity = "op_weight_msg_add_liquidity"
-	// TODO: Determine the simulation weight value
+	opWeightMsgAddLiquidity          = "op_weight_msg_add_liquidity"
 	defaultWeightMsgAddLiquidity int = 100
 
-	opWeightMsgRemoveLiquidity = "op_weight_msg_remove_liquidity"
-	// TODO: Determine the simulation weight value
+	opWeightMsgRemoveLiquidity          = "op_weight_msg_remove_liquidity"
 	defaultWeightMsgRemoveLiquidity int = 100
 
-	opWeightMsgSwapExactTokensForTokens = "op_weight_msg_swap_exact_tokens_for_tokens"
-	// TODO: Determine the simulation weight value
+	opWeightMsgSwapExactTokensForTokens          = "op_weight_msg_swap_exact_tokens_for_tokens"
 	defaultWeightMsgSwapExactTokensForTokens int = 100
 
-	opWeightMsgSwapTokensForExactTokens = "op_weight_msg_swap_tokens_for_exact_tokens"
-	// TODO: Determine the simulation weight value
+	opWeightMsgSwapTokensForExactTokens          = "op_weight_msg_swap_tokens_for_exact_tokens"
 	defaultWeightMsgSwapTokensForExactTokens int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const

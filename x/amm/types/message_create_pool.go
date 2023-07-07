@@ -1,8 +1,6 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -10,7 +8,7 @@ const TypeMsgCreatePool = "create_pool"
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, poolParam PoolParam, poolAssets []sdk.Coin, assetWeights []uint64) *MsgCreatePool {
+func NewMsgCreatePool(creator string, poolParam PoolParam, poolAssets []sdk.Coin, assetWeights []sdk.Dec) *MsgCreatePool {
 	return &MsgCreatePool{
 		Creator:      creator,
 		PoolParam:    &poolParam,
@@ -41,7 +39,6 @@ func (msg *MsgCreatePool) GetSignBytes() []byte {
 }
 
 func (msg *MsgCreatePool) ValidateBasic() error {
-	fmt.Print(msg.Creator)
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return ErrInvalidAddress
@@ -53,12 +50,12 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	}
 
 	swapFeeAmount := msg.PoolParam.SwapFee
-	if swapFeeAmount >= TOTALPERCENT {
+	if swapFeeAmount.GTE(sdk.NewDec(TOTALPERCENT)) {
 		return ErrFeeOverflow
 	}
 
 	exitFeeAmount := msg.PoolParam.ExitFee
-	if exitFeeAmount >= TOTALPERCENT {
+	if exitFeeAmount.GTE(sdk.NewDec(TOTALPERCENT)) {
 		return ErrFeeOverflow
 	}
 
@@ -70,7 +67,7 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 	}
 
 	for _, weight := range msg.AssetWeights {
-		if weight == 0 {
+		if weight.Equal(sdk.NewDec(0)) {
 			return ErrWeightZero
 		}
 	}
