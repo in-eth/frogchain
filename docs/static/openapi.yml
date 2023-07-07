@@ -35047,7 +35047,6 @@ paths:
                 properties:
                   swapFee:
                     type: string
-                    format: uint64
                     title: >-
                       100% of the swap fee goes to the liquidity providers — the
                       amount of the 
@@ -35059,7 +35058,6 @@ paths:
                       10^8)
                   exitFee:
                     type: string
-                    format: uint64
                     title: >-
                       When exiting a pool, the user provides the minimum amount
                       of tokens they are 
@@ -35324,7 +35322,6 @@ paths:
                       properties:
                         swapFee:
                           type: string
-                          format: uint64
                           title: >-
                             100% of the swap fee goes to the liquidity providers
                             — the amount of the 
@@ -35336,7 +35333,6 @@ paths:
                             ~ 10^8)
                         exitFee:
                           type: string
-                          format: uint64
                           title: >-
                             When exiting a pool, the user provides the minimum
                             amount of tokens they are 
@@ -35387,7 +35383,6 @@ paths:
                       type: array
                       items:
                         type: string
-                        format: uint64
                     shareToken:
                       type: object
                       properties:
@@ -35406,7 +35401,6 @@ paths:
                       title: LP token
                     minimumLiquidity:
                       type: string
-                      format: uint64
                       title: >-
                         min liquidity is the minimum amount of share token to
                         maintain the pool
@@ -35539,7 +35533,6 @@ paths:
                     properties:
                       swapFee:
                         type: string
-                        format: uint64
                         title: >-
                           100% of the swap fee goes to the liquidity providers —
                           the amount of the 
@@ -35551,7 +35544,6 @@ paths:
                           10^8)
                       exitFee:
                         type: string
-                        format: uint64
                         title: >-
                           When exiting a pool, the user provides the minimum
                           amount of tokens they are 
@@ -35601,7 +35593,6 @@ paths:
                     type: array
                     items:
                       type: string
-                      format: uint64
                   shareToken:
                     type: object
                     properties:
@@ -35620,7 +35611,6 @@ paths:
                     title: LP token
                   minimumLiquidity:
                     type: string
-                    format: uint64
                     title: >-
                       min liquidity is the minimum amount of share token to
                       maintain the pool
@@ -71325,7 +71315,6 @@ definitions:
         properties:
           swapFee:
             type: string
-            format: uint64
             title: >-
               100% of the swap fee goes to the liquidity providers — the amount
               of the 
@@ -71335,7 +71324,6 @@ definitions:
               this represents the percent * 10^6 for the float. (0 ~ 10^8)
           exitFee:
             type: string
-            format: uint64
             title: >-
               When exiting a pool, the user provides the minimum amount of
               tokens they are 
@@ -71378,7 +71366,6 @@ definitions:
         type: array
         items:
           type: string
-          format: uint64
       shareToken:
         type: object
         properties:
@@ -71394,7 +71381,6 @@ definitions:
         title: LP token
       minimumLiquidity:
         type: string
-        format: uint64
         title: >-
           min liquidity is the minimum amount of share token to maintain the
           pool
@@ -71406,7 +71392,6 @@ definitions:
     properties:
       swapFee:
         type: string
-        format: uint64
         title: >-
           100% of the swap fee goes to the liquidity providers — the amount of
           the 
@@ -71416,7 +71401,6 @@ definitions:
           this represents the percent * 10^6 for the float. (0 ~ 10^8)
       exitFee:
         type: string
-        format: uint64
         title: >-
           When exiting a pool, the user provides the minimum amount of tokens
           they are 
@@ -71455,7 +71439,6 @@ definitions:
               properties:
                 swapFee:
                   type: string
-                  format: uint64
                   title: >-
                     100% of the swap fee goes to the liquidity providers — the
                     amount of the 
@@ -71466,7 +71449,6 @@ definitions:
                     this represents the percent * 10^6 for the float. (0 ~ 10^8)
                 exitFee:
                   type: string
-                  format: uint64
                   title: >-
                     When exiting a pool, the user provides the minimum amount of
                     tokens they are 
@@ -71514,7 +71496,6 @@ definitions:
               type: array
               items:
                 type: string
-                format: uint64
             shareToken:
               type: object
               properties:
@@ -71533,7 +71514,6 @@ definitions:
               title: LP token
             minimumLiquidity:
               type: string
-              format: uint64
               title: >-
                 min liquidity is the minimum amount of share token to maintain
                 the pool
@@ -71606,7 +71586,6 @@ definitions:
         properties:
           swapFee:
             type: string
-            format: uint64
             title: >-
               100% of the swap fee goes to the liquidity providers — the amount
               of the 
@@ -71616,7 +71595,6 @@ definitions:
               this represents the percent * 10^6 for the float. (0 ~ 10^8)
           exitFee:
             type: string
-            format: uint64
             title: >-
               When exiting a pool, the user provides the minimum amount of
               tokens they are 
@@ -71653,7 +71631,6 @@ definitions:
             properties:
               swapFee:
                 type: string
-                format: uint64
                 title: >-
                   100% of the swap fee goes to the liquidity providers — the
                   amount of the 
@@ -71664,7 +71641,6 @@ definitions:
                   this represents the percent * 10^6 for the float. (0 ~ 10^8)
               exitFee:
                 type: string
-                format: uint64
                 title: >-
                   When exiting a pool, the user provides the minimum amount of
                   tokens they are 
@@ -71712,7 +71688,6 @@ definitions:
             type: array
             items:
               type: string
-              format: uint64
           shareToken:
             type: object
             properties:
@@ -71731,7 +71706,6 @@ definitions:
             title: LP token
           minimumLiquidity:
             type: string
-            format: uint64
             title: >-
               min liquidity is the minimum amount of share token to maintain the
               pool

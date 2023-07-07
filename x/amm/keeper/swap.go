@@ -51,28 +51,22 @@ func (k Keeper) SwapExactAmountOut(
 		return sdk.NewDec(0), sdk.NewDec(0), err
 	}
 
-	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
-		path[i], path[j] = path[j], path[i]
-	}
+	for i := len(path) - 1; i > 0; i-- {
+		tokenDenomOut := path[i]
+		tokenDenomIn := path[i-1]
 
-	tokenInAmount := tokenOutAmount
-	for i, tokenDenomOut := range path {
-		if i >= len(path)-1 {
-			break
-		}
-
-		tokenDenomIn := path[i+1]
-
-		tokenInAmount, err = k.SwapToken(ctx, poolId, tokenInAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_OUT)
+		tokenInAmount, err := k.SwapToken(ctx, poolId, tokenOutAmount, tokenDenomIn, tokenDenomOut, types.SWAP_EXACT_TOKEN_OUT)
 		if err != nil {
 			return sdk.NewDec(0), sdk.NewDec(0), err
 		}
+
+		tokenOutAmount = tokenInAmount
 	}
 
 	// calc fee and send it to feeCollector
-	fee := tokenInAmount.Mul(poolParam.SwapFee).QuoRoundUp(sdk.NewDec(types.TOTALPERCENT).Sub(poolParam.SwapFee))
+	fee := tokenOutAmount.Mul(poolParam.SwapFee).QuoRoundUp(sdk.NewDec(types.TOTALPERCENT).Sub(poolParam.SwapFee))
 
-	tokenInAmount = tokenInAmount.Add(math.LegacyDec(fee.RoundInt()))
+	tokenInAmount := tokenOutAmount.Add(math.LegacyDec(fee.RoundInt()))
 
 	return tokenInAmount, fee, err
 }

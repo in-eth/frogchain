@@ -112,10 +112,7 @@ message QueryGetPoolAssetsResponse {
 
 message QueryGetSwapExactTokensForTokensRequest {
            uint64 poolId   = 1;
-           string amountIn = 2 [
-             (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-             (gogoproto.nullable) = false
-           ];
+           uint64 amountIn = 2;
   repeated string path     = 3 [(gogoproto.nullable) = false];
 }
 
@@ -125,10 +122,7 @@ message QueryGetSwapExactTokensForTokensResponse {
 
 message QueryGetSwapTokensForExactTokensRequest {
            uint64 poolId    = 1;
-           string amountOut = 2 [
-             (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-             (gogoproto.nullable) = false
-           ];
+           uint64 amountOut = 2;
   repeated string path      = 3 [(gogoproto.nullable) = false];
 }
 

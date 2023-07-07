@@ -42,16 +42,17 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, err
 	}
 
+	poolId := k.GetPoolCount(ctx)
+
 	// pool data
 	var pool = types.Pool{
+		Id:               poolId,
 		PoolParam:        *msg.PoolParam,
 		PoolAssets:       msg.PoolAssets,
 		AssetWeights:     msg.AssetWeights,
 		MinimumLiquidity: sdk.NewDec(types.MINIMUM_LIQUIDITY),
 		IsActivated:      true,
 	}
-
-	poolId := k.GetPoolCount(ctx)
 
 	// send asset tokens from creator to module
 	sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, assetCoins)

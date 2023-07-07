@@ -17,7 +17,7 @@ func (k Keeper) GetSwapTokensForExactTokens(goCtx context.Context, req *types.Qu
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	tokenInAmount, _, err := k.SwapExactAmountOut(ctx, req.PoolId, req.AmountOut, req.Path)
+	tokenInAmount, _, err := k.SwapExactAmountOut(ctx, req.PoolId, sdk.NewDec(int64(req.AmountOut)), req.Path)
 	if err != nil {
 		return nil, err
 	}

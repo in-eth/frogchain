@@ -43,7 +43,7 @@ func (k msgServer) SwapTokensForExactTokens(goCtx context.Context, msg *types.Ms
 	// send fee token to fee collector
 	err = k.bankKeeper.SendCoins(ctx, sender, feeCollector, sdk.NewCoins(
 		sdk.NewCoin(
-			msg.Path[len(msg.Path)-1],
+			msg.Path[0],
 			fee.RoundInt(),
 		),
 	))

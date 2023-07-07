@@ -77,13 +77,13 @@ func TestMsgSwapTokensForExactTokens(t *testing.T) {
 			msg: types.MsgSwapTokensForExactTokens{
 				Creator:   alice,
 				PoolId:    0,
-				AmountOut: sdk.NewDec(100),
-				Path:      []string{"foocoin", "token"},
+				AmountOut: sdk.NewDec(10000),
+				Path:      []string{"token", "foocoin"},
 				To:        alice,
 				Deadline:  ctx.BlockTime(),
 			},
 			err:              nil,
-			expectedResponse: types.MsgSwapTokensForExactTokensResponse{AmountIn: 15000},
+			expectedResponse: types.MsgSwapTokensForExactTokensResponse{AmountIn: 150},
 		},
 	}
 	for _, tt := range tests {
