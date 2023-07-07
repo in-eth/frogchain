@@ -26,8 +26,8 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
+					SwapFee:      sdk.NewDec(10),
+					ExitFee:      sdk.NewDec(10),
 					FeeCollector: "invalid_address",
 				},
 			},
@@ -37,8 +37,8 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      100000001,
+					SwapFee:      sdk.NewDec(10),
+					ExitFee:      sdk.NewDec(100000001),
 					FeeCollector: sample.AccAddress(),
 				},
 			},
@@ -48,8 +48,8 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
-					SwapFee:      100000001,
-					ExitFee:      10,
+					SwapFee:      sdk.NewDec(100000001),
+					ExitFee:      sdk.NewDec(10),
 					FeeCollector: sample.AccAddress(),
 				},
 			},
@@ -59,8 +59,8 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
+					SwapFee:      sdk.NewDec(10),
+					ExitFee:      sdk.NewDec(10),
 					FeeCollector: sample.AccAddress(),
 				},
 				PoolAssets: []sdk.Coin{
@@ -73,7 +73,7 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 						sdk.NewInt(10),
 					),
 				},
-				AssetWeights: []uint64{1},
+				AssetWeights: []sdk.Dec{sdk.NewDec(1)},
 			},
 			err: ErrInvalidLength,
 		}, {
@@ -81,8 +81,8 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
+					SwapFee:      sdk.NewDec(10),
+					ExitFee:      sdk.NewDec(10),
 					FeeCollector: sample.AccAddress(),
 				},
 				PoolAssets: []sdk.Coin{
@@ -95,7 +95,7 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 						sdk.NewInt(10),
 					),
 				},
-				AssetWeights: []uint64{0, 1},
+				AssetWeights: []sdk.Dec{sdk.NewDec(0), sdk.NewDec(1)},
 			},
 
 			err: ErrWeightZero,
@@ -104,8 +104,8 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 			msg: MsgCreatePool{
 				Creator: sample.AccAddress(),
 				PoolParam: &PoolParam{
-					SwapFee:      10,
-					ExitFee:      10,
+					SwapFee:      sdk.NewDec(10),
+					ExitFee:      sdk.NewDec(10),
 					FeeCollector: sample.AccAddress(),
 				},
 				PoolAssets: []sdk.Coin{
@@ -118,7 +118,7 @@ func TestMsgCreatePool_ValidateBasic(t *testing.T) {
 						sdk.NewInt(10),
 					),
 				},
-				AssetWeights: []uint64{1, 1},
+				AssetWeights: []sdk.Dec{sdk.NewDec(10), sdk.NewDec(10)},
 			},
 		},
 	}

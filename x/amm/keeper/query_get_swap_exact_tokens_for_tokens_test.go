@@ -33,7 +33,7 @@ func TestGetSwapExactTokensForTokens(t *testing.T) {
 					"token",
 				},
 			},
-			response: &types.QueryGetSwapExactTokensForTokensResponse{AmountOut: 25},
+			response: &types.QueryGetSwapExactTokensForTokensResponse{AmountOut: 9},
 		},
 		{
 			desc: "Second",
@@ -45,7 +45,7 @@ func TestGetSwapExactTokensForTokens(t *testing.T) {
 					"token",
 				},
 			},
-			response: &types.QueryGetSwapExactTokensForTokensResponse{AmountOut: 25},
+			response: &types.QueryGetSwapExactTokensForTokensResponse{AmountOut: 9},
 		},
 		{
 			desc: "Invalidpatth",

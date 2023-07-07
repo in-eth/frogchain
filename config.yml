@@ -2,14 +2,14 @@ version: 1
 accounts:
 - name: Alice
   coins:
-  - 200000token
-  - 200000foocoin
+  - 3000000foocoin
+  - 300000token
   - 200000000stake
 
 - name: Bob
   coins:
-  - 100000token
   - 100000foocoin
+  - 100000token
   - 100000000stake
 client:
   openapi:

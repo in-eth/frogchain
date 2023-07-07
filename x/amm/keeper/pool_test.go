@@ -22,16 +22,20 @@ func createNPool(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Pool {
 		}
 
 		items[i].PoolParam = types.PoolParam{
-			SwapFee:      12,
-			ExitFee:      15,
+			SwapFee:      sdk.NewDec(12),
+			ExitFee:      sdk.NewDec(15),
 			FeeCollector: "user1",
 		}
 
 		items[i].ShareToken = sdk.NewCoin(types.ShareTokenIndex(uint64(i)), sdk.NewInt(50))
 
-		items[i].AssetWeights = []uint64{1, 1}
+		items[i].AssetWeights = []sdk.Dec{sdk.NewDec(1), sdk.NewDec(1)}
 
-		items[i].Id = keeper.AppendPool(ctx, items[i])
+		items[i].MinimumLiquidity = sdk.NewDec(types.MINIMUM_LIQUIDITY)
+
+		items[i].Id = keeper.GetPoolCount(ctx)
+		keeper.SetPool(ctx, items[i])
+		keeper.SetPoolCount(ctx, items[i].Id+1)
 	}
 	return items
 }

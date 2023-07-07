@@ -8,7 +8,7 @@ const TypeMsgAddLiquidity = "add_liquidity"
 
 var _ sdk.Msg = &MsgAddLiquidity{}
 
-func NewMsgAddLiquidity(creator string, poolId uint64, desiredAmounts []uint64, minAmounts []uint64) *MsgAddLiquidity {
+func NewMsgAddLiquidity(creator string, poolId uint64, desiredAmounts []sdk.Dec, minAmounts []sdk.Dec) *MsgAddLiquidity {
 	return &MsgAddLiquidity{
 		Creator:        creator,
 		PoolId:         poolId,
@@ -45,7 +45,7 @@ func (msg *MsgAddLiquidity) ValidateBasic() error {
 	}
 
 	for i, desiredAmount := range msg.DesiredAmounts {
-		if desiredAmount < msg.MinAmounts[i] || desiredAmount == 0 || msg.MinAmounts[i] == 0 {
+		if desiredAmount.LT(msg.MinAmounts[i]) || desiredAmount.Equal(sdk.NewDec(0)) || msg.MinAmounts[i].Equal(sdk.NewDec(0)) {
 			return ErrInvalidAmount
 		}
 	}

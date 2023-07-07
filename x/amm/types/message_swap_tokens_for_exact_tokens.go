@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -8,7 +10,7 @@ const TypeMsgSwapTokensForExactTokens = "swap_tokens_for_exact_tokens"
 
 var _ sdk.Msg = &MsgSwapTokensForExactTokens{}
 
-func NewMsgSwapTokensForExactTokens(creator string, poolId uint64, amountOut uint64, path []string, to string, deadline string) *MsgSwapTokensForExactTokens {
+func NewMsgSwapTokensForExactTokens(creator string, poolId uint64, amountOut sdk.Dec, path []string, to string, deadline time.Time) *MsgSwapTokensForExactTokens {
 	return &MsgSwapTokensForExactTokens{
 		Creator:   creator,
 		PoolId:    poolId,

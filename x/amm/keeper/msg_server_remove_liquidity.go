@@ -8,6 +8,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLiquidity) (*types.MsgRemoveLiquidityResponse, error) {
@@ -25,15 +26,18 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		return nil, err
 	}
 
-	liquidityProvider, _ := sdk.AccAddressFromBech32(msg.Creator)
+	liquidityProvider := sdk.MustAccAddressFromBech32(msg.Creator)
+
+	// get pool fee collector
+	feeCollector := sdk.MustAccAddressFromBech32(poolParam.FeeCollector)
 
 	// burn share token, amount is desiredAmount
-	fee := msg.Liquidity * poolParam.ExitFee / (types.TOTALPERCENT)
-	liquidity := msg.Liquidity - fee
+	fee := msg.Liquidity.Mul(poolParam.ExitFee).QuoInt(math.NewInt(types.TOTALPERCENT))
+	liquidity := msg.Liquidity.Sub(fee)
 
 	burnShareToken := sdk.NewCoin(
 		shareToken.Denom,
-		sdk.NewInt(int64(liquidity)),
+		liquidity.TruncateInt(),
 	)
 
 	if poolAssetsLen, _ := k.GetPoolAssetsLength(ctx, msg.PoolId); len(msg.MinAmounts) != poolAssetsLen {
@@ -41,7 +45,7 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	}
 
 	// send assets from pool to account
-	receiveTokens := sdk.NewCoins()
+	sendTokens := sdk.NewCoins()
 	for i, minAmount := range msg.MinAmounts {
 		// get pool asset
 		poolAsset, err := k.GetPoolTokenForId(ctx, msg.PoolId, uint64(i))
@@ -50,10 +54,10 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		}
 
 		// calculate token amount for liquidity
-		castAmount := liquidity * poolAsset.Amount.Uint64() / shareToken.Amount.Uint64()
+		castAmount := liquidity.MulInt(poolAsset.Amount).QuoInt(shareToken.Amount)
 
-		if castAmount < minAmount {
-			return nil, ErrorWrap(types.ErrInvalidAmount,
+		if castAmount.LT(minAmount) {
+			return nil, sdkerrors.Wrapf(types.ErrInvalidAmount,
 				"calculated amount is below minimum, %s, %s, %s",
 				fmt.Sprint(i),
 				fmt.Sprint(castAmount),
@@ -61,15 +65,15 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 			)
 		}
 
-		receiveTokens = receiveTokens.Add(
+		sendTokens = sendTokens.Add(
 			sdk.NewCoin(
 				poolAsset.Denom,
-				math.NewInt(int64(castAmount)),
+				castAmount.TruncateInt(),
 			),
 		)
 
 		// update pool asset data
-		poolAsset = poolAsset.SubAmount(math.NewInt(int64(castAmount)))
+		poolAsset = poolAsset.SubAmount(castAmount.TruncateInt())
 		k.SetPoolToken(ctx, msg.PoolId, uint64(i), poolAsset)
 	}
 
@@ -78,7 +82,7 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		ctx,
 		types.ModuleName,
 		liquidityProvider,
-		receiveTokens,
+		sendTokens,
 	)
 	if err != nil {
 		return nil, err
@@ -101,17 +105,11 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 		return nil, err
 	}
 
-	// get pool fee collector
-	feeCollector, err := sdk.AccAddressFromBech32(poolParam.FeeCollector)
-	if err != nil {
-		return nil, err
-	}
-
 	// send fee share token to fee collector
 	err = k.bankKeeper.SendCoins(ctx, liquidityProvider, feeCollector, sdk.NewCoins(
 		sdk.NewCoin(
 			shareToken.Denom,
-			sdk.NewInt(int64(fee)),
+			fee.RoundInt(),
 		),
 	))
 	if err != nil {
@@ -119,7 +117,7 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 	}
 
 	// update pool share token data
-	shareToken = shareToken.SubAmount(sdk.NewInt(int64(liquidity)))
+	shareToken = shareToken.SubAmount(liquidity.TruncateInt())
 	err = k.SetPoolShareToken(ctx, msg.PoolId, shareToken)
 	if err != nil {
 		return nil, err
@@ -127,10 +125,10 @@ func (k msgServer) RemoveLiquidity(goCtx context.Context, msg *types.MsgRemoveLi
 
 	// emit mint event
 	ctx.EventManager().EmitEvent(
-		types.NewRemoveLiquidityEvent(liquidityProvider, msg.PoolId, receiveTokens),
+		types.NewRemoveLiquidityEvent(liquidityProvider, msg.PoolId, sendTokens),
 	)
 
 	return &types.MsgRemoveLiquidityResponse{
-		ReceivedTokens: receiveTokens,
+		ReceivedTokens: sendTokens,
 	}, nil
 }

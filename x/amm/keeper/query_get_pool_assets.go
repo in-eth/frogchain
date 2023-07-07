@@ -17,7 +17,6 @@ func (k Keeper) GetPoolAssets(goCtx context.Context, req *types.QueryGetPoolAsse
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Process the query
 	poolAssets, err := k.GetAllPoolAssets(ctx, req.Id)
 	if err != nil {
 		return nil, err

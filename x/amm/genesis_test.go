@@ -21,29 +21,29 @@ func TestGenesis(t *testing.T) {
 			{
 				Id: 0,
 				PoolParam: types.PoolParam{
-					SwapFee: 1,
-					ExitFee: 1,
+					SwapFee: sdk.NewDec(1),
+					ExitFee: sdk.NewDec(1),
 				},
 				PoolAssets: []sdk.Coin{
 					sdk.NewCoin("coin", sdk.NewInt(100)),
 					sdk.NewCoin("val", sdk.NewInt(100)),
 				},
 				ShareToken:       sdk.NewCoin(types.ShareTokenIndex(0), sdk.NewInt(100)),
-				MinimumLiquidity: 1000,
+				MinimumLiquidity: sdk.NewDec(1000),
 				IsActivated:      true,
 			},
 			{
 				Id: 1,
 				PoolParam: types.PoolParam{
-					SwapFee: 1,
-					ExitFee: 1,
+					SwapFee: sdk.NewDec(1),
+					ExitFee: sdk.NewDec(1),
 				},
 				PoolAssets: []sdk.Coin{
 					sdk.NewCoin("coin", sdk.NewInt(100)),
 					sdk.NewCoin("val", sdk.NewInt(100)),
 				},
 				ShareToken:       sdk.NewCoin(types.ShareTokenIndex(0), sdk.NewInt(100)),
-				MinimumLiquidity: 1000,
+				MinimumLiquidity: sdk.NewDec(1000),
 				IsActivated:      true,
 			},
 		},

@@ -3,6 +3,8 @@
 sidebar_position: 1
 ---
 
+Ignite CLI version:		v0.27.1
+
 # `x/amm`
 
 ## Abstract
@@ -432,47 +434,29 @@ Example:
 
 ```shell
 frogchaind query amm list-pool
-```
+```list-pool
 
 Example Output:
 
 ```yml
 Pool:
 - assetWeights:
-  - "1"
-  - "1"
+  - "1.000000000000000000"
+  - "1.000000000000000000"
   id: "0"
   isActivated: true
-  minimumLiquidity: "1000"
+  minimumLiquidity: "1000.000000000000000000"
   poolAssets:
-  - amount: "102000"
+  - amount: "30000"
     denom: foocoin
-  - amount: "2000"
+  - amount: "300"
     denom: token
   poolParam:
-    exitFee: "10"
+    exitFee: "10.000000000000000000"
     feeCollector: cosmos1g3z20q5jskz3g2anvs5hnxpn7tsa7dvylv34yd
-    swapFee: "10"
+    swapFee: "10.000000000000000000"
   shareToken:
-    amount: "10200"
-    denom: frogchain-amm-pool-0-shareToken
-- assetWeights:
-  - "1"
-  - "1"
-  id: "1"
-  isActivated: true
-  minimumLiquidity: "1000"
-  poolAssets:
-  - amount: "102000"
-    denom: foocoin
-  - amount: "1020"
-    denom: token
-  poolParam:
-    exitFee: "10"
-    feeCollector: cosmos1g3z20q5jskz3g2anvs5hnxpn7tsa7dvylv34yd
-    swapFee: "10"
-  shareToken:
-    amount: "10200"
+    amount: "3000"
     denom: frogchain-amm-pool-1-shareToken
 pagination:
   next_key: null
@@ -498,22 +482,22 @@ Example Output:
 ```yml
 Pool:
   assetWeights:
-  - "1"
-  - "1"
-  id: "1"
+  - "1.000000000000000000"
+  - "1.000000000000000000"
+  id: "0"
   isActivated: true
-  minimumLiquidity: "1000"
+  minimumLiquidity: "1000.000000000000000000"
   poolAssets:
-  - amount: "102000"
+  - amount: "30000"
     denom: foocoin
-  - amount: "1020"
+  - amount: "300"
     denom: token
   poolParam:
-    exitFee: "10"
+    exitFee: "10.000000000000000000"
     feeCollector: cosmos1g3z20q5jskz3g2anvs5hnxpn7tsa7dvylv34yd
-    swapFee: "10"
+    swapFee: "10.000000000000000000"
   shareToken:
-    amount: "10200"
+    amount: "3000"
     denom: frogchain-amm-pool-1-shareToken
 ```
 
@@ -645,7 +629,7 @@ frogchaind tx amm create-pool [pool-param] [pool-assets] [asset-weights] [flags]
 Example:
 
 ```shell
-frogchaind tx amm create-pool '{"SwapFee":10,"ExitFee":10,"FeeCollector":"cosmos1g3z20q5jskz3g2anvs5hnxpn7tsa7dvylv34yd"}' '500foocoin,100token' '1,1'
+frogchaind tx amm create-pool '{"SwapFee":"10","ExitFee":"10","FeeCollector":"cosmos1g3z20q5jskz3g2anvs5hnxpn7tsa7dvylv34yd"}' '30000foocoin,300token' '1,1' --from Alice
 ```
 
 ##### add-liquidity
@@ -659,7 +643,7 @@ frogchaind tx amm add-liquidity [pool-id] [desired-amounts] [min-amounts] [flags
 Example:
 
 ```shell
-frogchaind tx amm add-liquidity 1 '500,100' '100,50'
+frogchaind tx amm add-liquidity 1 '3000,30' '3000,30' --from Bob
 ```
 
 ##### remove-liquidity
@@ -673,7 +657,7 @@ frogchaind tx amm remove-liquidity [pool-id] [desired-share-token-amount] [min-a
 Example:
 
 ```shell
-frogchaind tx amm remove-liquidity 1 500 '100,50'
+frogchaind tx amm remove-liquidity 1 500 '5000,50' --from Bob
 ```
 
 ##### swap-exact-tokens-for-tokens
@@ -687,7 +671,7 @@ frogchaind tx amm swap-exact-tokens-for-tokens [pool-id] [amount-in] [amount-out
 Example:
 
 ```shell
-frogchaind tx amm swap-exact-tokens-for-tokens 1 500 50 'foocoin,token' Alice '159753216578951'
+frogchaind tx amm swap-exact-tokens-for-tokens 1 500 50 'foocoin,token' "cosmos1rsl3u6e0l8923m9hgnaxuqfpcu05xa9emh3dl2" "2024-01-02 15:04:05 -07:00" --from Alice
 ```
 
 ##### swap-tokens-for-exact-tokens
@@ -701,5 +685,5 @@ frogchaind tx amm swap-tokens-for-exact-tokens [pool-id] [amount-out] [path] [to
 Example:
 
 ```shell
-frogchaind tx amm swap-tokens-for-exact-tokens 1 500 'foocoin,token' Alice '159753216578951'
+frogchaind tx amm swap-tokens-for-exact-tokens 1 500 'foocoin,token' "cosmos1rsl3u6e0l8923m9hgnaxuqfpcu05xa9emh3dl2" "2024-01-02 15:04:05 -07:00" --from Alice
 ```

@@ -17,14 +17,12 @@ func (k Keeper) GetSwapExactTokensForTokens(goCtx context.Context, req *types.Qu
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Process the query
-
-	tokenOutAmout, _, err := k.SwapExactAmountIn(ctx, req.PoolId, req.AmountIn, req.Path)
+	tokenOutAmout, _, err := k.SwapExactAmountIn(ctx, req.PoolId, sdk.NewDec(int64(req.AmountIn)), req.Path)
 	if err != nil {
 		return nil, err
 	}
 
 	return &types.QueryGetSwapExactTokensForTokensResponse{
-		AmountOut: tokenOutAmout,
+		AmountOut: tokenOutAmout.TruncateInt().Uint64(),
 	}, nil
 }

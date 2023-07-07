@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -8,7 +10,7 @@ const TypeMsgSwapExactTokensForTokens = "swap_exact_tokens_for_tokens"
 
 var _ sdk.Msg = &MsgSwapExactTokensForTokens{}
 
-func NewMsgSwapExactTokensForTokens(creator string, poolId uint64, amountIn uint64, amountOutMin uint64, path []string, to string, deadline string) *MsgSwapExactTokensForTokens {
+func NewMsgSwapExactTokensForTokens(creator string, poolId uint64, amountIn sdk.Dec, amountOutMin sdk.Dec, path []string, to string, deadline time.Time) *MsgSwapExactTokensForTokens {
 	return &MsgSwapExactTokensForTokens{
 		Creator:      creator,
 		PoolId:       poolId,
@@ -50,11 +52,6 @@ func (msg *MsgSwapExactTokensForTokens) ValidateBasic() error {
 	if err != nil {
 		return ErrInvalidAddress
 	}
-
-	// deadline, err := time.Parse(DeadlineLayout, msg.Deadline)
-	// if deadline < .BlockTime() {
-
-	// }
 
 	if len(msg.Path) == 1 {
 		return ErrInvalidPath

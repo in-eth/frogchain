@@ -5,6 +5,9 @@ package types
 
 import (
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	io "io"
 	math "math"
@@ -27,14 +30,14 @@ type PoolParam struct {
 	// 100% of the swap fee goes to the liquidity providers — the amount of the
 	// underlying token that can beredeemed by each pool token increases.
 	// this represents the percent * 10^6 for the float. (0 ~ 10^8)
-	SwapFee uint64 `protobuf:"varint,1,opt,name=swapFee,proto3" json:"swapFee,omitempty"`
+	SwapFee github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,1,opt,name=swapFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"swapFee"`
 	// When exiting a pool, the user provides the minimum amount of tokens they are
 	// willing to receive as they are returning their shares of the pool. However,
 	// unlike joining a pool, exiting a pool requires the user to pay the exit fee,
 	// which is set as a param of the pool. The user's share tokens burnt as result.
 	// Exiting the pool using a single asset is also possible.
 	// this represents the percent * 10^6 for the float. (0 ~ 10^8)
-	ExitFee uint64 `protobuf:"varint,2,opt,name=exitFee,proto3" json:"exitFee,omitempty"`
+	ExitFee github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=exitFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"exitFee"`
 	// feeCollector is an address which receive fees(for swap and exit)
 	FeeCollector string `protobuf:"bytes,3,opt,name=feeCollector,proto3" json:"feeCollector,omitempty"`
 }
@@ -72,20 +75,6 @@ func (m *PoolParam) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PoolParam proto.InternalMessageInfo
 
-func (m *PoolParam) GetSwapFee() uint64 {
-	if m != nil {
-		return m.SwapFee
-	}
-	return 0
-}
-
-func (m *PoolParam) GetExitFee() uint64 {
-	if m != nil {
-		return m.ExitFee
-	}
-	return 0
-}
-
 func (m *PoolParam) GetFeeCollector() string {
 	if m != nil {
 		return m.FeeCollector
@@ -100,18 +89,22 @@ func init() {
 func init() { proto.RegisterFile("frogchain/amm/pool_param.proto", fileDescriptor_01cedd9805c43f80) }
 
 var fileDescriptor_01cedd9805c43f80 = []byte{
-	// 177 bytes of a gzipped FileDescriptorProto
+	// 241 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4b, 0x2b, 0xca, 0x4f,
 	0x4f, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x4f, 0xcc, 0xcd, 0xd5, 0x2f, 0xc8, 0xcf, 0xcf, 0x89, 0x2f,
 	0x48, 0x2c, 0x4a, 0xcc, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x85, 0xcb, 0xeb, 0x25,
-	0xe6, 0xe6, 0x2a, 0x25, 0x73, 0x71, 0x06, 0xe4, 0xe7, 0xe7, 0x04, 0x80, 0x54, 0x08, 0x49, 0x70,
-	0xb1, 0x17, 0x97, 0x27, 0x16, 0xb8, 0xa5, 0xa6, 0x4a, 0x30, 0x2a, 0x30, 0x6a, 0xb0, 0x04, 0xc1,
-	0xb8, 0x20, 0x99, 0xd4, 0x8a, 0xcc, 0x12, 0x90, 0x0c, 0x13, 0x44, 0x06, 0xca, 0x15, 0x52, 0xe2,
-	0xe2, 0x49, 0x4b, 0x4d, 0x75, 0xce, 0xcf, 0xc9, 0x49, 0x4d, 0x2e, 0xc9, 0x2f, 0x92, 0x60, 0x56,
-	0x60, 0xd4, 0xe0, 0x0c, 0x42, 0x11, 0x73, 0xd2, 0x3f, 0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39,
-	0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6, 0x63,
-	0x39, 0x86, 0x28, 0x51, 0x84, 0x6b, 0x2b, 0xc0, 0xee, 0x2d, 0xa9, 0x2c, 0x48, 0x2d, 0x4e, 0x62,
-	0x03, 0xbb, 0xd5, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x82, 0xb7, 0x0b, 0x28, 0xcd, 0x00, 0x00,
+	0xe6, 0xe6, 0x4a, 0x89, 0xa4, 0xe7, 0xa7, 0xe7, 0x83, 0x65, 0xf4, 0x41, 0x2c, 0x88, 0x22, 0x29,
+	0xc9, 0xe4, 0xfc, 0xe2, 0xdc, 0xfc, 0xe2, 0x78, 0x88, 0x04, 0x84, 0x03, 0x91, 0x52, 0x3a, 0xcc,
+	0xc8, 0xc5, 0x19, 0x90, 0x9f, 0x9f, 0x13, 0x00, 0x32, 0x53, 0xc8, 0x83, 0x8b, 0xbd, 0xb8, 0x3c,
+	0xb1, 0xc0, 0x2d, 0x35, 0x55, 0x82, 0x51, 0x81, 0x51, 0x83, 0xd3, 0x49, 0xef, 0xc4, 0x3d, 0x79,
+	0x86, 0x5b, 0xf7, 0xe4, 0xd5, 0xd2, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xa1,
+	0xfa, 0xa1, 0x94, 0x6e, 0x71, 0x4a, 0xb6, 0x7e, 0x49, 0x65, 0x41, 0x6a, 0xb1, 0x9e, 0x4b, 0x6a,
+	0x72, 0x10, 0x4c, 0x3b, 0xc8, 0xa4, 0xd4, 0x8a, 0xcc, 0x12, 0x90, 0x49, 0x4c, 0xe4, 0x99, 0x04,
+	0xd5, 0x2e, 0xa4, 0xc4, 0xc5, 0x93, 0x96, 0x9a, 0xea, 0x9c, 0x9f, 0x93, 0x93, 0x9a, 0x5c, 0x92,
+	0x5f, 0x24, 0xc1, 0x0c, 0x32, 0x2e, 0x08, 0x45, 0xcc, 0x49, 0xff, 0xc4, 0x23, 0x39, 0xc6, 0x0b,
+	0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86,
+	0x1b, 0x8f, 0xe5, 0x18, 0xa2, 0x44, 0x11, 0xe1, 0x57, 0x01, 0x0e, 0x41, 0xb0, 0x0d, 0x49, 0x6c,
+	0x60, 0xdf, 0x1b, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x14, 0xb2, 0xdd, 0x1b, 0x5f, 0x01, 0x00,
 	0x00,
 }
 
@@ -142,16 +135,26 @@ func (m *PoolParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if m.ExitFee != 0 {
-		i = encodeVarintPoolParam(dAtA, i, uint64(m.ExitFee))
-		i--
-		dAtA[i] = 0x10
+	{
+		size := m.ExitFee.Size()
+		i -= size
+		if _, err := m.ExitFee.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintPoolParam(dAtA, i, uint64(size))
 	}
-	if m.SwapFee != 0 {
-		i = encodeVarintPoolParam(dAtA, i, uint64(m.SwapFee))
-		i--
-		dAtA[i] = 0x8
+	i--
+	dAtA[i] = 0x12
+	{
+		size := m.SwapFee.Size()
+		i -= size
+		if _, err := m.SwapFee.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintPoolParam(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -172,12 +175,10 @@ func (m *PoolParam) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.SwapFee != 0 {
-		n += 1 + sovPoolParam(uint64(m.SwapFee))
-	}
-	if m.ExitFee != 0 {
-		n += 1 + sovPoolParam(uint64(m.ExitFee))
-	}
+	l = m.SwapFee.Size()
+	n += 1 + l + sovPoolParam(uint64(l))
+	l = m.ExitFee.Size()
+	n += 1 + l + sovPoolParam(uint64(l))
 	l = len(m.FeeCollector)
 	if l > 0 {
 		n += 1 + l + sovPoolParam(uint64(l))
@@ -221,10 +222,10 @@ func (m *PoolParam) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SwapFee", wireType)
 			}
-			m.SwapFee = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPoolParam
@@ -234,16 +235,31 @@ func (m *PoolParam) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SwapFee |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPoolParam
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPoolParam
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.SwapFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExitFee", wireType)
 			}
-			m.ExitFee = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPoolParam
@@ -253,11 +269,26 @@ func (m *PoolParam) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ExitFee |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPoolParam
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPoolParam
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ExitFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field FeeCollector", wireType)

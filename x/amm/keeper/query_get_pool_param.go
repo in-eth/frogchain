@@ -17,7 +17,6 @@ func (k Keeper) GetPoolParam(goCtx context.Context, req *types.QueryGetPoolParam
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Process the query
 	poolParam, err := k.GetPoolParamForId(ctx, req.Id)
 	if err != nil {
 		return nil, err
