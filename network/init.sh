@@ -18,6 +18,7 @@ RESTPORT_1=1316
 RESTPORT_2=1317
 ROSETTA_1=8080
 ROSETTA_2=9080
+pprof_laddr_1=6061
 
 # Stop if it is already running 
 if pgrep -x "$BINARY" >/dev/null; then
@@ -59,10 +60,12 @@ sed -i -e 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:'"$RPCPORT_1"'"#g' $CHAIN_DI
 sed -i -e 's/timeout_commit = "5s"/timeout_commit = "1s"/g' $CHAIN_DIR/$CHAINID_1/config/config.toml
 sed -i -e 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $CHAIN_DIR/$CHAINID_1/config/config.toml
 sed -i -e 's/index_all_keys = false/index_all_keys = true/g' $CHAIN_DIR/$CHAINID_1/config/config.toml
+sed -i -e 's#"localhost:6060"#"localhost:'"$pprof_laddr_1"'"#g' $CHAIN_DIR/$CHAINID_1/config/config.toml
 sed -i -e 's/enable = false/enable = true/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/swagger = false/swagger = true/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/1317/'"$RESTPORT_1"'/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/":8080"/":'"$ROSETTA_1"'"/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 
 # Update host chain genesis to allow x/bank/MsgSend ICA tx execution
-cat $CHAIN_DIR/$CHAINID_1/config/genesis.json | jq '(.app_state.interchainaccounts.host_genesis_state.params.allow_messages) |= ["/cosmos.bank.v1beta1.MsgSend", "/cosmos.staking.v1beta1.MsgDelegate"]' > $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp && mv $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp $CHAIN_DIR/$CHAINID_1/config/genesis.json
+# cat $CHAIN_DIR/$CHAINID_1/config/genesis.json | jq '(.app_state.interchainaccounts.host_genesis_state.params.allow_messages) |= ["/cosmos.bank.v1beta1.MsgSend"]' > $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp
+# mv $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp $CHAIN_DIR/$CHAINID_1/config/genesis.json
