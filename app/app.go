@@ -113,6 +113,9 @@ import (
 	ammmodule "frogchain/x/amm"
 	ammmodulekeeper "frogchain/x/amm/keeper"
 	ammmoduletypes "frogchain/x/amm/types"
+	investibcmodule "frogchain/x/investibc"
+	investibcmodulekeeper "frogchain/x/investibc/keeper"
+	investibcmoduletypes "frogchain/x/investibc/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "frogchain/app/params"
@@ -120,9 +123,25 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "cosmos"
+	AccountAddressPrefix = "frog"
 	Name                 = "frogchain"
 )
+
+var (
+	AccountPubKeyPrefix    = AccountAddressPrefix + "pub"
+	ValidatorAddressPrefix = AccountAddressPrefix + "valoper"
+	ValidatorPubKeyPrefix  = AccountAddressPrefix + "valoperpub"
+	ConsNodeAddressPrefix  = AccountAddressPrefix + "valcons"
+	ConsNodePubKeyPrefix   = AccountAddressPrefix + "valconspub"
+)
+
+func SetConfig() {
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount(AccountAddressPrefix, AccountPubKeyPrefix)
+	config.SetBech32PrefixForValidator(ValidatorAddressPrefix, ValidatorPubKeyPrefix)
+	config.SetBech32PrefixForConsensusNode(ConsNodeAddressPrefix, ConsNodePubKeyPrefix)
+	config.Seal()
+}
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
 
@@ -174,20 +193,22 @@ var (
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
 		ammmodule.AppModuleBasic{},
+		investibcmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		icatypes.ModuleName:            nil,
-		minttypes.ModuleName:           {authtypes.Minter},
-		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:            {authtypes.Burner},
-		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
-		ammmoduletypes.ModuleName:      {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		authtypes.FeeCollectorName:      nil,
+		distrtypes.ModuleName:           nil,
+		icatypes.ModuleName:             nil,
+		minttypes.ModuleName:            {authtypes.Minter},
+		stakingtypes.BondedPoolName:     {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:  {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:             {authtypes.Burner},
+		ibctransfertypes.ModuleName:     {authtypes.Minter, authtypes.Burner},
+		ammmoduletypes.ModuleName:       {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		investibcmoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -250,7 +271,9 @@ type App struct {
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 
-	AmmKeeper ammmodulekeeper.Keeper
+	AmmKeeper             ammmodulekeeper.Keeper
+	ScopedInvestibcKeeper capabilitykeeper.ScopedKeeper
+	InvestibcKeeper       investibcmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -298,6 +321,7 @@ func New(
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		ammmoduletypes.StoreKey,
+		investibcmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -530,6 +554,22 @@ func New(
 	)
 	ammModule := ammmodule.NewAppModule(appCodec, app.AmmKeeper, app.AccountKeeper, app.BankKeeper)
 
+	scopedInvestibcKeeper := app.CapabilityKeeper.ScopeToModule(investibcmoduletypes.ModuleName)
+	app.ScopedInvestibcKeeper = scopedInvestibcKeeper
+	app.InvestibcKeeper = *investibcmodulekeeper.NewKeeper(
+		appCodec,
+		keys[investibcmoduletypes.StoreKey],
+		keys[investibcmoduletypes.MemStoreKey],
+		app.GetSubspace(investibcmoduletypes.ModuleName),
+		app.IBCKeeper.ChannelKeeper,
+		&app.IBCKeeper.PortKeeper,
+		scopedInvestibcKeeper,
+		app.BankKeeper,
+		app.AmmKeeper,
+	)
+	investibcModule := investibcmodule.NewAppModule(appCodec, app.InvestibcKeeper, app.AccountKeeper, app.BankKeeper)
+
+	investibcIBCModule := investibcmodule.NewIBCModule(app.InvestibcKeeper)
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
@@ -541,6 +581,7 @@ func New(
 	ibcRouter := ibcporttypes.NewRouter()
 	ibcRouter.AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
+	ibcRouter.AddRoute(investibcmoduletypes.ModuleName, investibcIBCModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -592,6 +633,7 @@ func New(
 		transferModule,
 		icaModule,
 		ammModule,
+		investibcModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -625,6 +667,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ammmoduletypes.ModuleName,
+		investibcmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -651,6 +694,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ammmoduletypes.ModuleName,
+		investibcmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -682,6 +726,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ammmoduletypes.ModuleName,
+		investibcmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.mm.SetOrderInitGenesis(genesisModuleOrder...)
@@ -907,6 +952,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(ammmoduletypes.ModuleName)
+	paramsKeeper.Subspace(investibcmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

@@ -2,15 +2,17 @@ version: 1
 accounts:
 - name: Alice
   coins:
-  - 3000000foocoin
-  - 300000token
-  - 200000000stake
+  - 300000000000foocoin
+  - 300000000000token
+  - 100000000000frog
+  - 200000000000stake
 
 - name: Bob
   coins:
-  - 100000foocoin
-  - 100000token
-  - 100000000stake
+  - 100000000000foocoin
+  - 100000000000token
+  - 100000000000frog
+  - 100000000000stake
 client:
   openapi:
     path: docs/static/openapi.yml
@@ -22,3 +24,16 @@ faucet:
 validators:
 - name: Alice
   bonded: 100000000stake
+  app:
+    api:
+      address: :1318
+    grpc:
+      address: :9092
+    grpc-web:
+      address: :9093
+  config:
+    p2p:
+      laddr: :26658
+    rpc:
+      laddr: :26659
+      pprof_laddr: :6061

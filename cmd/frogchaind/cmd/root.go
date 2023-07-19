@@ -53,7 +53,7 @@ func NewRootCmd() (*cobra.Command, appparams.EncodingConfig) {
 		WithInput(os.Stdin).
 		WithAccountRetriever(types.AccountRetriever{}).
 		WithHomeDir(app.DefaultNodeHome).
-		WithViper("")
+		WithViper("FROG")
 
 	rootCmd := &cobra.Command{
 		Use:   app.Name + "d",

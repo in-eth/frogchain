@@ -1,0 +1,13 @@
+syntax = "proto3";
+package frogchain.investibc;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "frogchain/x/investibc/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  string adminAccount = 1 [(gogoproto.moretags) = "yaml:\"admin_account\""];
+}

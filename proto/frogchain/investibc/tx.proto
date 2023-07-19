@@ -1,0 +1,7 @@
+syntax = "proto3";
+package frogchain.investibc;
+
+option go_package = "frogchain/x/investibc/types";
+
+// Msg defines the Msg service.
+service Msg {}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+package frogchain.investibc;
+
+option go_package = "frogchain/x/investibc/types";
+
+message InvestibcPacketData {
+    oneof packet {
+        NoData noData = 1;
+    }
+}
+
+message NoData {
+}

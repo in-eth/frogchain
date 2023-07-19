@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package frogchain.investibc;
+
+import "gogoproto/gogo.proto";
+import "frogchain/investibc/params.proto";
+
+option go_package = "frogchain/x/investibc/types";
+
+// GenesisState defines the investibc module's genesis state.
+message GenesisState {
+  Params params  = 1 [(gogoproto.nullable) = false];
+  string port_id = 2;
+}
+
