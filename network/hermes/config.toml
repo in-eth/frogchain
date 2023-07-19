@@ -100,13 +100,13 @@ key_name = 'lo-test1'
 store_prefix = 'ibc'
 default_gas = 9000000
 max_gas = 30000000
-gas_price = { price = 0.1, denom = 'atom' }
+gas_price = { price = 0.1, denom = 'uosmo' }
 gas_multiplier = 1.5
 max_msg_num = 30
 max_tx_size = 2097152
 clock_drift = '5s'
 max_block_time = '10s'
-trusting_period = '14days'
+trusting_period = '239s'
 trust_threshold = { numerator = '1', denominator = '3' }
 address_type = { derivation = 'cosmos' }
 
