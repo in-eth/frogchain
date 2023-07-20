@@ -71785,6 +71785,8 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  frogchain.investibc.MsgSetAdminAccountResponse:
+    type: object
   frogchain.investibc.Params:
     type: object
     properties:

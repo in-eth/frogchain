@@ -1,0 +1,9 @@
+syntax = "proto3";
+package frogchain.investibc;
+
+option go_package = "frogchain/x/investibc/types";
+
+message DepositDenom {
+  string denom = 1; 
+  
+}

@@ -23,7 +23,15 @@ var (
 )
 
 const (
-// this line is used by starport scaffolding # simapp/module/const
+	opWeightMsgSetAdminAccount = "op_weight_msg_set_admin_account"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgSetAdminAccount int = 100
+
+	opWeightMsgSetDepositDenom = "op_weight_msg_set_deposit_denom"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgSetDepositDenom int = 100
+
+	// this line is used by starport scaffolding # simapp/module/const
 )
 
 // GenerateGenesisState creates a randomized GenState of the module.
@@ -52,6 +60,28 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
 
+	var weightMsgSetAdminAccount int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgSetAdminAccount, &weightMsgSetAdminAccount, nil,
+		func(_ *rand.Rand) {
+			weightMsgSetAdminAccount = defaultWeightMsgSetAdminAccount
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSetAdminAccount,
+		investibcsimulation.SimulateMsgSetAdminAccount(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgSetDepositDenom int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgSetDepositDenom, &weightMsgSetDepositDenom, nil,
+		func(_ *rand.Rand) {
+			weightMsgSetDepositDenom = defaultWeightMsgSetDepositDenom
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSetDepositDenom,
+		investibcsimulation.SimulateMsgSetDepositDenom(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -60,6 +90,22 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 // ProposalMsgs returns msgs used for governance proposals for simulations.
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgSetAdminAccount,
+			defaultWeightMsgSetAdminAccount,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				investibcsimulation.SimulateMsgSetAdminAccount(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgSetDepositDenom,
+			defaultWeightMsgSetDepositDenom,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				investibcsimulation.SimulateMsgSetDepositDenom(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
 		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }
