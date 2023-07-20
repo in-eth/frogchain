@@ -5,13 +5,15 @@ package frogchain.investibc;
 import "gogoproto/gogo.proto";
 import "frogchain/investibc/params.proto";
 import "frogchain/investibc/deposit_denom.proto";
+import "frogchain/investibc/deposit_balance.proto";
 
 option go_package = "frogchain/x/investibc/types";
 
 // GenesisState defines the investibc module's genesis state.
 message GenesisState {
-  Params       params       = 1 [(gogoproto.nullable) = false];
-  string       port_id      = 2;
-  DepositDenom depositDenom = 3;
+           Params         params             = 1 [(gogoproto.nullable) = false];
+           string         port_id            = 2;
+           DepositDenom   depositDenom       = 3;
+  repeated DepositBalance depositBalanceList = 4 [(gogoproto.nullable) = false];
 }
 

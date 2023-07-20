@@ -25,9 +25,31 @@ func TestGenesisState_Validate(t *testing.T) {
 				DepositDenom: &types.DepositDenom{
 					Denom: "78",
 				},
+				DepositBalanceList: []types.DepositBalance{
+					{
+						Index: "0",
+					},
+					{
+						Index: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "duplicated depositBalance",
+			genState: &types.GenesisState{
+				DepositBalanceList: []types.DepositBalance{
+					{
+						Index: "0",
+					},
+					{
+						Index: "0",
+					},
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}
