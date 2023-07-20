@@ -15,6 +15,8 @@ import (
 	"github.com/cosmos/ibc-go/v7/modules/core/exported"
 
 	"frogchain/x/investibc/types"
+
+	icacontrollerkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/keeper"
 )
 
 type (
@@ -28,8 +30,9 @@ type (
 		portKeeper    types.PortKeeper
 		scopedKeeper  exported.ScopedKeeper
 
-		bankKeeper types.BankKeeper
-		ammKeeper  types.AmmKeeper
+		bankKeeper          types.BankKeeper
+		ammKeeper           types.AmmKeeper
+		icaControllerKeeper icacontrollerkeeper.Keeper
 	}
 )
 

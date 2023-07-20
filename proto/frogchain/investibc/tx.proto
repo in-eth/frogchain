@@ -9,9 +9,10 @@ option go_package = "frogchain/x/investibc/types";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc SetAdminAccount (MsgSetAdminAccount) returns (MsgSetAdminAccountResponse);
-  rpc SetDepositDenom (MsgSetDepositDenom) returns (MsgSetDepositDenomResponse);
-  rpc Deposit         (MsgDeposit        ) returns (MsgDepositResponse        );
+  rpc SetAdminAccount    (MsgSetAdminAccount   ) returns (MsgSetAdminAccountResponse   );
+  rpc SetDepositDenom    (MsgSetDepositDenom   ) returns (MsgSetDepositDenomResponse   );
+  rpc Deposit            (MsgDeposit           ) returns (MsgDepositResponse           );
+  rpc RegisterIcaAccount (MsgRegisterIcaAccount) returns (MsgRegisterIcaAccountResponse);
 }
 message MsgSetAdminAccount {
   string creator      = 1;
@@ -33,4 +34,12 @@ message MsgDeposit {
 }
 
 message MsgDepositResponse {}
+
+message MsgRegisterIcaAccount {
+  string creator      = 1;
+  string connectionId = 2;
+  string version      = 3;
+}
+
+message MsgRegisterIcaAccountResponse {}
 

@@ -72035,6 +72035,8 @@ definitions:
         type: string
   frogchain.investibc.MsgDepositResponse:
     type: object
+  frogchain.investibc.MsgRegisterIcaAccountResponse:
+    type: object
   frogchain.investibc.MsgSetAdminAccountResponse:
     type: object
   frogchain.investibc.MsgSetDepositDenomResponse:
