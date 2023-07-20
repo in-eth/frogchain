@@ -2,12 +2,16 @@ syntax = "proto3";
 
 package frogchain.investibc;
 
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
 option go_package = "frogchain/x/investibc/types";
 
 // Msg defines the Msg service.
 service Msg {
   rpc SetAdminAccount (MsgSetAdminAccount) returns (MsgSetAdminAccountResponse);
   rpc SetDepositDenom (MsgSetDepositDenom) returns (MsgSetDepositDenomResponse);
+  rpc Deposit         (MsgDeposit        ) returns (MsgDepositResponse        );
 }
 message MsgSetAdminAccount {
   string creator      = 1;
@@ -22,4 +26,11 @@ message MsgSetDepositDenom {
 }
 
 message MsgSetDepositDenomResponse {}
+
+message MsgDeposit {
+  string                   creator = 1;
+  cosmos.base.v1beta1.Coin amount  = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgDepositResponse {}
 

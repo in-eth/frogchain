@@ -32,6 +32,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdSetAdminAccount())
 	cmd.AddCommand(CmdSetDepositDenom())
+	cmd.AddCommand(CmdDeposit())
 	// this line is used by starport scaffolding # 1
 
 	return cmd

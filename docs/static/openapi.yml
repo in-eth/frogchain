@@ -72033,6 +72033,8 @@ definitions:
     properties:
       denom:
         type: string
+  frogchain.investibc.MsgDepositResponse:
+    type: object
   frogchain.investibc.MsgSetAdminAccountResponse:
     type: object
   frogchain.investibc.MsgSetDepositDenomResponse:
