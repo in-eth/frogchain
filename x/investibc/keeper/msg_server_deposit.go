@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"frogchain/x/investibc/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -16,7 +17,7 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 	receiveToken := msg.Amount
 
 	// send asset tokens from creator to module
-	sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, receiveToken)
+	sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, sdk.NewCoins(receiveToken))
 	if sdkError != nil {
 		return nil, sdkError
 	}
@@ -24,7 +25,7 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 	// set share token data
 	moduleToken := sdk.Coin{
 		Denom:  types.ModuleToken,
-		Amount: receiveToken.TruncateInt(),
+		Amount: receiveToken.Amount,
 	}
 
 	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(moduleToken)); err != nil {
@@ -32,12 +33,12 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 	}
 
 	// send module_token to the depositor
-	sdkError = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creator, moduleToken)
+	sdkError = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creator, sdk.NewCoins(moduleToken))
 	if sdkError != nil {
 		return nil, sdkError
 	}
 
-	k.SetDepositBalance(ctx, types.NewDepositBalance(Index: msg.Creator, Balance: moduleToken))
+	k.SetDepositBalance(ctx, types.DepositBalance{Index: msg.Creator, Balance: moduleToken})
 
 	return &types.MsgDepositResponse{}, nil
 }

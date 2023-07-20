@@ -3,6 +3,7 @@ package investibc
 import (
 	"frogchain/x/investibc/keeper"
 	"frogchain/x/investibc/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -10,7 +11,7 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// Set if defined
 	if genState.DepositDenom != nil {
-		k.SetDepositDenom(ctx, *genState.DepositDenom)
+		k.SetDepositDenomStore(ctx, *genState.DepositDenom)
 	}
 	// Set all the depositBalance
 	for _, elem := range genState.DepositBalanceList {

@@ -14,7 +14,7 @@ import (
 
 func createTestDepositDenom(keeper *keeper.Keeper, ctx sdk.Context) types.DepositDenom {
 	item := types.DepositDenom{}
-	keeper.SetDepositDenom(ctx, item)
+	keeper.SetDepositDenomStore(ctx, item)
 	return item
 }
 

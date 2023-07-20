@@ -2,12 +2,13 @@ package keeper
 
 import (
 	"frogchain/x/investibc/types"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // SetDepositDenom set depositDenom in the store
-func (k Keeper) SetDepositDenom(ctx sdk.Context, depositDenom types.DepositDenom) {
+func (k Keeper) SetDepositDenomStore(ctx sdk.Context, depositDenom types.DepositDenom) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.DepositDenomKey))
 	b := k.cdc.MustMarshal(&depositDenom)
 	store.Set([]byte{0}, b)
