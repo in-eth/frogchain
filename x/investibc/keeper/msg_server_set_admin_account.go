@@ -10,8 +10,7 @@ import (
 func (k msgServer) SetAdminAccount(goCtx context.Context, msg *types.MsgSetAdminAccount) (*types.MsgSetAdminAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
+	k.SetParams(ctx, types.NewParams(msg.AdminAccount))
 
 	return &types.MsgSetAdminAccountResponse{}, nil
 }
