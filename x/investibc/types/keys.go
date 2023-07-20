@@ -18,6 +18,9 @@ const (
 
 	// PortID is the default port id that module binds to
 	PortID = "investibc"
+
+	// ModuleToken defines the native token of module
+	ModuleToken = "frog"
 )
 
 var (

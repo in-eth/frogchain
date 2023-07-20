@@ -7,6 +7,8 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "frogchain/investibc/params.proto";
 import "frogchain/investibc/deposit_denom.proto";
+import "frogchain/investibc/deposit_balance.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "frogchain/x/investibc/types";
 
@@ -24,6 +26,16 @@ service Query {
     option (google.api.http).get = "/frogchain/investibc/deposit_denom";
   
   }
+  
+  // Queries a list of DepositBalance items.
+  rpc DepositBalance    (QueryGetDepositBalanceRequest) returns (QueryGetDepositBalanceResponse) {
+    option (google.api.http).get = "/frogchain/investibc/deposit_balance/{index}";
+  
+  }
+  rpc DepositBalanceAll (QueryAllDepositBalanceRequest) returns (QueryAllDepositBalanceResponse) {
+    option (google.api.http).get = "/frogchain/investibc/deposit_balance";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -39,5 +51,22 @@ message QueryGetDepositDenomRequest {}
 
 message QueryGetDepositDenomResponse {
   DepositDenom DepositDenom = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetDepositBalanceRequest {
+  string index = 1;
+}
+
+message QueryGetDepositBalanceResponse {
+  DepositBalance depositBalance = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllDepositBalanceRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllDepositBalanceResponse {
+  repeated DepositBalance                         depositBalance = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination     = 2;
 }
 

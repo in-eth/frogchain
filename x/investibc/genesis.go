@@ -3,6 +3,7 @@ package investibc
 import (
 	"frogchain/x/investibc/keeper"
 	"frogchain/x/investibc/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -10,7 +11,11 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// Set if defined
 	if genState.DepositDenom != nil {
-		k.SetDepositDenom(ctx, *genState.DepositDenom)
+		k.SetDepositDenomStore(ctx, *genState.DepositDenom)
+	}
+	// Set all the depositBalance
+	for _, elem := range genState.DepositBalanceList {
+		k.SetDepositBalance(ctx, elem)
 	}
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetPort(ctx, genState.PortId)
@@ -38,6 +43,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	if found {
 		genesis.DepositDenom = &depositDenom
 	}
+	genesis.DepositBalanceList = k.GetAllDepositBalance(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

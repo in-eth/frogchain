@@ -17,6 +17,14 @@ func TestGenesis(t *testing.T) {
 		DepositDenom: &types.DepositDenom{
 			Denom: "6",
 		},
+		DepositBalanceList: []types.DepositBalance{
+			{
+				Index: "0",
+			},
+			{
+				Index: "1",
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -31,5 +39,6 @@ func TestGenesis(t *testing.T) {
 	require.Equal(t, genesisState.PortId, got.PortId)
 
 	require.Equal(t, genesisState.DepositDenom, got.DepositDenom)
+	require.ElementsMatch(t, genesisState.DepositBalanceList, got.DepositBalanceList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }
