@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+
 	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 )
 
@@ -12,7 +13,6 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		PortId:             PortID,
-		DepositDenom:       nil,
 		DepositBalanceList: []DepositBalance{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),

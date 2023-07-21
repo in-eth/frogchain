@@ -35834,41 +35834,6 @@ paths:
           type: string
       tags:
         - Query
-  /frogchain/investibc/deposit_denom:
-    get:
-      summary: Queries a DepositDenom by index.
-      operationId: FrogchainInvestibcDepositDenom
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              DepositDenom:
-                type: object
-                properties:
-                  denom:
-                    type: string
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
   /frogchain/investibc/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -35885,6 +35850,23 @@ paths:
                 properties:
                   adminAccount:
                     type: string
+                  depositDenom:
+                    type: string
+                  currentDepositAmount:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -72028,11 +72010,6 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
-  frogchain.investibc.DepositDenom:
-    type: object
-    properties:
-      denom:
-        type: string
   frogchain.investibc.MsgDepositResponse:
     type: object
   frogchain.investibc.MsgRegisterIcaAccountResponse:
@@ -72046,6 +72023,20 @@ definitions:
     properties:
       adminAccount:
         type: string
+      depositDenom:
+        type: string
+      currentDepositAmount:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
     description: Params defines the parameters for the module.
   frogchain.investibc.QueryAllDepositBalanceResponse:
     type: object
@@ -72121,14 +72112,6 @@ definitions:
               method
 
               signatures required by gogoproto.
-  frogchain.investibc.QueryGetDepositDenomResponse:
-    type: object
-    properties:
-      DepositDenom:
-        type: object
-        properties:
-          denom:
-            type: string
   frogchain.investibc.QueryParamsResponse:
     type: object
     properties:
@@ -72138,6 +72121,23 @@ definitions:
         properties:
           adminAccount:
             type: string
+          depositDenom:
+            type: string
+          currentDepositAmount:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse:
     type: object

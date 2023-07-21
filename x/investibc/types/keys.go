@@ -31,7 +31,3 @@ var (
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
-
-const (
-	DepositDenomKey = "DepositDenom/value/"
-)

@@ -18,7 +18,7 @@ func (k msgServer) SetDepositDenom(goCtx context.Context, msg *types.MsgSetDepos
 		return nil, types.ErrAdminPermission
 	}
 
-	k.SetDepositDenomStore(ctx, types.DepositDenom{Denom: msg.Denom})
+	k.SetDepositDenomParam(ctx, msg.Denom)
 
 	return &types.MsgSetDepositDenomResponse{}, nil
 }

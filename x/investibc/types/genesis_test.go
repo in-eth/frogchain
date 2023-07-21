@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"frogchain/x/investibc/types"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,9 +23,6 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
 				PortId: types.PortID,
-				DepositDenom: &types.DepositDenom{
-					Denom: "78",
-				},
 				DepositBalanceList: []types.DepositBalance{
 					{
 						Index: "0",

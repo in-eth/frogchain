@@ -7,6 +7,7 @@ import (
 	"frogchain/testutil/nullify"
 	"frogchain/x/investibc"
 	"frogchain/x/investibc/types"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,9 +15,6 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 		PortId: types.PortID,
-		DepositDenom: &types.DepositDenom{
-			Denom: "6",
-		},
 		DepositBalanceList: []types.DepositBalance{
 			{
 				Index: "0",
@@ -38,7 +36,6 @@ func TestGenesis(t *testing.T) {
 
 	require.Equal(t, genesisState.PortId, got.PortId)
 
-	require.Equal(t, genesisState.DepositDenom, got.DepositDenom)
 	require.ElementsMatch(t, genesisState.DepositBalanceList, got.DepositBalanceList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

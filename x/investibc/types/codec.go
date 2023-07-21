@@ -9,9 +9,9 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSetAdminAccount{}, "investibc/SetAdminAccount", nil)
-	cdc.RegisterConcrete(&MsgSetDepositDenom{}, "investibc/SetDepositDenom", nil)
 	cdc.RegisterConcrete(&MsgDeposit{}, "investibc/Deposit", nil)
 	cdc.RegisterConcrete(&MsgRegisterIcaAccount{}, "investibc/RegisterIcaAccount", nil)
+	cdc.RegisterConcrete(&MsgSetDepositDenom{}, "investibc/SetDepositDenom", nil)
 	// this line is used by starport scaffolding # 2
 }
 
@@ -20,13 +20,13 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgSetAdminAccount{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgSetDepositDenom{},
-	)
-	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgDeposit{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgRegisterIcaAccount{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgSetDepositDenom{},
 	)
 	// this line is used by starport scaffolding # 3
 

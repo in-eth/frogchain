@@ -16,11 +16,19 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 
 	receiveToken := msg.Amount
 
+	if receiveToken.Denom != k.DepositDenom(ctx) {
+		return nil, types.ErrInvalidDenom
+	}
+
 	// send asset tokens from creator to module
 	sdkError := k.bankKeeper.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, sdk.NewCoins(receiveToken))
 	if sdkError != nil {
 		return nil, sdkError
 	}
+
+	depositAmount := k.CurrentDepositAmount(ctx)
+	depositAmount = depositAmount.Add(receiveToken)
+	k.SetCurrentDepositAmountParam(ctx, depositAmount)
 
 	// set share token data
 	moduleToken := sdk.Coin{

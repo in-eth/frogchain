@@ -3,6 +3,7 @@ package types
 import (
 	"fmt"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"gopkg.in/yaml.v2"
 )
@@ -15,6 +16,18 @@ var (
 	DefaultAdminAccount string = "admin_account"
 )
 
+var (
+	KeyDepositDenom = []byte("DepositDenom")
+	// TODO: Determine the default value
+	DefaultDepositDenom string = "deposit_denom"
+)
+
+var (
+	KeyCurrentDepositAmount = []byte("CurrentDepositAmount")
+	// TODO: Determine the default value
+	DefaultCurrentDepositAmount sdk.Coin = sdk.NewCoin(DefaultDepositDenom, sdk.ZeroInt())
+)
+
 // ParamKeyTable the param key table for launch module
 func ParamKeyTable() paramtypes.KeyTable {
 	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
@@ -23,9 +36,13 @@ func ParamKeyTable() paramtypes.KeyTable {
 // NewParams creates a new Params instance
 func NewParams(
 	adminAccount string,
+	depositDenom string,
+	currentDepositAmount sdk.Coin,
 ) Params {
 	return Params{
-		AdminAccount: adminAccount,
+		AdminAccount:         adminAccount,
+		DepositDenom:         depositDenom,
+		CurrentDepositAmount: currentDepositAmount,
 	}
 }
 
@@ -33,6 +50,8 @@ func NewParams(
 func DefaultParams() Params {
 	return NewParams(
 		DefaultAdminAccount,
+		DefaultDepositDenom,
+		DefaultCurrentDepositAmount,
 	)
 }
 
