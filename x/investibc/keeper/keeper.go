@@ -16,7 +16,9 @@ import (
 
 	"frogchain/x/investibc/types"
 
+	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/keeper"
+	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 )
 
 type (
@@ -28,11 +30,14 @@ type (
 
 		channelKeeper types.ChannelKeeper
 		portKeeper    types.PortKeeper
-		scopedKeeper  exported.ScopedKeeper
 
 		bankKeeper          types.BankKeeper
 		ammKeeper           types.AmmKeeper
 		icaControllerKeeper icacontrollerkeeper.Keeper
+		IBCKeeper           ibckeeper.Keeper
+
+		scopedKeeper     exported.ScopedKeeper
+		IBCScopperKeeper capabilitykeeper.ScopedKeeper
 	}
 )
 
@@ -43,10 +48,15 @@ func NewKeeper(
 	ps paramtypes.Subspace,
 	channelKeeper types.ChannelKeeper,
 	portKeeper types.PortKeeper,
-	scopedKeeper exported.ScopedKeeper,
 
 	bankKeeper types.BankKeeper,
 	ammKeeper types.AmmKeeper,
+
+	icacontrollerKeeper icacontrollerkeeper.Keeper,
+	ibcKeeper ibckeeper.Keeper,
+
+	scopedKeeper exported.ScopedKeeper,
+	IBCScopperKeeper capabilitykeeper.ScopedKeeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -61,10 +71,15 @@ func NewKeeper(
 
 		channelKeeper: channelKeeper,
 		portKeeper:    portKeeper,
-		scopedKeeper:  scopedKeeper,
 
 		bankKeeper: bankKeeper,
 		ammKeeper:  ammKeeper,
+
+		icaControllerKeeper: icacontrollerKeeper,
+		IBCKeeper:           ibcKeeper,
+
+		scopedKeeper:     scopedKeeper,
+		IBCScopperKeeper: IBCScopperKeeper,
 	}
 }
 

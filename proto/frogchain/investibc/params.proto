@@ -18,4 +18,16 @@ message Params {
     (gogoproto.nullable) = false,
     (gogoproto.moretags) = "yaml:\"current_deposit_amount\""
   ];
+  
+  string liquidityDenom = 4 [(gogoproto.moretags) = "yaml:\"liquidity_denom\""];
+  
+  cosmos.base.v1beta1.Coin currentLiquidityAmount = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"current_liquidity_amount\""
+  ];
+  
+  uint64 depositLastTime = 6;
+  string icaConnectionId = 7;
+  bool joinSwapExactAmountInPacketSent = 8; // broadcasted ICA tx to bootstrap Osmosis LP
+  bool lockTokensPacketSent = 9; // set as true once Osmosis liquidity created
 }

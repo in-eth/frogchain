@@ -8,9 +8,12 @@ import (
 
 // x/investibc module sentinel errors
 var (
-	ErrSample               = sdkerrors.Register(ModuleName, 1100, "sample error")
-	ErrInvalidPacketTimeout = sdkerrors.Register(ModuleName, 1500, "invalid packet timeout")
-	ErrInvalidVersion       = sdkerrors.Register(ModuleName, 1501, "invalid version")
-	ErrAdminPermission      = sdkerrors.Register(ModuleName, 1502, "no permission")
-	ErrInvalidDenom         = sdkerrors.Register(ModuleName, 1503, "invalid denom")
+	ErrSample                = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrInvalidPacketTimeout  = sdkerrors.Register(ModuleName, 1500, "invalid packet timeout")
+	ErrInvalidVersion        = sdkerrors.Register(ModuleName, 1501, "invalid version")
+	ErrAdminPermission       = sdkerrors.Register(ModuleName, 1502, "no permission")
+	ErrInvalidDenom          = sdkerrors.Register(ModuleName, 1503, "invalid denom")
+	ErrConnectionNotFound    = sdkerrors.Register(ModuleName, 1503, "connection not found")
+	ErrPortIdNotFound        = sdkerrors.Register(ModuleName, 1504, "port id not found")
+	ErrSwapResponseUnmarshal = sdkerrors.Register(ModuleName, 1505, "cannot unmarshal swap response message")
 )

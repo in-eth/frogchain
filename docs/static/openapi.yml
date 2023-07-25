@@ -35867,6 +35867,34 @@ paths:
                       custom method
 
                       signatures required by gogoproto.
+                  liquidityDenom:
+                    type: string
+                  currentLiquidityAmount:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                  depositLastTime:
+                    type: string
+                    format: uint64
+                  icaConnectionId:
+                    type: string
+                  joinSwapExactAmountInPacketSent:
+                    type: boolean
+                    title: broadcasted ICA tx to bootstrap Osmosis LP
+                  lockTokensPacketSent:
+                    type: boolean
+                    title: set as true once Osmosis liquidity created
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -72012,11 +72040,15 @@ definitions:
           signatures required by gogoproto.
   frogchain.investibc.MsgDepositResponse:
     type: object
-  frogchain.investibc.MsgRegisterIcaAccountResponse:
+  frogchain.investibc.MsgInitIcaAccountResponse:
     type: object
   frogchain.investibc.MsgSetAdminAccountResponse:
     type: object
   frogchain.investibc.MsgSetDepositDenomResponse:
+    type: object
+  frogchain.investibc.MsgSetLiquidityDenomResponse:
+    type: object
+  frogchain.investibc.MsgWithdrawResponse:
     type: object
   frogchain.investibc.Params:
     type: object
@@ -72037,6 +72069,31 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+      liquidityDenom:
+        type: string
+      currentLiquidityAmount:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      depositLastTime:
+        type: string
+        format: uint64
+      icaConnectionId:
+        type: string
+      joinSwapExactAmountInPacketSent:
+        type: boolean
+        title: broadcasted ICA tx to bootstrap Osmosis LP
+      lockTokensPacketSent:
+        type: boolean
+        title: set as true once Osmosis liquidity created
     description: Params defines the parameters for the module.
   frogchain.investibc.QueryAllDepositBalanceResponse:
     type: object
@@ -72138,6 +72195,34 @@ definitions:
               method
 
               signatures required by gogoproto.
+          liquidityDenom:
+            type: string
+          currentLiquidityAmount:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+          depositLastTime:
+            type: string
+            format: uint64
+          icaConnectionId:
+            type: string
+          joinSwapExactAmountInPacketSent:
+            type: boolean
+            title: broadcasted ICA tx to bootstrap Osmosis LP
+          lockTokensPacketSent:
+            type: boolean
+            title: set as true once Osmosis liquidity created
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse:
     type: object

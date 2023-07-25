@@ -17,8 +17,10 @@ import (
 	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
+	icacontrollerkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/keeper"
 	clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
+	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 	"github.com/stretchr/testify/require"
 )
 
@@ -78,6 +80,19 @@ func InvestibcKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		memStoreKey,
 		"InvestibcParams",
 	)
+
+	icacontrollerKeeper := icacontrollerkeeper.NewKeeper(appCodec,
+		storeKey,
+		paramsSubspace,
+		nil,
+		nil,
+		nil,
+		nil,
+		nil,
+	)
+
+	ibcKeeper := ibckeeper.NewKeeper(appCodec, storeKey, paramsSubspace, nil, nil, capabilityKeeper.ScopeToModule("InvestibcScopedKeeper"))
+
 	k := keeper.NewKeeper(
 		appCodec,
 		storeKey,
@@ -85,9 +100,12 @@ func InvestibcKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		paramsSubspace,
 		investibcChannelKeeper{},
 		investibcPortKeeper{},
+		nil,
+		nil,
+		icacontrollerKeeper,
+		*ibcKeeper,
 		capabilityKeeper.ScopeToModule("InvestibcScopedKeeper"),
-		nil,
-		nil,
+		capabilityKeeper.ScopeToModule("InvestibcScopedKeeper"),
 	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, logger)

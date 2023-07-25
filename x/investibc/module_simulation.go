@@ -32,13 +32,21 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgDeposit int = 100
 
-	opWeightMsgRegisterIcaAccount = "op_weight_msg_register_ica_account"
+	opWeightMsgInitIcaAccount = "op_weight_msg_register_ica_account"
 	// TODO: Determine the simulation weight value
-	defaultWeightMsgRegisterIcaAccount int = 100
+	defaultWeightMsgInitIcaAccount int = 100
 
 	opWeightMsgSetDepositDenom = "op_weight_msg_set_deposit_denom"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgSetDepositDenom int = 100
+
+	opWeightMsgWithdraw = "op_weight_msg_withdraw"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgWithdraw int = 100
+
+	opWeightMsgSetLiquidityDenom = "op_weight_msg_set_liquidity_denom"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgSetLiquidityDenom int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const
 )
@@ -91,15 +99,15 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		investibcsimulation.SimulateMsgDeposit(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgRegisterIcaAccount int
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgRegisterIcaAccount, &weightMsgRegisterIcaAccount, nil,
+	var weightMsgInitIcaAccount int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgInitIcaAccount, &weightMsgInitIcaAccount, nil,
 		func(_ *rand.Rand) {
-			weightMsgRegisterIcaAccount = defaultWeightMsgRegisterIcaAccount
+			weightMsgInitIcaAccount = defaultWeightMsgInitIcaAccount
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgRegisterIcaAccount,
-		investibcsimulation.SimulateMsgRegisterIcaAccount(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgInitIcaAccount,
+		investibcsimulation.SimulateMsgInitIcaAccount(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	var weightMsgSetDepositDenom int
@@ -111,6 +119,28 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgSetDepositDenom,
 		investibcsimulation.SimulateMsgSetDepositDenom(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgWithdraw int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgWithdraw, &weightMsgWithdraw, nil,
+		func(_ *rand.Rand) {
+			weightMsgWithdraw = defaultWeightMsgWithdraw
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgWithdraw,
+		investibcsimulation.SimulateMsgWithdraw(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgSetLiquidityDenom int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgSetLiquidityDenom, &weightMsgSetLiquidityDenom, nil,
+		func(_ *rand.Rand) {
+			weightMsgSetLiquidityDenom = defaultWeightMsgSetLiquidityDenom
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSetLiquidityDenom,
+		investibcsimulation.SimulateMsgSetLiquidityDenom(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
@@ -138,10 +168,10 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			},
 		),
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgRegisterIcaAccount,
-			defaultWeightMsgRegisterIcaAccount,
+			opWeightMsgInitIcaAccount,
+			defaultWeightMsgInitIcaAccount,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				investibcsimulation.SimulateMsgRegisterIcaAccount(am.accountKeeper, am.bankKeeper, am.keeper)
+				investibcsimulation.SimulateMsgInitIcaAccount(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
@@ -150,6 +180,23 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgSetDepositDenom,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				investibcsimulation.SimulateMsgSetDepositDenom(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgWithdraw,
+			defaultWeightMsgWithdraw,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				investibcsimulation.SimulateMsgWithdraw(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgSetLiquidityDenom,
+			defaultWeightMsgSetLiquidityDenom,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				investibcsimulation.SimulateMsgSetLiquidityDenom(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

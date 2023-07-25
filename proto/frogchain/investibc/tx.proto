@@ -9,10 +9,12 @@ option go_package = "frogchain/x/investibc/types";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc SetAdminAccount    (MsgSetAdminAccount   ) returns (MsgSetAdminAccountResponse   );
-  rpc Deposit            (MsgDeposit           ) returns (MsgDepositResponse           );
-  rpc RegisterIcaAccount (MsgRegisterIcaAccount) returns (MsgRegisterIcaAccountResponse);
-  rpc SetDepositDenom    (MsgSetDepositDenom   ) returns (MsgSetDepositDenomResponse   );
+  rpc SetAdminAccount   (MsgSetAdminAccount  ) returns (MsgSetAdminAccountResponse  );
+  rpc Deposit           (MsgDeposit          ) returns (MsgDepositResponse          );
+  rpc InitIcaAccount    (MsgInitIcaAccount   ) returns (MsgInitIcaAccountResponse   );
+  rpc SetDepositDenom   (MsgSetDepositDenom  ) returns (MsgSetDepositDenomResponse  );
+  rpc Withdraw          (MsgWithdraw         ) returns (MsgWithdrawResponse         );
+  rpc SetLiquidityDenom (MsgSetLiquidityDenom) returns (MsgSetLiquidityDenomResponse);
 }
 message MsgSetAdminAccount {
   string creator      = 1;
@@ -28,13 +30,12 @@ message MsgDeposit {
 
 message MsgDepositResponse {}
 
-message MsgRegisterIcaAccount {
+message MsgInitIcaAccount {
   string creator      = 1;
   string connectionId = 2;
-  string version      = 3;
 }
 
-message MsgRegisterIcaAccountResponse {}
+message MsgInitIcaAccountResponse {}
 
 message MsgSetDepositDenom {
   string creator = 1;
@@ -42,4 +43,18 @@ message MsgSetDepositDenom {
 }
 
 message MsgSetDepositDenomResponse {}
+
+message MsgWithdraw {
+  string                   creator = 1;
+  cosmos.base.v1beta1.Coin amount  = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgWithdrawResponse {}
+
+message MsgSetLiquidityDenom {
+  string creator = 1;
+  string denom   = 2;
+}
+
+message MsgSetLiquidityDenomResponse {}
 

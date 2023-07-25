@@ -12,6 +12,6 @@ option go_package = "frogchain/x/investibc/types";
 message GenesisState {
            Params         params             = 1 [(gogoproto.nullable) = false];
            string         port_id            = 2;
-  repeated DepositBalance depositBalanceList = 4 [(gogoproto.nullable) = false];
+  repeated DepositBalance depositBalanceList = 3 [(gogoproto.nullable) = false];
 }
 
