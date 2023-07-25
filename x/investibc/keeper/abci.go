@@ -11,10 +11,14 @@ import (
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/gogoproto/proto"
 	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
+
+	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
 )
 
 func (k *Keeper) BeginBlocker(ctx sdk.Context) {
@@ -25,7 +29,7 @@ func (k *Keeper) BeginBlocker(ctx sdk.Context) {
 func (k *Keeper) EndBlocker(ctx context.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyEndBlocker)
 
-	err := k.EndBlockerDistributeRewards(ctx)
+	err := k.EndBlockerTransferRewards(ctx)
 	if err != nil {
 		return err
 	}
@@ -33,7 +37,7 @@ func (k *Keeper) EndBlocker(ctx context.Context) error {
 	return err
 }
 
-func (k *Keeper) EndBlockerDistributeRewards(goCtx context.Context) error {
+func (k *Keeper) EndBlockerTransferRewards(goCtx context.Context) error {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	portID, err := icatypes.NewControllerPortID(types.ModuleName)
@@ -47,23 +51,31 @@ func (k *Keeper) EndBlockerDistributeRewards(goCtx context.Context) error {
 	}
 
 	balance := k.bankKeeper.GetBalance(ctx, sdk.AccAddress(addr), k.DepositDenom(ctx)).Sub(k.CurrentDepositAmount(ctx))
-	if balance.Amount.GT(math.ZeroInt()) {
-		k.DistributeRewards(ctx, addr, balance)
+
+	if balance.Amount.LTE(math.ZeroInt()) {
+		return nil
+	}
+
+	channelID, found := k.icaControllerKeeper.GetActiveChannelID(ctx, k.IcaConnectionId(ctx), ibctransfertypes.PortID)
+	if !found {
+		return icatypes.ErrActiveChannelNotFound.Wrapf("failed to retrieve active channel for port %s", portID)
+	}
+
+	// transfer tokens to Osmosis network
+	timeoutTimestamp := ctx.BlockTime().Add(time.Minute).UnixNano()
+	_, err = k.TransferKeeper.Transfer(goCtx, ibctransfertypes.NewMsgTransfer(
+		ibctransfertypes.PortID,
+		channelID,
+		balance,
+		addr,
+		sdk.AccAddress(authtypes.FeeCollectorName).String(),
+		clienttypes.Height{},
+		uint64(timeoutTimestamp),
+		""))
+	if err != nil {
+		return err
 	}
 	return nil
-}
-
-func (k *Keeper) DistributeRewards(ctx sdk.Context, fromAddr string, totalReward sdk.Coin) {
-	totalSupply := k.bankKeeper.GetSupply(ctx, types.ModuleToken)
-	balanceList := k.GetAllDepositBalance(ctx)
-	for _, balance := range balanceList {
-		reward := totalReward
-		reward.Amount = reward.Amount.Mul(balance.GetBalance().Amount).Quo(totalSupply.Amount)
-		err := k.bankKeeper.SendCoins(ctx, sdk.AccAddress(fromAddr), sdk.AccAddress(balance.GetIndex()), sdk.NewCoins(reward))
-		if err != nil {
-			panic("reward distribute failed")
-		}
-	}
 }
 
 func (k *Keeper) EndBlockerSendPacketToOsmosis(goCtx context.Context) error {
@@ -92,7 +104,7 @@ func (k *Keeper) EndBlockerSendPacketToOsmosis(goCtx context.Context) error {
 	}
 	if k.DepositLastTime(ctx)+24*uint64(time.Hour) < uint64(ctx.BlockTime().Unix()) &&
 		sendToken.Amount.GT(math.ZeroInt()) &&
-		sendToken.Denom != "" {
+		sendToken.Denom != "deposit_denom" {
 
 		sdkError := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(addr), sdk.NewCoins(sendToken))
 		if sdkError != nil {
@@ -104,7 +116,7 @@ func (k *Keeper) EndBlockerSendPacketToOsmosis(goCtx context.Context) error {
 	}
 
 	liquidityToken := k.CurrentLiquidityAmount(ctx)
-	if liquidityToken.Amount.GT(math.ZeroInt()) && liquidityToken.Denom != "" {
+	if liquidityToken.Amount.GT(math.ZeroInt()) && liquidityToken.Denom != "liquidity_denom" {
 		k.LockUpLiquidity(ctx, portID, channelID, addr, liquidityToken)
 	}
 

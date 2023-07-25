@@ -17,7 +17,7 @@ var (
 
 var (
 	KeyDepositDenom            = []byte("DepositDenom")
-	DefaultDepositDenom string = ""
+	DefaultDepositDenom string = "deposit_denom"
 )
 
 var (
@@ -27,7 +27,7 @@ var (
 
 var (
 	KeyLiquidityDenom            = []byte("LiquidityDenom")
-	DefaultLiquidityDenom string = ""
+	DefaultLiquidityDenom string = "liquidity_denom"
 )
 
 var (
@@ -37,7 +37,7 @@ var (
 
 var (
 	KeyDepositLastTime            = []byte("DepositLastTime")
-	DefaultDepositLastTime uint64 = 0
+	DefaultDepositLastTime uint64 = 10
 )
 
 var (
@@ -166,14 +166,14 @@ func validateVestingDuration(i interface{}) error {
 }
 
 func validateDepositEndTime(i interface{}) error {
-	v, ok := i.(uint64)
+	_, ok := i.(uint64)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if v == 0 {
-		return fmt.Errorf("deposit end time should be positive")
-	}
+	// if v == 0 {
+	// 	return fmt.Errorf("deposit end time should be positive")
+	// }
 	return nil
 }
 

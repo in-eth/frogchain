@@ -18,6 +18,7 @@ import (
 
 	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/keeper"
+	ibctransferkeeper "github.com/cosmos/ibc-go/v7/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 )
 
@@ -35,6 +36,7 @@ type (
 		ammKeeper           types.AmmKeeper
 		icaControllerKeeper icacontrollerkeeper.Keeper
 		IBCKeeper           ibckeeper.Keeper
+		TransferKeeper      ibctransferkeeper.Keeper
 
 		scopedKeeper     exported.ScopedKeeper
 		IBCScopperKeeper capabilitykeeper.ScopedKeeper
@@ -54,6 +56,7 @@ func NewKeeper(
 
 	icacontrollerKeeper icacontrollerkeeper.Keeper,
 	ibcKeeper ibckeeper.Keeper,
+	TransferKeeper ibctransferkeeper.Keeper,
 
 	scopedKeeper exported.ScopedKeeper,
 	IBCScopperKeeper capabilitykeeper.ScopedKeeper,
@@ -77,6 +80,7 @@ func NewKeeper(
 
 		icaControllerKeeper: icacontrollerKeeper,
 		IBCKeeper:           ibcKeeper,
+		TransferKeeper:      TransferKeeper,
 
 		scopedKeeper:     scopedKeeper,
 		IBCScopperKeeper: IBCScopperKeeper,

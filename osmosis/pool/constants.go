@@ -1,6 +1,8 @@
 package types
 
 import (
+	"math/big"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -20,9 +22,26 @@ const (
 	MaxNumOfAssetsInPool = 8
 )
 
+const maxBitLen = 256
+
+func NewIntWithDecimal(n int64, dec int) sdk.Int {
+	if dec < 0 {
+		panic("NewIntWithDecimal() decimal is negative")
+	}
+	exp := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(dec)), nil)
+	i := new(big.Int)
+	i.Mul(big.NewInt(n), exp)
+
+	// Check overflow
+	if i.BitLen() > maxBitLen {
+		panic("NewIntWithDecimal() out of bound")
+	}
+	return sdk.NewIntFromBigInt(i)
+}
+
 var (
 	// OneShare represents the amount of subshares in a single pool share.
-	OneShare = sdk.NewIntWithDecimal(1, OneShareExponent)
+	OneShare = NewIntWithDecimal(1, OneShareExponent)
 
 	// InitPoolSharesSupply is the amount of new shares to initialize a pool with.
 	InitPoolSharesSupply = OneShare.MulRaw(100)

@@ -568,6 +568,7 @@ func New(
 		app.AmmKeeper,
 		icaControllerKeeper,
 		*app.IBCKeeper,
+		app.TransferKeeper,
 		scopedInvestibcKeeper,
 		scopedIBCKeeper,
 	)

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -20,6 +21,18 @@ const (
 	TypeMsgJoinSwapShareAmountOut  = "join_swap_share_amount_out"
 	TypeMsgExitSwapExternAmountOut = "exit_swap_extern_amount_out"
 	TypeMsgExitSwapShareAmountIn   = "exit_swap_share_amount_in"
+)
+
+var (
+	amino = codec.NewLegacyAmino()
+
+	// ModuleCdc references the global x/bank module codec. Note, the codec should
+	// ONLY be used in certain instances of tests and for JSON encoding as Amino is
+	// still used for that purpose.
+	//
+	// The actual codec used for serialization should be provided to x/staking and
+	// defined at the application level.
+	ModuleCdc = codec.NewAminoCodec(amino)
 )
 
 func ValidateFutureGovernor(governor string) error {
