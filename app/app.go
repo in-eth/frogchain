@@ -116,6 +116,7 @@ import (
 	investibcmodule "frogchain/x/investibc"
 	investibcmodulekeeper "frogchain/x/investibc/keeper"
 	investibcmoduletypes "frogchain/x/investibc/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "frogchain/app/params"
@@ -563,9 +564,13 @@ func New(
 		app.GetSubspace(investibcmoduletypes.ModuleName),
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
-		scopedInvestibcKeeper,
 		app.BankKeeper,
 		app.AmmKeeper,
+		icaControllerKeeper,
+		*app.IBCKeeper,
+		app.TransferKeeper,
+		scopedInvestibcKeeper,
+		scopedIBCKeeper,
 	)
 	investibcModule := investibcmodule.NewAppModule(appCodec, app.InvestibcKeeper, app.AccountKeeper, app.BankKeeper)
 

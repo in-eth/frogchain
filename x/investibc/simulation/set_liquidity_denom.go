@@ -10,7 +10,7 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 )
 
-func SimulateMsgRegisterIcaAccount(
+func SimulateMsgSetLiquidityDenom(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -18,12 +18,12 @@ func SimulateMsgRegisterIcaAccount(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-		msg := &types.MsgRegisterIcaAccount{
+		msg := &types.MsgSetLiquidityDenom{
 			Creator: simAccount.Address.String(),
 		}
 
-		// TODO: Handling the RegisterIcaAccount simulation
+		// TODO: Handling the SetLiquidityDenom simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, msg.Type(), "RegisterIcaAccount simulation not implemented"), nil, nil
+		return simtypes.NoOpMsg(types.ModuleName, msg.Type(), "SetLiquidityDenom simulation not implemented"), nil, nil
 	}
 }

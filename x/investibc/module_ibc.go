@@ -3,8 +3,15 @@ package investibc
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
+	proto "github.com/gogo/protobuf/proto"
+
 	"frogchain/x/investibc/keeper"
 	"frogchain/x/investibc/types"
+
+	osmosislockup "frogchain/osmosis/lockup"
+	osmosispool "frogchain/osmosis/pool"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
@@ -171,49 +178,26 @@ func (im IBCModule) OnAcknowledgementPacket(
 		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal packet acknowledgement: %v", err)
 	}
 
-	// this line is used by starport scaffolding # oracle/packet/module/ack
-
-	var modulePacketData types.InvestibcPacketData
-	if err := modulePacketData.Unmarshal(modulePacket.GetData()); err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal packet data: %s", err.Error())
+	txMsgData := &sdk.TxMsgData{}
+	if err := proto.Unmarshal(ack.GetResult(), txMsgData); err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal ICS-27 tx message data: %v", err)
 	}
 
-	var eventType string
-
-	// Dispatch packet
-	switch packet := modulePacketData.Packet.(type) {
-	// this line is used by starport scaffolding # ibc/packet/module/ack
+	switch len(txMsgData.Data) {
+	case 0:
+		// TODO: handle for sdk 0.46.x
+		return nil
 	default:
-		errMsg := fmt.Sprintf("unrecognized %s packet type: %T", types.ModuleName, packet)
-		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
+		for _, msgData := range txMsgData.Data {
+			response, err := handleMsgData(ctx, im.keeper, msgData)
+			if err != nil {
+				return err
+			}
+
+			im.keeper.Logger(ctx).Info("message response in ICS-27 packet", "response", response)
+		}
+		return nil
 	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			eventType,
-			sdk.NewAttribute(sdk.AttributeKeyModule, types.ModuleName),
-			sdk.NewAttribute(types.AttributeKeyAck, fmt.Sprintf("%v", ack)),
-		),
-	)
-
-	switch resp := ack.Response.(type) {
-	case *channeltypes.Acknowledgement_Result:
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				eventType,
-				sdk.NewAttribute(types.AttributeKeyAckSuccess, string(resp.Result)),
-			),
-		)
-	case *channeltypes.Acknowledgement_Error:
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				eventType,
-				sdk.NewAttribute(types.AttributeKeyAckError, resp.Error),
-			),
-		)
-	}
-
-	return nil
 }
 
 // OnTimeoutPacket implements the IBCModule interface
@@ -227,13 +211,60 @@ func (im IBCModule) OnTimeoutPacket(
 		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal packet data: %s", err.Error())
 	}
 
+	if im.keeper.JoinSwapExactAmountInPacketSent(ctx) == true {
+		im.keeper.SetJoinSwapExactAmountInPacketSentParam(ctx, false)
+	} else if im.keeper.LockTokensPacketSent(ctx) == true {
+		im.keeper.SetLockTokensPacketSentParam(ctx, false)
+	}
+
 	// Dispatch packet
 	switch packet := modulePacketData.Packet.(type) {
 	// this line is used by starport scaffolding # ibc/packet/module/timeout
+
 	default:
 		errMsg := fmt.Sprintf("unrecognized %s packet type: %T", types.ModuleName, packet)
 		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
 	}
 
 	return nil
+}
+
+func handleMsgData(ctx sdk.Context, k keeper.Keeper, msgData *sdk.MsgData) (string, error) {
+	switch msgData.MsgType {
+	case sdk.MsgTypeURL(&osmosispool.MsgJoinSwapExternAmountIn{}):
+		msgResponse := &osmosispool.MsgJoinSwapExternAmountInResponse{}
+		if err := proto.Unmarshal(msgData.Data, msgResponse); err != nil {
+			return "", sdkerrors.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
+		}
+
+		k.SetJoinSwapExactAmountInPacketSentParam(ctx, false)
+
+		sendToken := k.CurrentDepositAmount(ctx)
+		sendToken.Amount = math.ZeroInt()
+		k.SetCurrentDepositAmountParam(ctx, sendToken)
+
+		k.SetDepositLastTimeParam(ctx, uint64(ctx.BlockTime().Unix()))
+
+		liquidityToken := k.CurrentLiquidityAmount(ctx)
+		liquidityToken = liquidityToken.AddAmount(msgResponse.ShareOutAmount)
+		k.SetCurrentLiquidityAmountParam(ctx, liquidityToken)
+
+		return msgResponse.String(), nil
+
+	case sdk.MsgTypeURL(&osmosislockup.MsgLockTokens{}):
+		msgResponse := &osmosislockup.MsgLockTokensResponse{}
+		if err := proto.Unmarshal(msgData.Data, msgResponse); err != nil {
+			return "", sdkerrors.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
+		}
+
+		k.SetLockTokensPacketSentParam(ctx, false)
+
+		liquidityToken := k.CurrentLiquidityAmount(ctx)
+		liquidityToken.Amount = math.ZeroInt()
+		k.SetCurrentLiquidityAmountParam(ctx, liquidityToken)
+
+		return msgResponse.String(), nil
+	default:
+		return "", nil
+	}
 }

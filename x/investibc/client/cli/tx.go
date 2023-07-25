@@ -31,9 +31,15 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdSetAdminAccount())
-	cmd.AddCommand(CmdSetDepositDenom())
 	cmd.AddCommand(CmdDeposit())
 	cmd.AddCommand(CmdRegisterIcaAccount())
+	cmd.AddCommand(CmdSetDepositDenom())
+	cmd.AddCommand(CmdWithdraw())
+	cmd.AddCommand(CmdSetLiquidityDenom())
+	cmd.AddCommand(CmdSetLiquidityDenom())
+	cmd.AddCommand(CmdSetLiquidityDenom())
+	cmd.AddCommand(CmdSetLiquidityDenom())
+	cmd.AddCommand(CmdSetLiquidityDenom())
 	// this line is used by starport scaffolding # 1
 
 	return cmd

@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"frogchain/x/investibc/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -14,22 +15,20 @@ var _ = strconv.Itoa(0)
 
 func CmdRegisterIcaAccount() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "register-ica-account [connection-id] [version]",
-		Short: "Broadcast message register-ica-account",
+		Use:   "init-ica-account [connection-id] [version]",
+		Short: "Broadcast message init-ica-account",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argConnectionId := args[0]
-			argVersion := args[1]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgRegisterIcaAccount(
+			msg := types.NewMsgInitIcaAccount(
 				clientCtx.GetFromAddress().String(),
 				argConnectionId,
-				argVersion,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

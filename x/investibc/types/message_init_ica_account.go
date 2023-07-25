@@ -5,27 +5,26 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-const TypeMsgRegisterIcaAccount = "register_ica_account"
+const TypeMsgInitIcaAccount = "Init_ica_account"
 
-var _ sdk.Msg = &MsgRegisterIcaAccount{}
+var _ sdk.Msg = &MsgInitIcaAccount{}
 
-func NewMsgRegisterIcaAccount(creator string, connectionId string, version string) *MsgRegisterIcaAccount {
-	return &MsgRegisterIcaAccount{
+func NewMsgInitIcaAccount(creator string, connectionId string) *MsgInitIcaAccount {
+	return &MsgInitIcaAccount{
 		Creator:      creator,
 		ConnectionId: connectionId,
-		Version:      version,
 	}
 }
 
-func (msg *MsgRegisterIcaAccount) Route() string {
+func (msg *MsgInitIcaAccount) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgRegisterIcaAccount) Type() string {
-	return TypeMsgRegisterIcaAccount
+func (msg *MsgInitIcaAccount) Type() string {
+	return TypeMsgInitIcaAccount
 }
 
-func (msg *MsgRegisterIcaAccount) GetSigners() []sdk.AccAddress {
+func (msg *MsgInitIcaAccount) GetSigners() []sdk.AccAddress {
 	creator, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		panic(err)
@@ -33,12 +32,12 @@ func (msg *MsgRegisterIcaAccount) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{creator}
 }
 
-func (msg *MsgRegisterIcaAccount) GetSignBytes() []byte {
+func (msg *MsgInitIcaAccount) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgRegisterIcaAccount) ValidateBasic() error {
+func (msg *MsgInitIcaAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)

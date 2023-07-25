@@ -6,7 +6,6 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "frogchain/investibc/params.proto";
-import "frogchain/investibc/deposit_denom.proto";
 import "frogchain/investibc/deposit_balance.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
@@ -18,12 +17,6 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/frogchain/investibc/params";
-  
-  }
-  
-  // Queries a DepositDenom by index.
-  rpc DepositDenom (QueryGetDepositDenomRequest) returns (QueryGetDepositDenomResponse) {
-    option (google.api.http).get = "/frogchain/investibc/deposit_denom";
   
   }
   
@@ -45,12 +38,6 @@ message QueryParamsResponse {
   
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryGetDepositDenomRequest {}
-
-message QueryGetDepositDenomResponse {
-  DepositDenom DepositDenom = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetDepositBalanceRequest {

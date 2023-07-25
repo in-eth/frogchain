@@ -18,7 +18,7 @@ func (k msgServer) SetAdminAccount(goCtx context.Context, msg *types.MsgSetAdmin
 		return nil, types.ErrAdminPermission
 	}
 
-	k.SetParams(ctx, types.NewParams(msg.AdminAccount))
+	k.SetAdminAccountParam(ctx, msg.AdminAccount)
 
 	return &types.MsgSetAdminAccountResponse{}, nil
 }

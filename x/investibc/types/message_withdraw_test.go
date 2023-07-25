@@ -8,21 +8,21 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestMsgRegisterIcaAccount_ValidateBasic(t *testing.T) {
+func TestMsgWithdraw_ValidateBasic(t *testing.T) {
 	tests := []struct {
 		name string
-		msg  MsgRegisterIcaAccount
+		msg  MsgWithdraw
 		err  error
 	}{
 		{
 			name: "invalid address",
-			msg: MsgRegisterIcaAccount{
+			msg: MsgWithdraw{
 				Creator: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
-			msg: MsgRegisterIcaAccount{
+			msg: MsgWithdraw{
 				Creator: sample.AccAddress(),
 			},
 		},

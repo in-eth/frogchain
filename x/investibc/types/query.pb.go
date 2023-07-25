@@ -114,86 +114,6 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
-type QueryGetDepositDenomRequest struct {
-}
-
-func (m *QueryGetDepositDenomRequest) Reset()         { *m = QueryGetDepositDenomRequest{} }
-func (m *QueryGetDepositDenomRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetDepositDenomRequest) ProtoMessage()    {}
-func (*QueryGetDepositDenomRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_14bbf54403c61b98, []int{2}
-}
-func (m *QueryGetDepositDenomRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetDepositDenomRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetDepositDenomRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetDepositDenomRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetDepositDenomRequest.Merge(m, src)
-}
-func (m *QueryGetDepositDenomRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetDepositDenomRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetDepositDenomRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetDepositDenomRequest proto.InternalMessageInfo
-
-type QueryGetDepositDenomResponse struct {
-	DepositDenom DepositDenom `protobuf:"bytes,1,opt,name=DepositDenom,proto3" json:"DepositDenom"`
-}
-
-func (m *QueryGetDepositDenomResponse) Reset()         { *m = QueryGetDepositDenomResponse{} }
-func (m *QueryGetDepositDenomResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetDepositDenomResponse) ProtoMessage()    {}
-func (*QueryGetDepositDenomResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_14bbf54403c61b98, []int{3}
-}
-func (m *QueryGetDepositDenomResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryGetDepositDenomResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryGetDepositDenomResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryGetDepositDenomResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetDepositDenomResponse.Merge(m, src)
-}
-func (m *QueryGetDepositDenomResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryGetDepositDenomResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetDepositDenomResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryGetDepositDenomResponse proto.InternalMessageInfo
-
-func (m *QueryGetDepositDenomResponse) GetDepositDenom() DepositDenom {
-	if m != nil {
-		return m.DepositDenom
-	}
-	return DepositDenom{}
-}
-
 type QueryGetDepositBalanceRequest struct {
 	Index string `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
 }
@@ -202,7 +122,7 @@ func (m *QueryGetDepositBalanceRequest) Reset()         { *m = QueryGetDepositBa
 func (m *QueryGetDepositBalanceRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryGetDepositBalanceRequest) ProtoMessage()    {}
 func (*QueryGetDepositBalanceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_14bbf54403c61b98, []int{4}
+	return fileDescriptor_14bbf54403c61b98, []int{2}
 }
 func (m *QueryGetDepositBalanceRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -246,7 +166,7 @@ func (m *QueryGetDepositBalanceResponse) Reset()         { *m = QueryGetDepositB
 func (m *QueryGetDepositBalanceResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryGetDepositBalanceResponse) ProtoMessage()    {}
 func (*QueryGetDepositBalanceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_14bbf54403c61b98, []int{5}
+	return fileDescriptor_14bbf54403c61b98, []int{3}
 }
 func (m *QueryGetDepositBalanceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -290,7 +210,7 @@ func (m *QueryAllDepositBalanceRequest) Reset()         { *m = QueryAllDepositBa
 func (m *QueryAllDepositBalanceRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryAllDepositBalanceRequest) ProtoMessage()    {}
 func (*QueryAllDepositBalanceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_14bbf54403c61b98, []int{6}
+	return fileDescriptor_14bbf54403c61b98, []int{4}
 }
 func (m *QueryAllDepositBalanceRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -335,7 +255,7 @@ func (m *QueryAllDepositBalanceResponse) Reset()         { *m = QueryAllDepositB
 func (m *QueryAllDepositBalanceResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryAllDepositBalanceResponse) ProtoMessage()    {}
 func (*QueryAllDepositBalanceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_14bbf54403c61b98, []int{7}
+	return fileDescriptor_14bbf54403c61b98, []int{5}
 }
 func (m *QueryAllDepositBalanceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -381,8 +301,6 @@ func (m *QueryAllDepositBalanceResponse) GetPagination() *query.PageResponse {
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "frogchain.investibc.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "frogchain.investibc.QueryParamsResponse")
-	proto.RegisterType((*QueryGetDepositDenomRequest)(nil), "frogchain.investibc.QueryGetDepositDenomRequest")
-	proto.RegisterType((*QueryGetDepositDenomResponse)(nil), "frogchain.investibc.QueryGetDepositDenomResponse")
 	proto.RegisterType((*QueryGetDepositBalanceRequest)(nil), "frogchain.investibc.QueryGetDepositBalanceRequest")
 	proto.RegisterType((*QueryGetDepositBalanceResponse)(nil), "frogchain.investibc.QueryGetDepositBalanceResponse")
 	proto.RegisterType((*QueryAllDepositBalanceRequest)(nil), "frogchain.investibc.QueryAllDepositBalanceRequest")
@@ -392,43 +310,39 @@ func init() {
 func init() { proto.RegisterFile("frogchain/investibc/query.proto", fileDescriptor_14bbf54403c61b98) }
 
 var fileDescriptor_14bbf54403c61b98 = []byte{
-	// 576 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x94, 0xb1, 0x6e, 0x13, 0x31,
-	0x18, 0xc7, 0xe3, 0x42, 0x22, 0x61, 0x50, 0x25, 0xdc, 0x0c, 0x28, 0x69, 0xae, 0xc5, 0xad, 0x9a,
-	0x52, 0x55, 0x67, 0x92, 0xd2, 0x81, 0xb1, 0x51, 0x45, 0x07, 0x96, 0x34, 0x23, 0x0b, 0x72, 0x12,
-	0x73, 0x9c, 0xb8, 0xd8, 0xd7, 0xf8, 0x5a, 0xb5, 0x42, 0x48, 0x88, 0x95, 0x05, 0x89, 0x07, 0x60,
-	0x67, 0xe1, 0x05, 0x78, 0x80, 0x8e, 0x95, 0x58, 0x98, 0x10, 0x4a, 0x78, 0x10, 0x14, 0xfb, 0x4b,
-	0x7b, 0x57, 0xee, 0x2e, 0xa9, 0xd8, 0x92, 0xf3, 0xff, 0xff, 0xfd, 0x7f, 0xb6, 0xbf, 0xcf, 0x78,
-	0xe5, 0xd5, 0x50, 0x79, 0xbd, 0xd7, 0xdc, 0x97, 0xcc, 0x97, 0x27, 0x42, 0x47, 0x7e, 0xb7, 0xc7,
-	0x8e, 0x8e, 0xc5, 0xf0, 0xcc, 0x0d, 0x87, 0x2a, 0x52, 0x64, 0xe9, 0x52, 0xe0, 0x5e, 0x0a, 0x2a,
-	0x65, 0x4f, 0x79, 0xca, 0xac, 0xb3, 0xc9, 0x2f, 0x2b, 0xad, 0x2c, 0x7b, 0x4a, 0x79, 0x81, 0x60,
-	0x3c, 0xf4, 0x19, 0x97, 0x52, 0x45, 0x3c, 0xf2, 0x95, 0xd4, 0xb0, 0xba, 0xd5, 0x53, 0x7a, 0xa0,
-	0x34, 0xeb, 0x72, 0x2d, 0x6c, 0x02, 0x3b, 0x69, 0x74, 0x45, 0xc4, 0x1b, 0x2c, 0xe4, 0x9e, 0x2f,
-	0x8d, 0x18, 0xb4, 0xab, 0x69, 0x54, 0x21, 0x1f, 0xf2, 0xc1, 0xb4, 0x5a, 0x3d, 0x4d, 0xd1, 0x17,
-	0xa1, 0xd2, 0x7e, 0xf4, 0xb2, 0x2f, 0xa4, 0x1a, 0x80, 0xf0, 0x51, 0x9e, 0xb0, 0xcb, 0x03, 0x2e,
-	0x7b, 0x02, 0xa4, 0x4e, 0x9c, 0x70, 0xca, 0xd6, 0x53, 0x3e, 0x50, 0xd1, 0x32, 0x26, 0x87, 0x13,
-	0xee, 0xb6, 0x01, 0xe9, 0x88, 0xa3, 0x63, 0xa1, 0x23, 0xda, 0xc6, 0x4b, 0x89, 0xaf, 0x3a, 0x54,
-	0x52, 0x0b, 0xf2, 0x14, 0x97, 0x2c, 0xf0, 0x03, 0xb4, 0x8a, 0x36, 0xef, 0x36, 0xab, 0x6e, 0xca,
-	0x41, 0xba, 0xd6, 0xd4, 0xba, 0x7d, 0xfe, 0x6b, 0xa5, 0xd0, 0x01, 0x03, 0xad, 0xe1, 0xaa, 0xa9,
-	0x78, 0x20, 0xa2, 0x7d, 0x0b, 0xba, 0x3f, 0xd9, 0xd0, 0x34, 0xf0, 0x0d, 0x5e, 0x4e, 0x5f, 0x86,
-	0xe4, 0xe7, 0xf8, 0x5e, 0xfc, 0x3b, 0xe4, 0x3f, 0x4c, 0xcd, 0x8f, 0x0b, 0x81, 0x22, 0x61, 0xa6,
-	0xbb, 0xb8, 0x76, 0x2d, 0xac, 0x65, 0xcf, 0x0c, 0x68, 0x48, 0x19, 0x17, 0x7d, 0xd9, 0x17, 0xa7,
-	0x26, 0xe6, 0x4e, 0xc7, 0xfe, 0xa1, 0x1a, 0x3b, 0x59, 0x36, 0xa0, 0x3c, 0xc4, 0x8b, 0xfd, 0xc4,
-	0x0a, 0x70, 0xae, 0xe5, 0x71, 0x82, 0x14, 0x48, 0xaf, 0x15, 0xa0, 0x1e, 0xb0, 0xee, 0x05, 0x41,
-	0x3a, 0xeb, 0x33, 0x8c, 0xaf, 0x5a, 0x0d, 0xf2, 0x36, 0x5c, 0x7b, 0xeb, 0xee, 0xe4, 0xd6, 0x5d,
-	0xdb, 0xf9, 0x70, 0xf7, 0x6e, 0x9b, 0x7b, 0x53, 0x6f, 0x27, 0xe6, 0xa4, 0xdf, 0x11, 0x6c, 0x2f,
-	0x25, 0x29, 0x67, 0x7b, 0xb7, 0xfe, 0x6b, 0x7b, 0xe4, 0x20, 0x41, 0xbf, 0x60, 0xe8, 0xeb, 0x33,
-	0xe9, 0x2d, 0x4f, 0x1c, 0xbf, 0xf9, 0xb1, 0x88, 0x8b, 0x06, 0x9f, 0xbc, 0x47, 0xb8, 0x64, 0x5b,
-	0x90, 0xd4, 0x53, 0xc1, 0xfe, 0xed, 0xf7, 0xca, 0xe6, 0x6c, 0xa1, 0xcd, 0xa4, 0x6b, 0x1f, 0x7e,
-	0xfc, 0xf9, 0xbc, 0x50, 0x23, 0x55, 0x96, 0x3d, 0xce, 0xe4, 0x0b, 0x4a, 0xb6, 0x2b, 0x79, 0x9c,
-	0x5d, 0x3f, 0x7d, 0x20, 0x2a, 0x8d, 0x1b, 0x38, 0x00, 0x6d, 0xcb, 0xa0, 0xad, 0x13, 0xca, 0x66,
-	0xbe, 0x23, 0xe4, 0x1b, 0xc2, 0x8b, 0xc9, 0x0b, 0x22, 0xcd, 0x79, 0x12, 0x93, 0xcd, 0x57, 0xd9,
-	0xb9, 0x91, 0x07, 0x38, 0x9f, 0x18, 0x4e, 0x97, 0x6c, 0xb3, 0x39, 0x9e, 0x31, 0xf6, 0xd6, 0x0c,
-	0xdf, 0x3b, 0xf2, 0x15, 0xe1, 0xfb, 0xc9, 0x82, 0x7b, 0x41, 0x90, 0x07, 0x9d, 0x35, 0x31, 0x79,
-	0xd0, 0x99, 0xbd, 0x4f, 0xb7, 0x0d, 0xf4, 0x06, 0x59, 0x9f, 0x07, 0xba, 0xb5, 0x7b, 0x3e, 0x72,
-	0xd0, 0xc5, 0xc8, 0x41, 0xbf, 0x47, 0x0e, 0xfa, 0x34, 0x76, 0x0a, 0x17, 0x63, 0xa7, 0xf0, 0x73,
-	0xec, 0x14, 0x5e, 0x54, 0xaf, 0xec, 0xa7, 0xb1, 0x02, 0xd1, 0x59, 0x28, 0x74, 0xb7, 0x64, 0xde,
-	0xe4, 0x9d, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x53, 0xb2, 0xe0, 0x67, 0xc1, 0x06, 0x00, 0x00,
+	// 508 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x94, 0x41, 0x4f, 0x93, 0x31,
+	0x18, 0xc7, 0x57, 0x90, 0x25, 0xd6, 0x84, 0xc4, 0xb2, 0x83, 0xd9, 0xa4, 0x90, 0x62, 0x00, 0x0d,
+	0x69, 0xc3, 0x90, 0x83, 0x47, 0x16, 0x23, 0xd7, 0xb1, 0xa3, 0x17, 0xd3, 0xf7, 0x5d, 0xad, 0x4d,
+	0x5e, 0xda, 0x97, 0xb5, 0x10, 0x88, 0x31, 0x31, 0x7e, 0x02, 0x13, 0xbf, 0x85, 0x17, 0xbf, 0x80,
+	0x1f, 0x80, 0x23, 0x89, 0x17, 0x4f, 0xc6, 0x6c, 0x5e, 0xfc, 0x16, 0x66, 0x6d, 0x07, 0x7b, 0xf5,
+	0x7d, 0x07, 0x86, 0xdb, 0xb6, 0xfe, 0x9f, 0xff, 0xff, 0xf7, 0x3c, 0x7d, 0x3a, 0xb8, 0xf2, 0x7a,
+	0x60, 0x64, 0xfa, 0x86, 0x2b, 0xcd, 0x94, 0x3e, 0x11, 0xd6, 0xa9, 0x24, 0x65, 0x47, 0xc7, 0x62,
+	0x70, 0x46, 0xf3, 0x81, 0x71, 0x06, 0x2d, 0x5d, 0x0a, 0xe8, 0xa5, 0xa0, 0xd9, 0x90, 0x46, 0x1a,
+	0x7f, 0xce, 0xc6, 0x9f, 0x82, 0xb4, 0xf9, 0x50, 0x1a, 0x23, 0x33, 0xc1, 0x78, 0xae, 0x18, 0xd7,
+	0xda, 0x38, 0xee, 0x94, 0xd1, 0x36, 0x9e, 0x3e, 0x49, 0x8d, 0x3d, 0x34, 0x96, 0x25, 0xdc, 0x8a,
+	0x90, 0xc0, 0x4e, 0xb6, 0x13, 0xe1, 0xf8, 0x36, 0xcb, 0xb9, 0x54, 0xda, 0x8b, 0xa3, 0x76, 0xb5,
+	0x8c, 0x2a, 0xe7, 0x03, 0x7e, 0x38, 0x71, 0x7b, 0x5c, 0xa6, 0xe8, 0x8b, 0xdc, 0x58, 0xe5, 0x5e,
+	0x25, 0x3c, 0xe3, 0x3a, 0x15, 0x51, 0x8a, 0xa7, 0x83, 0x27, 0x91, 0xa9, 0x51, 0x31, 0x8c, 0x34,
+	0x20, 0x3a, 0x18, 0xe3, 0x74, 0xbd, 0x7f, 0x4f, 0x1c, 0x1d, 0x0b, 0xeb, 0x48, 0x17, 0x2e, 0x15,
+	0x7e, 0xb5, 0xb9, 0xd1, 0x56, 0xa0, 0x67, 0xb0, 0x1e, 0x38, 0x1e, 0x80, 0x55, 0xb0, 0x79, 0xaf,
+	0xdd, 0xa2, 0x25, 0xf3, 0xa1, 0xa1, 0xa8, 0x73, 0xe7, 0xfc, 0xc7, 0x4a, 0xad, 0x17, 0x0b, 0xc8,
+	0x2e, 0x5c, 0xf6, 0x8e, 0xfb, 0xc2, 0x3d, 0x0f, 0xa0, 0x9d, 0xc0, 0x19, 0x23, 0x51, 0x03, 0x2e,
+	0x28, 0xdd, 0x17, 0xa7, 0xde, 0xfa, 0x6e, 0x2f, 0x7c, 0x21, 0x16, 0xe2, 0xaa, 0xb2, 0xc8, 0x74,
+	0x00, 0x17, 0xfb, 0x85, 0x93, 0xc8, 0xb6, 0x56, 0xca, 0x56, 0x34, 0x89, 0x8c, 0x7f, 0x19, 0x10,
+	0x19, 0x59, 0xf7, 0xb2, 0xac, 0x9c, 0xf5, 0x05, 0x84, 0x57, 0xb7, 0x16, 0xf3, 0xd6, 0x69, 0x98,
+	0x34, 0x1d, 0x4f, 0x9a, 0x86, 0x25, 0x8a, 0xf3, 0xa6, 0x5d, 0x2e, 0x27, 0xb5, 0xbd, 0xa9, 0x4a,
+	0xf2, 0x15, 0xc4, 0xf6, 0x4a, 0x92, 0x66, 0xb4, 0x37, 0x7f, 0xab, 0xf6, 0xd0, 0x7e, 0x81, 0x7e,
+	0xce, 0xd3, 0x6f, 0x5c, 0x4b, 0x1f, 0x78, 0xa6, 0xf1, 0xdb, 0xbf, 0xe7, 0xe1, 0x82, 0xc7, 0x47,
+	0xef, 0x01, 0xac, 0x87, 0x6b, 0x47, 0x1b, 0xa5, 0x60, 0xff, 0xee, 0x58, 0x73, 0xf3, 0x7a, 0x61,
+	0xc8, 0x24, 0x6b, 0x1f, 0xbe, 0xfd, 0xfa, 0x34, 0xb7, 0x8c, 0x5a, 0xac, 0xfa, 0x65, 0xa0, 0x2f,
+	0x00, 0x2e, 0x16, 0xdb, 0x47, 0xed, 0xea, 0x84, 0xaa, 0x35, 0x6c, 0xee, 0xfc, 0x57, 0x4d, 0x04,
+	0x7c, 0xea, 0x01, 0x29, 0xda, 0x62, 0x37, 0x78, 0x98, 0xec, 0xad, 0x5f, 0xed, 0x77, 0xe8, 0x33,
+	0x80, 0xf7, 0x8b, 0x86, 0x7b, 0x59, 0x36, 0x0b, 0xba, 0x6a, 0x1f, 0x67, 0x41, 0x57, 0x6e, 0x16,
+	0xd9, 0xf2, 0xd0, 0xeb, 0xe8, 0xd1, 0x4d, 0xa0, 0x3b, 0xbb, 0xe7, 0x43, 0x0c, 0x2e, 0x86, 0x18,
+	0xfc, 0x1c, 0x62, 0xf0, 0x71, 0x84, 0x6b, 0x17, 0x23, 0x5c, 0xfb, 0x3e, 0xc2, 0xb5, 0x97, 0xad,
+	0xab, 0xf2, 0xd3, 0x29, 0x03, 0x77, 0x96, 0x0b, 0x9b, 0xd4, 0xfd, 0xbf, 0xcc, 0xce, 0x9f, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0xf0, 0xb3, 0xe4, 0x7a, 0x6a, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -445,8 +359,6 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Queries a DepositDenom by index.
-	DepositDenom(ctx context.Context, in *QueryGetDepositDenomRequest, opts ...grpc.CallOption) (*QueryGetDepositDenomResponse, error)
 	// Queries a list of DepositBalance items.
 	DepositBalance(ctx context.Context, in *QueryGetDepositBalanceRequest, opts ...grpc.CallOption) (*QueryGetDepositBalanceResponse, error)
 	DepositBalanceAll(ctx context.Context, in *QueryAllDepositBalanceRequest, opts ...grpc.CallOption) (*QueryAllDepositBalanceResponse, error)
@@ -463,15 +375,6 @@ func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	out := new(QueryParamsResponse)
 	err := c.cc.Invoke(ctx, "/frogchain.investibc.Query/Params", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) DepositDenom(ctx context.Context, in *QueryGetDepositDenomRequest, opts ...grpc.CallOption) (*QueryGetDepositDenomResponse, error) {
-	out := new(QueryGetDepositDenomResponse)
-	err := c.cc.Invoke(ctx, "/frogchain.investibc.Query/DepositDenom", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -500,8 +403,6 @@ func (c *queryClient) DepositBalanceAll(ctx context.Context, in *QueryAllDeposit
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Queries a DepositDenom by index.
-	DepositDenom(context.Context, *QueryGetDepositDenomRequest) (*QueryGetDepositDenomResponse, error)
 	// Queries a list of DepositBalance items.
 	DepositBalance(context.Context, *QueryGetDepositBalanceRequest) (*QueryGetDepositBalanceResponse, error)
 	DepositBalanceAll(context.Context, *QueryAllDepositBalanceRequest) (*QueryAllDepositBalanceResponse, error)
@@ -513,9 +414,6 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
-}
-func (*UnimplementedQueryServer) DepositDenom(ctx context.Context, req *QueryGetDepositDenomRequest) (*QueryGetDepositDenomResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DepositDenom not implemented")
 }
 func (*UnimplementedQueryServer) DepositBalance(ctx context.Context, req *QueryGetDepositBalanceRequest) (*QueryGetDepositBalanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DepositBalance not implemented")
@@ -542,24 +440,6 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_DepositDenom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetDepositDenomRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).DepositDenom(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/frogchain.investibc.Query/DepositDenom",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).DepositDenom(ctx, req.(*QueryGetDepositDenomRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -607,10 +487,6 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
-		},
-		{
-			MethodName: "DepositDenom",
-			Handler:    _Query_DepositDenom_Handler,
 		},
 		{
 			MethodName: "DepositBalance",
@@ -670,62 +546,6 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = l
 	{
 		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetDepositDenomRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetDepositDenomRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetDepositDenomRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryGetDepositDenomResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryGetDepositDenomResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryGetDepositDenomResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.DepositDenom.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -915,26 +735,6 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetDepositDenomRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *QueryGetDepositDenomResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.DepositDenom.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
-
 func (m *QueryGetDepositBalanceRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1106,139 +906,6 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetDepositDenomRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetDepositDenomRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetDepositDenomRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryGetDepositDenomResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetDepositDenomResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetDepositDenomResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DepositDenom", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.DepositDenom.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
