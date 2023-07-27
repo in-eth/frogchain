@@ -10,7 +10,7 @@ import (
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSetAdminAccount{}, "investibc/SetAdminAccount", nil)
 	cdc.RegisterConcrete(&MsgDeposit{}, "investibc/Deposit", nil)
-	cdc.RegisterConcrete(&MsgInitIcaAccount{}, "investibc/RegisterIcaAccount", nil)
+	cdc.RegisterConcrete(&MsgInitIcaAccount{}, "investibc/InitIcaAccount", nil)
 	cdc.RegisterConcrete(&MsgSetDepositDenom{}, "investibc/SetDepositDenom", nil)
 	cdc.RegisterConcrete(&MsgWithdraw{}, "investibc/Withdraw", nil)
 	cdc.RegisterConcrete(&MsgSetLiquidityDenom{}, "investibc/SetLiquidityDenom", nil)

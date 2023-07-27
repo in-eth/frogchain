@@ -3,6 +3,7 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type AmmKeeper interface {
@@ -13,6 +14,13 @@ type AmmKeeper interface {
 type AccountKeeper interface {
 	GetAccount(ctx sdk.Context, addr sdk.AccAddress) types.AccountI
 	// Methods imported from account should be defined here
+}
+
+type StakingKeeper interface {
+	// Methods imported from amm should be defined here
+	BondDenom(ctx sdk.Context) string
+	GetAllValidators(ctx sdk.Context) (validators []stakingtypes.Validator)
+	Delegate(ctx sdk.Context, delAddr sdk.AccAddress, bondAmt sdk.Int, tokenSrc stakingtypes.BondStatus, validator stakingtypes.Validator, subtractAccount bool) (newShares sdk.Dec, err error)
 }
 
 // BankKeeper defines the expected interface needed to retrieve account balances.

@@ -12,7 +12,7 @@ var _ paramtypes.ParamSet = (*Params)(nil)
 
 var (
 	KeyAdminAccount            = []byte("AdminAccount")
-	DefaultAdminAccount string = "admin_account"
+	DefaultAdminAccount string = "frog1m9l358xunhhwds0568za49mzhvuxx9uxeu2c3r"
 )
 
 var (

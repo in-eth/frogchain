@@ -45,17 +45,14 @@ echo $WALLET_MNEMONIC_1 | $BINARY keys add wallet1 --home $CHAIN_DIR/$CHAINID_1 
 echo $WALLET_MNEMONIC_2 | $BINARY keys add wallet2 --home $CHAIN_DIR/$CHAINID_1 --recover --keyring-backend=test
 echo $RLY_MNEMONIC_1 | $BINARY keys add rly1 --home $CHAIN_DIR/$CHAINID_1 --recover --keyring-backend=test 
 
-$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show val1 --keyring-backend test -a) 100000000000stake  --home $CHAIN_DIR/$CHAINID_1
-$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet1 --keyring-backend test -a) 100000000000frog  --home $CHAIN_DIR/$CHAINID_1
-$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet2 --keyring-backend test -a) 100000000000frog  --home $CHAIN_DIR/$CHAINID_1
-$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show rly1 --keyring-backend test -a) 100000000000frog  --home $CHAIN_DIR/$CHAINID_1
+$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show val1 --keyring-backend test -a) 10000000000000000frog --home $CHAIN_DIR/$CHAINID_1
+$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet1 --keyring-backend test -a) --home $CHAIN_DIR/$CHAINID_1
+$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet2 --keyring-backend test -a) 10000000000000000frog  --home $CHAIN_DIR/$CHAINID_1
+$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show rly1 --keyring-backend test -a) 10000000000000000frog  --home $CHAIN_DIR/$CHAINID_1
 
 echo "Creating and collecting gentx..."
-$BINARY gentx val1 7000000000stake --home $CHAIN_DIR/$CHAINID_1 --chain-id $CHAINID_1 --keyring-backend test
+$BINARY gentx val1 7000000000frog --home $CHAIN_DIR/$CHAINID_1 --chain-id $CHAINID_1 --keyring-backend test
 $BINARY collect-gentxs --home $CHAIN_DIR/$CHAINID_1
-
-echo "Creating and collecting gentx..."
-export alice=$($BINARY keys show alice -a --home $CHAIN_DIR/$CHAINID_1) && echo $alice;
 
 echo "Changing defaults and ports in app.toml and config.toml files..."
 sed -i -e 's#"tcp://0.0.0.0:26656"#"tcp://0.0.0.0:'"$P2PPORT_1"'"#g' $CHAIN_DIR/$CHAINID_1/config/config.toml
@@ -68,7 +65,13 @@ sed -i -e 's/enable = false/enable = true/g' $CHAIN_DIR/$CHAINID_1/config/app.to
 sed -i -e 's/swagger = false/swagger = true/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/1317/'"$RESTPORT_1"'/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/":8080"/":'"$ROSETTA_1"'"/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
+sed -i -e 's/gas-to-suggest = 200000/gas-to-suggest = 500000/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 
 # Update host chain genesis to allow x/bank/MsgSend ICA tx execution
 # cat $CHAIN_DIR/$CHAINID_1/config/genesis.json | jq '(.app_state.interchainaccounts.host_genesis_state.params.allow_messages) |= ["/cosmos.bank.v1beta1.MsgSend"]' > $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp
-# mv $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp $CHAIN_DIR/$CHAINID_1/config/genesis.json
+# cat $CHAIN_DIR/$CHAINID_1/config/genesis.json | jq '(.app_state.staking.params.bond_denom) |= ["/frog"]' > $CHAIN_DIR/$CHAINID_1/config/genesis.json
+# mv $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp $CHAIN_DIR/$CHAINID_1/config/genesis.json -f
+
+sed -i -e 's/\"bond_denom\": \"stake\"/\"bond_denom\": \"frog\"/g' $CHAIN_DIR/$CHAINID_1/config/genesis.json
+sed -i -e 's/\"denom\": \"stake\"/\"denom\": \"frog\"/g' $CHAIN_DIR/$CHAINID_1/config/genesis.json
+sed -i -e 's/\"mint_denom\": \"stake\"/\"mint_denom\": \"frog\"/g' $CHAIN_DIR/$CHAINID_1/config/genesis.json

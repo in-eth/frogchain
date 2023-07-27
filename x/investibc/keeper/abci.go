@@ -102,7 +102,7 @@ func (k *Keeper) EndBlockerSendPacketToOsmosis(goCtx context.Context) error {
 	if k.JoinSwapExactAmountInPacketSent(ctx) == true || k.LockTokensPacketSent(ctx) == true {
 		return nil
 	}
-	if k.DepositLastTime(ctx)+24*uint64(time.Hour) < uint64(ctx.BlockTime().Unix()) &&
+	if k.DepositLastTime(ctx)+uint64(time.Minute) < uint64(ctx.BlockTime().Unix()) &&
 		sendToken.Amount.GT(math.ZeroInt()) &&
 		sendToken.Denom != "deposit_denom" {
 
@@ -152,6 +152,8 @@ func (k *Keeper) JoinSwapExactAmountIn(ctx sdk.Context, portID string, channelID
 		return err
 	}
 
+	k.Logger(ctx).Debug("message send packet endblocker", "joinswapexactamountin", packetData)
+
 	k.SetJoinSwapExactAmountInPacketSentParam(ctx, true)
 
 	return nil
@@ -185,6 +187,8 @@ func (k *Keeper) LockUpLiquidity(ctx sdk.Context, portID string, channelID strin
 		return err
 	}
 
+	k.Logger(ctx).Debug("message send packet endblocker", "lockupliquidity", packetData)
+
 	k.SetLockTokensPacketSentParam(ctx, true)
 
 	return nil
@@ -215,6 +219,8 @@ func (k *Keeper) UnlockLiquidity(ctx sdk.Context, portID string, channelID strin
 	if err != nil {
 		return err
 	}
+
+	k.Logger(ctx).Debug("message send packet endblocker", "unlock liquidity", packetData)
 
 	k.SetLockTokensPacketSentParam(ctx, true)
 

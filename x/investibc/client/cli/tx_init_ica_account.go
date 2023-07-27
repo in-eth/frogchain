@@ -13,11 +13,11 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdRegisterIcaAccount() *cobra.Command {
+func CmdInitIcaAccount() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "init-ica-account [connection-id] [version]",
+		Use:   "init-ica-account [connection-id]",
 		Short: "Broadcast message init-ica-account",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argConnectionId := args[0]
 

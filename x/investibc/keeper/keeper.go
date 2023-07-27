@@ -34,6 +34,7 @@ type (
 
 		bankKeeper          types.BankKeeper
 		ammKeeper           types.AmmKeeper
+		stakingKeeper       types.StakingKeeper
 		icaControllerKeeper icacontrollerkeeper.Keeper
 		IBCKeeper           ibckeeper.Keeper
 		TransferKeeper      ibctransferkeeper.Keeper
@@ -53,6 +54,7 @@ func NewKeeper(
 
 	bankKeeper types.BankKeeper,
 	ammKeeper types.AmmKeeper,
+	stakingKeeper types.StakingKeeper,
 
 	icacontrollerKeeper icacontrollerkeeper.Keeper,
 	ibcKeeper ibckeeper.Keeper,
@@ -75,8 +77,9 @@ func NewKeeper(
 		channelKeeper: channelKeeper,
 		portKeeper:    portKeeper,
 
-		bankKeeper: bankKeeper,
-		ammKeeper:  ammKeeper,
+		bankKeeper:    bankKeeper,
+		ammKeeper:     ammKeeper,
+		stakingKeeper: stakingKeeper,
 
 		icaControllerKeeper: icacontrollerKeeper,
 		IBCKeeper:           ibcKeeper,

@@ -116,6 +116,7 @@ func InvestibcKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		investibcPortKeeper{},
 		nil,
 		nil,
+		nil,
 		icacontrollerKeeper,
 		*ibcKeeper,
 		TransferKeeper,

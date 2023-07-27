@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	// "github.com/cosmos/cosmos-sdk/client/flags"
-	// sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"frogchain/x/investibc/types"
 )
@@ -25,8 +23,8 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdQueryParams())
-	cmd.AddCommand(CmdListDepositBalance())
-	cmd.AddCommand(CmdShowDepositBalance())
+	cmd.AddCommand(CmdInterchainAccount())
+
 	// this line is used by starport scaffolding # 1
 
 	return cmd

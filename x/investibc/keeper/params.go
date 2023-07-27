@@ -59,7 +59,7 @@ func (k Keeper) SetLiquidityDenomParam(ctx sdk.Context, liquidityDenom string) {
 	if params.CurrentLiquidityAmount.Amount.GT(math.ZeroInt()) {
 		panic("could not change liquidity denom : current liquidity amount is not zero")
 	}
-	params.CurrentDepositAmount.Denom = liquidityDenom
+	params.CurrentLiquidityAmount.Denom = liquidityDenom
 	k.paramstore.SetParamSet(ctx, &params)
 }
 

@@ -194,7 +194,7 @@ func (im IBCModule) OnAcknowledgementPacket(
 				return err
 			}
 
-			im.keeper.Logger(ctx).Info("message response in ICS-27 packet", "response", response)
+			im.keeper.Logger(ctx).Debug("message response in ICS-27 packet", "response", response)
 		}
 		return nil
 	}
@@ -213,8 +213,12 @@ func (im IBCModule) OnTimeoutPacket(
 
 	if im.keeper.JoinSwapExactAmountInPacketSent(ctx) == true {
 		im.keeper.SetJoinSwapExactAmountInPacketSentParam(ctx, false)
+
+		im.keeper.Logger(ctx).Debug("message timeout", "timeout", "joinswapexactamountin")
 	} else if im.keeper.LockTokensPacketSent(ctx) == true {
 		im.keeper.SetLockTokensPacketSentParam(ctx, false)
+
+		im.keeper.Logger(ctx).Debug("message timeout", "timeout", "locktokens")
 	}
 
 	// Dispatch packet
