@@ -120,12 +120,23 @@ proto-update-deps:
 ###############################################################################
 
 init-hermes: kill-dev install 
-	@echo "Initializing both blockchains..."
+	@echo "Initializing frogchain..."
 	./network/init.sh
 	./network/start.sh
 	@echo "Initializing relayer..." 
 	./network/hermes/restore-keys.sh
 	./network/hermes/create-conn.sh
+
+init-frogchain: kill-dev install 
+	@echo "Initializing frogchain..."
+	./network/init.sh
+	./network/start.sh
+
+start-only-hermes:
+	@echo "Initializing relayer..." 
+	./network/hermes/restore-keys.sh
+	./network/hermes/create-conn.sh
+	./network/hermes/start.sh
 
 start: 
 	@echo "Starting up test network"

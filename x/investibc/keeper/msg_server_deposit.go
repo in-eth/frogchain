@@ -27,10 +27,6 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 		return nil, sdkError
 	}
 
-	depositAmount := k.CurrentDepositAmount(ctx)
-	depositAmount = depositAmount.Add(receiveToken)
-	k.SetCurrentDepositAmountParam(ctx, depositAmount)
-
 	// set share token data
 	moduleToken := sdk.Coin{
 		Denom:  types.ModuleToken,

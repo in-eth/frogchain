@@ -3,7 +3,6 @@ package keeper
 import (
 	"frogchain/x/investibc/types"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,11 +13,19 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 		k.DepositDenom(ctx),
 		k.CurrentDepositAmount(ctx),
 		k.LiquidityDenom(ctx),
-		k.CurrentLiquidityAmount(ctx),
+		k.LockTokenTimestamp(ctx),
 		k.DepositLastTime(ctx),
 		k.IcaConnectionId(ctx),
+		k.DepositTokenToICAPacketSend(ctx),
+		k.JoinSwapExactAmountInPacketSend(ctx),
+		k.LockTokensPacketSend(ctx),
+		k.UnLockLiquidityPacketSend(ctx),
+		k.ClaimRewardPacketSend(ctx),
+		k.DepositTokenToICAPacketSent(ctx),
 		k.JoinSwapExactAmountInPacketSent(ctx),
 		k.LockTokensPacketSent(ctx),
+		k.UnLockLiquidityPacketSent(ctx),
+		k.ClaimRewardPacketSent(ctx),
 	)
 }
 
@@ -38,10 +45,6 @@ func (k Keeper) SetAdminAccountParam(ctx sdk.Context, adminAccount string) {
 func (k Keeper) SetDepositDenomParam(ctx sdk.Context, depositDenom string) {
 	params := k.GetParams(ctx)
 	params.DepositDenom = depositDenom
-	if params.CurrentDepositAmount.Amount.GT(math.ZeroInt()) {
-		panic("could not change deposit denom : current deposit amount is not zero")
-	}
-	params.CurrentDepositAmount.Denom = depositDenom
 	k.paramstore.SetParamSet(ctx, &params)
 }
 
@@ -56,17 +59,13 @@ func (k Keeper) SetCurrentDepositAmountParam(ctx sdk.Context, currentDepositAmou
 func (k Keeper) SetLiquidityDenomParam(ctx sdk.Context, liquidityDenom string) {
 	params := k.GetParams(ctx)
 	params.LiquidityDenom = liquidityDenom
-	if params.CurrentLiquidityAmount.Amount.GT(math.ZeroInt()) {
-		panic("could not change liquidity denom : current liquidity amount is not zero")
-	}
-	params.CurrentLiquidityAmount.Denom = liquidityDenom
 	k.paramstore.SetParamSet(ctx, &params)
 }
 
 // SetParams set the params
-func (k Keeper) SetCurrentLiquidityAmountParam(ctx sdk.Context, currentLiquidityAmount sdk.Coin) {
+func (k Keeper) SetLockTokenTimestampParam(ctx sdk.Context, lockTokenTimestamp uint64) {
 	params := k.GetParams(ctx)
-	params.CurrentLiquidityAmount = currentLiquidityAmount
+	params.LockTokenTimestamp = lockTokenTimestamp
 	k.paramstore.SetParamSet(ctx, &params)
 }
 
@@ -85,6 +84,48 @@ func (k Keeper) SetIcaConnectionIdParam(ctx sdk.Context, icaConnectionId string)
 }
 
 // SetParams set the params
+func (k Keeper) SetDepositTokenToICAPacketSendParam(ctx sdk.Context, depositTokenToICAPacketSend bool) {
+	params := k.GetParams(ctx)
+	params.DepositTokenToICAPacketSend = depositTokenToICAPacketSend
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetJoinSwapExactAmountInPacketSendParam(ctx sdk.Context, joinSwapExactAmountInPacketSend bool) {
+	params := k.GetParams(ctx)
+	params.JoinSwapExactAmountInPacketSend = joinSwapExactAmountInPacketSend
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetLockTokensPacketSendParam(ctx sdk.Context, lockTokensPacketSend bool) {
+	params := k.GetParams(ctx)
+	params.LockTokensPacketSend = lockTokensPacketSend
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetUnLockLiquidityPacketSendParam(ctx sdk.Context, unLockLiquidityPacketSend bool) {
+	params := k.GetParams(ctx)
+	params.UnLockLiquidityPacketSend = unLockLiquidityPacketSend
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetClaimRewardPacketSendParam(ctx sdk.Context, claimRewardPacketSend bool) {
+	params := k.GetParams(ctx)
+	params.ClaimRewardPacketSend = claimRewardPacketSend
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetDepositTokenToICAPacketSentParam(ctx sdk.Context, depositTokenToICAPacketSent bool) {
+	params := k.GetParams(ctx)
+	params.DepositTokenToICAPacketSent = depositTokenToICAPacketSent
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
 func (k Keeper) SetJoinSwapExactAmountInPacketSentParam(ctx sdk.Context, joinSwapExactAmountInPacketSent bool) {
 	params := k.GetParams(ctx)
 	params.JoinSwapExactAmountInPacketSent = joinSwapExactAmountInPacketSent
@@ -95,6 +136,20 @@ func (k Keeper) SetJoinSwapExactAmountInPacketSentParam(ctx sdk.Context, joinSwa
 func (k Keeper) SetLockTokensPacketSentParam(ctx sdk.Context, lockTokensPacketSent bool) {
 	params := k.GetParams(ctx)
 	params.LockTokensPacketSent = lockTokensPacketSent
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetUnLockLiquidityPacketSentParam(ctx sdk.Context, unLockLiquidityPacketSent bool) {
+	params := k.GetParams(ctx)
+	params.UnLockLiquidityPacketSent = unLockLiquidityPacketSent
+	k.paramstore.SetParamSet(ctx, &params)
+}
+
+// SetParams set the params
+func (k Keeper) SetClaimRewardPacketSentParam(ctx sdk.Context, claimRewardPacketSent bool) {
+	params := k.GetParams(ctx)
+	params.ClaimRewardPacketSent = claimRewardPacketSent
 	k.paramstore.SetParamSet(ctx, &params)
 }
 
@@ -116,38 +171,86 @@ func (k Keeper) CurrentDepositAmount(ctx sdk.Context) (res sdk.Coin) {
 	return
 }
 
-// DepositDenom returns the DepositDenom param
+// LiquidityDenom returns the LiquidityDenom param
 func (k Keeper) LiquidityDenom(ctx sdk.Context) (res string) {
 	k.paramstore.Get(ctx, types.KeyLiquidityDenom, &res)
 	return
 }
 
-// CurrentDepositAmount returns the CurrentDepositAmount param
-func (k Keeper) CurrentLiquidityAmount(ctx sdk.Context) (res sdk.Coin) {
-	k.paramstore.Get(ctx, types.KeyCurrentLiquidityAmount, &res)
+// CurrentLiquidityAmount returns the CurrentLiquidityAmount param
+func (k Keeper) LockTokenTimestamp(ctx sdk.Context) (res uint64) {
+	k.paramstore.Get(ctx, types.KeyLockTokenTimestamp, &res)
 	return
 }
 
-// CurrentDepositAmount returns the CurrentDepositAmount param
+// DepositLastTime returns the DepositLastTime param
 func (k Keeper) DepositLastTime(ctx sdk.Context) (res uint64) {
 	k.paramstore.Get(ctx, types.KeyDepositLastTime, &res)
 	return
 }
 
-// CurrentDepositAmount returns the CurrentDepositAmount param
+// IcaConnectionId returns the IcaConnectionId param
 func (k Keeper) IcaConnectionId(ctx sdk.Context) (res string) {
 	k.paramstore.Get(ctx, types.KeyIcaConnectionId, &res)
 	return
 }
 
-// CurrentDepositAmount returns the CurrentDepositAmount param
+// DepositTokenToICAPacketSend returns the DepositTokenToICAPacketSend param
+func (k Keeper) DepositTokenToICAPacketSend(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyDepositTokenToICAPacketSend, &res)
+	return
+}
+
+// JoinSwapExactAmountInPacketSend returns the JoinSwapExactAmountInPacketSend param
+func (k Keeper) JoinSwapExactAmountInPacketSend(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyJoinSwapExactAmountInPacketSend, &res)
+	return
+}
+
+// LockTokensPacketSend returns the LockTokensPacketSend param
+func (k Keeper) LockTokensPacketSend(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyLockTokensPacketSend, &res)
+	return
+}
+
+// UnLockLiquidityPacketSend returns the UnLockLiquidityPacketSend param
+func (k Keeper) UnLockLiquidityPacketSend(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyUnLockLiquidityPacketSend, &res)
+	return
+}
+
+// ClaimRewardPacketSend returns the ClaimRewardPacketSend param
+func (k Keeper) ClaimRewardPacketSend(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyClaimRewardPacketSend, &res)
+	return
+}
+
+// DepositTokenToICAPacketSent returns the DepositTokenToICAPacketSent param
+func (k Keeper) DepositTokenToICAPacketSent(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyDepositTokenToICAPacketSent, &res)
+	return
+}
+
+// JoinSwapExactAmountInPacketSent returns the JoinSwapExactAmountInPacketSent param
 func (k Keeper) JoinSwapExactAmountInPacketSent(ctx sdk.Context) (res bool) {
 	k.paramstore.Get(ctx, types.KeyJoinSwapExactAmountInPacketSent, &res)
 	return
 }
 
-// CurrentDepositAmount returns the CurrentDepositAmount param
+// LockTokensPacketSent returns the LockTokensPacketSent param
 func (k Keeper) LockTokensPacketSent(ctx sdk.Context) (res bool) {
 	k.paramstore.Get(ctx, types.KeyLockTokensPacketSent, &res)
+	return
+}
+
+// UnLockLiquidityPacketSent returns the UnLockLiquidityPacketSent param
+func (k Keeper) UnLockLiquidityPacketSent(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyUnLockLiquidityPacketSent, &res)
+	return
+}
+
+// ClaimRewardPacketSent returns the ClaimRewardPacketSent param
+func (k Keeper) ClaimRewardPacketSent(ctx sdk.Context) (res bool) {
+	k.paramstore.Get(ctx, types.KeyClaimRewardPacketSent, &res)
 	return
 }

@@ -607,8 +607,11 @@ func New(
 
 	investibcIBCModule := investibcmodule.NewIBCModule(app.InvestibcKeeper)
 
-	var investibcStack ibcporttypes.IBCModule = investibcIBCModule
-	investibcStack = icacontroller.NewIBCMiddleware(investibcIBCModule, app.ICAControllerKeeper)
+	icaControllerIBCModule := icacontroller.NewIBCMiddleware(investibcIBCModule, app.ICAControllerKeeper)
+	icaControllerStack := ibcfee.NewIBCMiddleware(icaControllerIBCModule, app.IBCFeeKeeper)
+
+	icaHostStack := ibcfee.NewIBCMiddleware(icaHostIBCModule, app.IBCFeeKeeper)
+
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
@@ -618,10 +621,10 @@ func New(
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
-	ibcRouter.AddRoute(investibcmoduletypes.ModuleName, investibcStack)
-	ibcRouter.AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
+	ibcRouter.AddRoute(investibcmoduletypes.ModuleName, icaControllerStack).
+		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
+		AddRoute(icahosttypes.SubModuleName, icaHostStack).
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
-	ibcRouter.AddRoute(icacontrollertypes.SubModuleName, investibcStack)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -881,6 +884,7 @@ func (app *App) ModuleAccountAddrs() map[string]bool {
 // addresses.
 func (app *App) BlockedModuleAccountAddrs() map[string]bool {
 	modAccAddrs := app.ModuleAccountAddrs()
+	delete(modAccAddrs, authtypes.NewModuleAddress(investibcmoduletypes.ModuleName).String())
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 
 	return modAccAddrs

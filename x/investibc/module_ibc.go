@@ -15,8 +15,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
+	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
-	porttypes "github.com/cosmos/ibc-go/v7/modules/core/05-port/types"
 	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 	ibcexported "github.com/cosmos/ibc-go/v7/modules/core/exported"
 )
@@ -43,22 +43,30 @@ func (im IBCModule) OnChanOpenInit(
 	version string,
 ) (string, error) {
 
-	// Require portID is the portID module is bound to
-	boundPort := im.keeper.GetPort(ctx)
-	if boundPort != portID {
-		return "", sdkerrors.Wrapf(porttypes.ErrInvalidPort, "invalid port: %s, expected %s", portID, boundPort)
-	}
+	if chanCap == nil {
+		path := host.ChannelCapabilityPath(portID, channelID)
+		chanCap, _ := im.keeper.IBCScopperKeeper.GetCapability(ctx, path)
 
-	if version != types.Version {
-		return "", sdkerrors.Wrapf(types.ErrInvalidVersion, "got %s, expected %s", version, types.Version)
+		chanCap = chanCap
 	}
+	return version, im.keeper.ClaimCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID))
 
-	// Claim channel capability passed back by IBC module
-	if err := im.keeper.ClaimCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)); err != nil {
-		return "", err
-	}
+	// // Require portID is the portID module is bound to
+	// boundPort := im.keeper.GetPort(ctx)
+	// if boundPort != portID {
+	// 	return "", sdkerrors.Wrapf(porttypes.ErrInvalidPort, "invalid port: %s, expected %s", portID, boundPort)
+	// }
 
-	return version, nil
+	// if version != types.Version {
+	// 	return "", sdkerrors.Wrapf(types.ErrInvalidVersion, "got %s, expected %s", version, types.Version)
+	// }
+
+	// // Claim channel capability passed back by IBC module
+	// if err := im.keeper.ClaimCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)); err != nil {
+	// 	return "", err
+	// }
+
+	// return version, nil
 }
 
 // OnChanOpenTry implements the IBCModule interface
@@ -74,27 +82,29 @@ func (im IBCModule) OnChanOpenTry(
 ) (string, error) {
 
 	// Require portID is the portID module is bound to
-	boundPort := im.keeper.GetPort(ctx)
-	if boundPort != portID {
-		return "", sdkerrors.Wrapf(porttypes.ErrInvalidPort, "invalid port: %s, expected %s", portID, boundPort)
-	}
+	// boundPort := im.keeper.GetPort(ctx)
+	// if boundPort != portID {
+	// 	return "", sdkerrors.Wrapf(porttypes.ErrInvalidPort, "invalid port: %s, expected %s", portID, boundPort)
+	// }
 
-	if counterpartyVersion != types.Version {
-		return "", sdkerrors.Wrapf(types.ErrInvalidVersion, "invalid counterparty version: got: %s, expected %s", counterpartyVersion, types.Version)
-	}
+	// if counterpartyVersion != types.Version {
+	// 	return "", sdkerrors.Wrapf(types.ErrInvalidVersion, "invalid counterparty version: got: %s, expected %s", counterpartyVersion, types.Version)
+	// }
 
-	// Module may have already claimed capability in OnChanOpenInit in the case of crossing hellos
-	// (ie chainA and chainB both call ChanOpenInit before one of them calls ChanOpenTry)
-	// If module can already authenticate the capability then module already owns it so we don't need to claim
-	// Otherwise, module does not have channel capability and we must claim it from IBC
-	if !im.keeper.AuthenticateCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)) {
-		// Only claim channel capability passed back by IBC module if we do not already own it
-		if err := im.keeper.ClaimCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)); err != nil {
-			return "", err
-		}
-	}
+	// // Module may have already claimed capability in OnChanOpenInit in the case of crossing hellos
+	// // (ie chainA and chainB both call ChanOpenInit before one of them calls ChanOpenTry)
+	// // If module can already authenticate the capability then module already owns it so we don't need to claim
+	// // Otherwise, module does not have channel capability and we must claim it from IBC
+	// if !im.keeper.AuthenticateCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)) {
+	// 	// Only claim channel capability passed back by IBC module if we do not already own it
+	// 	if err := im.keeper.ClaimCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)); err != nil {
+	// 		return "", err
+	// 	}
+	// }
 
-	return types.Version, nil
+	// return types.Version, nil
+
+	return "", nil
 }
 
 // OnChanOpenAck implements the IBCModule interface
@@ -105,9 +115,9 @@ func (im IBCModule) OnChanOpenAck(
 	_,
 	counterpartyVersion string,
 ) error {
-	if counterpartyVersion != types.Version {
-		return sdkerrors.Wrapf(types.ErrInvalidVersion, "invalid counterparty version: %s, expected %s", counterpartyVersion, types.Version)
-	}
+	// if counterpartyVersion != types.Version {
+	// 	return sdkerrors.Wrapf(types.ErrInvalidVersion, "invalid counterparty version: %s, expected %s", counterpartyVersion, types.Version)
+	// }
 	return nil
 }
 
@@ -127,7 +137,8 @@ func (im IBCModule) OnChanCloseInit(
 	channelID string,
 ) error {
 	// Disallow user-initiated channel closing for channels
-	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user cannot close channel")
+	// return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user cannot close channel")
+	return nil
 }
 
 // OnChanCloseConfirm implements the IBCModule interface
@@ -145,25 +156,26 @@ func (im IBCModule) OnRecvPacket(
 	modulePacket channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) ibcexported.Acknowledgement {
-	var ack channeltypes.Acknowledgement
+	// var ack channeltypes.Acknowledgement
 
-	// this line is used by starport scaffolding # oracle/packet/module/recv
+	// // this line is used by starport scaffolding # oracle/packet/module/recv
 
-	var modulePacketData types.InvestibcPacketData
-	if err := modulePacketData.Unmarshal(modulePacket.GetData()); err != nil {
-		return channeltypes.NewErrorAcknowledgement(sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal packet data: %s", err.Error()))
-	}
+	// var modulePacketData types.InvestibcPacketData
+	// if err := modulePacketData.Unmarshal(modulePacket.GetData()); err != nil {
+	// 	return channeltypes.NewErrorAcknowledgement(sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal packet data: %s", err.Error()))
+	// }
 
-	// Dispatch packet
-	switch packet := modulePacketData.Packet.(type) {
-	// this line is used by starport scaffolding # ibc/packet/module/recv
-	default:
-		err := fmt.Errorf("unrecognized %s packet type: %T", types.ModuleName, packet)
-		return channeltypes.NewErrorAcknowledgement(err)
-	}
+	// // Dispatch packet
+	// switch packet := modulePacketData.Packet.(type) {
+	// // this line is used by starport scaffolding # ibc/packet/module/recv
+	// default:
+	// 	err := fmt.Errorf("unrecognized %s packet type: %T", types.ModuleName, packet)
+	// 	return channeltypes.NewErrorAcknowledgement(err)
+	// }
 
-	// NOTE: acknowledgement will be written synchronously during IBC handler execution.
-	return ack
+	// // NOTE: acknowledgement will be written synchronously during IBC handler execution.
+	// return ack
+	return channeltypes.NewErrorAcknowledgement(fmt.Errorf("cannot receive packet via interchain accounts authentication module"))
 }
 
 // OnAcknowledgementPacket implements the IBCModule interface
@@ -206,52 +218,70 @@ func (im IBCModule) OnTimeoutPacket(
 	modulePacket channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) error {
-	var modulePacketData types.InvestibcPacketData
-	if err := modulePacketData.Unmarshal(modulePacket.GetData()); err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal packet data: %s", err.Error())
-	}
-
-	if im.keeper.JoinSwapExactAmountInPacketSent(ctx) == true {
+	if im.keeper.DepositTokenToICAPacketSent(ctx) {
+		im.keeper.SetDepositTokenToICAPacketSentParam(ctx, false)
+		im.keeper.Logger(ctx).Debug("message timeout", "deposit token to ica")
+	} else if im.keeper.JoinSwapExactAmountInPacketSent(ctx) {
 		im.keeper.SetJoinSwapExactAmountInPacketSentParam(ctx, false)
-
-		im.keeper.Logger(ctx).Debug("message timeout", "timeout", "joinswapexactamountin")
-	} else if im.keeper.LockTokensPacketSent(ctx) == true {
+		im.keeper.Logger(ctx).Debug("message timeout", "join swap exact amount in")
+	} else if im.keeper.LockTokensPacketSent(ctx) {
 		im.keeper.SetLockTokensPacketSentParam(ctx, false)
-
-		im.keeper.Logger(ctx).Debug("message timeout", "timeout", "locktokens")
+		im.keeper.Logger(ctx).Debug("message timeout", "lock liquidity")
+	} else if im.keeper.UnLockLiquidityPacketSent(ctx) {
+		im.keeper.SetUnLockLiquidityPacketSentParam(ctx, false)
+		im.keeper.Logger(ctx).Debug("message timeout", "unlock liquidity")
+	} else if im.keeper.ClaimRewardPacketSent(ctx) {
+		im.keeper.SetClaimRewardPacketSentParam(ctx, false)
+		im.keeper.Logger(ctx).Debug("message timeout", "claim reward")
 	}
 
-	// Dispatch packet
-	switch packet := modulePacketData.Packet.(type) {
-	// this line is used by starport scaffolding # ibc/packet/module/timeout
+	// // Dispatch packet
+	// switch packet := modulePacketData.Packet.(type) {
+	// // this line is used by starport scaffolding # ibc/packet/module/timeout
 
-	default:
-		errMsg := fmt.Sprintf("unrecognized %s packet type: %T", types.ModuleName, packet)
-		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
-	}
+	// default:
+	// 	errMsg := fmt.Sprintf("unrecognized %s packet type: %T", types.ModuleName, packet)
+	// 	return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
+	// }
 
 	return nil
 }
 
 func handleMsgData(ctx sdk.Context, k keeper.Keeper, msgData *sdk.MsgData) (string, error) {
 	switch msgData.MsgType {
+	case sdk.MsgTypeURL(&ibctransfertypes.MsgTransfer{}):
+		msgResponse := &ibctransfertypes.MsgTransferResponse{}
+		if err := proto.Unmarshal(msgData.Data, msgResponse); err != nil {
+			return "", sdkerrors.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
+		}
+
+		if k.ClaimRewardPacketSent(ctx) {
+			k.SetClaimRewardPacketSendParam(ctx, false)
+			k.SetClaimRewardPacketSentParam(ctx, false)
+			k.SetDepositTokenToICAPacketSendParam(ctx, true)
+			return msgResponse.String(), nil
+		}
+
+		k.SetDepositLastTimeParam(ctx, uint64(ctx.BlockTime().UnixNano()))
+
+		k.SetDepositTokenToICAPacketSendParam(ctx, false)
+		k.SetDepositTokenToICAPacketSentParam(ctx, false)
+		k.SetJoinSwapExactAmountInPacketSendParam(ctx, true)
+
+		return msgResponse.String(), nil
 	case sdk.MsgTypeURL(&osmosispool.MsgJoinSwapExternAmountIn{}):
 		msgResponse := &osmosispool.MsgJoinSwapExternAmountInResponse{}
 		if err := proto.Unmarshal(msgData.Data, msgResponse); err != nil {
 			return "", sdkerrors.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
 		}
 
-		k.SetJoinSwapExactAmountInPacketSentParam(ctx, false)
-
 		sendToken := k.CurrentDepositAmount(ctx)
 		sendToken.Amount = math.ZeroInt()
 		k.SetCurrentDepositAmountParam(ctx, sendToken)
 
-		k.SetDepositLastTimeParam(ctx, uint64(ctx.BlockTime().Unix()))
-
-		liquidityToken := k.CurrentLiquidityAmount(ctx)
-		liquidityToken = liquidityToken.AddAmount(msgResponse.ShareOutAmount)
-		k.SetCurrentLiquidityAmountParam(ctx, liquidityToken)
+		k.SetJoinSwapExactAmountInPacketSendParam(ctx, false)
+		k.SetJoinSwapExactAmountInPacketSentParam(ctx, false)
+		k.SetLockTokensPacketSendParam(ctx, true)
 
 		return msgResponse.String(), nil
 
@@ -261,11 +291,24 @@ func handleMsgData(ctx sdk.Context, k keeper.Keeper, msgData *sdk.MsgData) (stri
 			return "", sdkerrors.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
 		}
 
-		k.SetLockTokensPacketSentParam(ctx, false)
+		lockTokenTimestamp := uint64(ctx.BlockTime().UnixNano())
+		k.SetLockTokenTimestampParam(ctx, lockTokenTimestamp)
 
-		liquidityToken := k.CurrentLiquidityAmount(ctx)
-		liquidityToken.Amount = math.ZeroInt()
-		k.SetCurrentLiquidityAmountParam(ctx, liquidityToken)
+		k.SetLockTokensPacketSendParam(ctx, false)
+		k.SetLockTokensPacketSentParam(ctx, false)
+		k.SetUnLockLiquidityPacketSendParam(ctx, true)
+
+		return msgResponse.String(), nil
+
+	case sdk.MsgTypeURL(&osmosislockup.MsgBeginUnlockingAll{}):
+		msgResponse := &osmosislockup.MsgBeginUnlockingAllResponse{}
+		if err := proto.Unmarshal(msgData.Data, msgResponse); err != nil {
+			return "", sdkerrors.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
+		}
+
+		k.SetUnLockLiquidityPacketSendParam(ctx, false)
+		k.SetUnLockLiquidityPacketSentParam(ctx, false)
+		k.SetClaimRewardPacketSendParam(ctx, true)
 
 		return msgResponse.String(), nil
 	default:

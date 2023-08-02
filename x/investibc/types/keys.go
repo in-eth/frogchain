@@ -1,5 +1,7 @@
 package types
 
+import "time"
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "investibc"
@@ -26,6 +28,12 @@ const (
 var (
 	// PortKey defines the key to store the port ID in store
 	PortKey = KeyPrefix("investibc-port-")
+)
+
+var (
+	LockDuration = time.Duration(10 * time.Second)
+
+	IBCTransferChannelID = "channel-0"
 )
 
 func KeyPrefix(p string) []byte {

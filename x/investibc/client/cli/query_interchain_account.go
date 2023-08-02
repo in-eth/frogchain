@@ -14,7 +14,7 @@ var _ = strconv.Itoa(0)
 
 func CmdInterchainAccount() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "interchain-account [connection-id]",
+		Use:   "interchain-account [owner] [connection-id]",
 		Short: "Query interchain-account",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {

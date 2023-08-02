@@ -46,7 +46,7 @@ echo $WALLET_MNEMONIC_2 | $BINARY keys add wallet2 --home $CHAIN_DIR/$CHAINID_1 
 echo $RLY_MNEMONIC_1 | $BINARY keys add rly1 --home $CHAIN_DIR/$CHAINID_1 --recover --keyring-backend=test 
 
 $BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show val1 --keyring-backend test -a) 10000000000000000frog --home $CHAIN_DIR/$CHAINID_1
-$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet1 --keyring-backend test -a) --home $CHAIN_DIR/$CHAINID_1
+$BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet1 --keyring-backend test -a) 10000000000000000frog --home $CHAIN_DIR/$CHAINID_1
 $BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show wallet2 --keyring-backend test -a) 10000000000000000frog  --home $CHAIN_DIR/$CHAINID_1
 $BINARY add-genesis-account $($BINARY --home $CHAIN_DIR/$CHAINID_1 keys show rly1 --keyring-backend test -a) 10000000000000000frog  --home $CHAIN_DIR/$CHAINID_1
 
@@ -65,7 +65,8 @@ sed -i -e 's/enable = false/enable = true/g' $CHAIN_DIR/$CHAINID_1/config/app.to
 sed -i -e 's/swagger = false/swagger = true/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/1317/'"$RESTPORT_1"'/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 sed -i -e 's/":8080"/":'"$ROSETTA_1"'"/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
-sed -i -e 's/gas-to-suggest = 200000/gas-to-suggest = 500000/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
+sed -i -e 's/gas-to-suggest = 200000/gas-to-suggest = 5000000/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
+sed -i -e 's/denom-to-suggest = \"uatom\"/denom-to-suggest = \"frog\"/g' $CHAIN_DIR/$CHAINID_1/config/app.toml
 
 # Update host chain genesis to allow x/bank/MsgSend ICA tx execution
 # cat $CHAIN_DIR/$CHAINID_1/config/genesis.json | jq '(.app_state.interchainaccounts.host_genesis_state.params.allow_messages) |= ["/cosmos.bank.v1beta1.MsgSend"]' > $CHAIN_DIR/$CHAINID_1/config/genesis.json.tmp

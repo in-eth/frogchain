@@ -17,4 +17,5 @@ var (
 	ErrPortIdNotFound        = sdkerrors.Register(ModuleName, 1505, "port id not found")
 	ErrSwapResponseUnmarshal = sdkerrors.Register(ModuleName, 1506, "cannot unmarshal swap response message")
 	ErrNoValidator           = sdkerrors.Register(ModuleName, 1507, "no validator for delegate native token")
+	ErrChannelNotFound       = sdkerrors.Register(ModuleName, 1508, "active channel not found for pord id")
 )
