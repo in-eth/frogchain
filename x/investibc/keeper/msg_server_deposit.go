@@ -6,6 +6,7 @@ import (
 	"frogchain/x/investibc/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types.MsgDepositResponse, error) {
@@ -26,10 +27,6 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 		return nil, sdkError
 	}
 
-	depositAmount := k.CurrentDepositAmount(ctx)
-	depositAmount = depositAmount.Add(receiveToken)
-	k.SetCurrentDepositAmountParam(ctx, depositAmount)
-
 	// set share token data
 	moduleToken := sdk.Coin{
 		Denom:  types.ModuleToken,
@@ -46,7 +43,13 @@ func (k msgServer) Deposit(goCtx context.Context, msg *types.MsgDeposit) (*types
 		return nil, sdkError
 	}
 
-	k.SetDepositBalance(ctx, types.DepositBalance{Index: msg.Creator, Balance: moduleToken})
+	valArr := k.stakingKeeper.GetAllValidators(ctx)
+	if len(valArr) < 1 {
+		return nil, types.ErrNoValidator
+	}
+
+	validator := valArr[0]
+	k.stakingKeeper.Delegate(ctx, creator, moduleToken.Amount, stakingtypes.Unbonded, validator, true)
 
 	return &types.MsgDepositResponse{}, nil
 }

@@ -26,6 +26,7 @@ func (k msgServer) InitIcaAccount(goCtx context.Context, msg *types.MsgInitIcaAc
 	if !found {
 		return nil, types.ErrConnectionNotFound
 	}
+
 	counterpartyConnection := connectionEnd.Counterparty
 
 	appVersion := string(icatypes.ModuleCdc.MustMarshalJSON(&icatypes.Metadata{
@@ -37,6 +38,7 @@ func (k msgServer) InitIcaAccount(goCtx context.Context, msg *types.MsgInitIcaAc
 	}))
 
 	msgServer := icacontrollerkeeper.NewMsgServerImpl(&k.icaControllerKeeper)
+
 	msgRegisterInterchainAccount := icacontrollertypes.NewMsgRegisterInterchainAccount(msg.ConnectionId, types.ModuleName, appVersion)
 
 	_, err := msgServer.RegisterInterchainAccount(sdk.WrapSDKContext(ctx), msgRegisterInterchainAccount)
@@ -50,6 +52,5 @@ func (k msgServer) InitIcaAccount(goCtx context.Context, msg *types.MsgInitIcaAc
 	}
 
 	k.icaControllerKeeper.SetMiddlewareEnabled(ctx, portID, msg.ConnectionId)
-
 	return &types.MsgInitIcaAccountResponse{}, nil
 }

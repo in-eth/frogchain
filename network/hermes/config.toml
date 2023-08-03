@@ -90,6 +90,27 @@ host = '127.0.0.1'
 port = 3001
 
 [[chains]]
+id = 'frogchain'
+rpc_addr = 'http://127.0.0.1:16657'
+grpc_addr = 'http://127.0.0.1:8090'
+websocket_addr = 'ws://127.0.0.1:16657/websocket'
+rpc_timeout = '10s'
+account_prefix = 'frog'
+key_name = 'alice'
+store_prefix = 'ibc'
+default_gas = 9000000
+max_gas = 30000000
+gas_price = { price = 0.1, denom = 'frog' }
+gas_multiplier = 1.5
+max_msg_num = 30
+max_tx_size = 2097152
+clock_drift = '5s'
+max_block_time = '10s'
+trusting_period = '14days'
+trust_threshold = { numerator = '1', denominator = '3' }
+address_type = { derivation = 'cosmos' }
+
+[[chains]]
 id = 'localosmosis'
 rpc_addr = 'http://127.0.0.1:26657'
 grpc_addr = 'http://127.0.0.1:9090'
@@ -107,26 +128,5 @@ max_tx_size = 2097152
 clock_drift = '5s'
 max_block_time = '10s'
 trusting_period = '239s'
-trust_threshold = { numerator = '1', denominator = '3' }
-address_type = { derivation = 'cosmos' }
-
-[[chains]]
-id = 'frogchain'
-rpc_addr = 'http://127.0.0.1:16657'
-grpc_addr = 'http://127.0.0.1:8090'
-websocket_addr = 'ws://127.0.0.1:16657/websocket'
-rpc_timeout = '10s'
-account_prefix = 'frog'
-key_name = 'Alice'
-store_prefix = 'ibc'
-default_gas = 9000000
-max_gas = 30000000
-gas_price = { price = 0.1, denom = 'frog' }
-gas_multiplier = 1.5
-max_msg_num = 30
-max_tx_size = 2097152
-clock_drift = '5s'
-max_block_time = '10s'
-trusting_period = '14days'
 trust_threshold = { numerator = '1', denominator = '3' }
 address_type = { derivation = 'cosmos' }

@@ -5,14 +5,12 @@ accounts:
   - 300000000000foocoin
   - 300000000000token
   - 100000000000frog
-  - 200000000000stake
 
 - name: Bob
   coins:
   - 100000000000foocoin
   - 100000000000token
   - 100000000000frog
-  - 100000000000stake
 client:
   openapi:
     path: docs/static/openapi.yml
@@ -23,7 +21,7 @@ faucet:
   - 10foocoin
 validators:
 - name: Alice
-  bonded: 100000000stake
+  bonded: 100000000frog
   app:
     api:
       address: :1318

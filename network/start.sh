@@ -12,3 +12,4 @@ GRPCWEB_2=9091
 echo "Starting $CHAINID_1 in $CHAIN_DIR..."
 echo "Creating log file at $CHAIN_DIR/$CHAINID_1.log"
 $BINARY start --log_level debug --log_format json --home $CHAIN_DIR/$CHAINID_1 --pruning=nothing --grpc.address="0.0.0.0:$GRPCPORT_1" --grpc-web.address="0.0.0.0:$GRPCWEB_1" > $CHAIN_DIR/$CHAINID_1.log 2>&1 &
+# frogchaind start --home ./data/frogchain --grpc.address="0.0.0.0:8090" --grpc-web.address="0.0.0.0:8091"

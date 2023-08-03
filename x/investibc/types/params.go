@@ -12,7 +12,7 @@ var _ paramtypes.ParamSet = (*Params)(nil)
 
 var (
 	KeyAdminAccount            = []byte("AdminAccount")
-	DefaultAdminAccount string = "admin_account"
+	DefaultAdminAccount string = "frog1m9l358xunhhwds0568za49mzhvuxx9uxeu2c3r"
 )
 
 var (
@@ -31,8 +31,8 @@ var (
 )
 
 var (
-	KeyCurrentLiquidityAmount              = []byte("CurrentLiquidityAmount")
-	DefaultCurrentLiquidityAmount sdk.Coin = sdk.NewCoin(DefaultLiquidityDenom, sdk.ZeroInt())
+	KeyLockTokenTimestamp            = []byte("LockTokenTimestamp")
+	DefaultLockTokenTimestamp uint64 = 10
 )
 
 var (
@@ -46,6 +46,36 @@ var (
 )
 
 var (
+	KeyDepositTokenToICAPacketSend          = []byte("DepositTokenToICAPacketSend")
+	DefaultDepositTokenToICAPacketSend bool = true
+)
+
+var (
+	KeyJoinSwapExactAmountInPacketSend          = []byte("JoinSwapExactAmountInPacketSend")
+	DefaultJoinSwapExactAmountInPacketSend bool = false
+)
+
+var (
+	KeyLockTokensPacketSend          = []byte("LockTokensPacketSend")
+	DefaultLockTokensPacketSend bool = false
+)
+
+var (
+	KeyUnLockLiquidityPacketSend          = []byte("UnLockLiquidityPacketSend")
+	DefaultUnLockLiquidityPacketSend bool = false
+)
+
+var (
+	KeyClaimRewardPacketSend          = []byte("ClaimRewardPacketSend")
+	DefaultClaimRewardPacketSend bool = false
+)
+
+var (
+	KeyDepositTokenToICAPacketSent          = []byte("DepositTokenToICAPacketSent")
+	DefaultDepositTokenToICAPacketSent bool = false
+)
+
+var (
 	KeyJoinSwapExactAmountInPacketSent          = []byte("JoinSwapExactAmountInPacketSent")
 	DefaultJoinSwapExactAmountInPacketSent bool = false
 )
@@ -53,6 +83,16 @@ var (
 var (
 	KeyLockTokensPacketSent          = []byte("LockTokensPacketSent")
 	DefaultLockTokensPacketSent bool = false
+)
+
+var (
+	KeyUnLockLiquidityPacketSent          = []byte("UnLockLiquidityPacketSent")
+	DefaultUnLockLiquidityPacketSent bool = false
+)
+
+var (
+	KeyClaimRewardPacketSent          = []byte("ClaimRewardPacketSent")
+	DefaultClaimRewardPacketSent bool = false
 )
 
 // ParamKeyTable the param key table for launch module
@@ -66,22 +106,38 @@ func NewParams(
 	depositDenom string,
 	currentDepositAmount sdk.Coin,
 	liquidityDenom string,
-	currentLiquidityAmount sdk.Coin,
+	lockTokenTimestamp uint64,
 	depositLastTime uint64,
 	icaConnectionId string,
-	liquidityBootstrapping bool,
-	liquidityBootstrapped bool,
+	depositTokenToICAPacketSend bool,
+	joinSwapExactAmountInPacketSend bool,
+	lockTokensPacketSend bool,
+	unLockLiquidityPacketSend bool,
+	claimRewardPacketSend bool,
+	depositTokenToICAPacketSent bool,
+	joinSwapExactAmountInPacketSent bool,
+	lockTokensPacketSent bool,
+	unLockLiquidityPacketSent bool,
+	claimRewardPacketSent bool,
 ) Params {
 	return Params{
 		AdminAccount:                    adminAccount,
 		DepositDenom:                    depositDenom,
 		CurrentDepositAmount:            currentDepositAmount,
 		LiquidityDenom:                  liquidityDenom,
-		CurrentLiquidityAmount:          currentLiquidityAmount,
+		LockTokenTimestamp:              lockTokenTimestamp,
 		DepositLastTime:                 depositLastTime,
 		IcaConnectionId:                 icaConnectionId,
-		JoinSwapExactAmountInPacketSent: liquidityBootstrapping,
-		LockTokensPacketSent:            liquidityBootstrapped,
+		DepositTokenToICAPacketSend:     depositTokenToICAPacketSend,
+		JoinSwapExactAmountInPacketSend: joinSwapExactAmountInPacketSend,
+		LockTokensPacketSend:            lockTokensPacketSend,
+		UnLockLiquidityPacketSend:       unLockLiquidityPacketSend,
+		ClaimRewardPacketSend:           claimRewardPacketSend,
+		DepositTokenToICAPacketSent:     depositTokenToICAPacketSent,
+		JoinSwapExactAmountInPacketSent: joinSwapExactAmountInPacketSent,
+		LockTokensPacketSent:            lockTokensPacketSent,
+		UnLockLiquidityPacketSent:       unLockLiquidityPacketSent,
+		ClaimRewardPacketSent:           claimRewardPacketSent,
 	}
 }
 
@@ -92,11 +148,19 @@ func DefaultParams() Params {
 		DefaultDepositDenom,
 		DefaultCurrentDepositAmount,
 		DefaultLiquidityDenom,
-		DefaultCurrentLiquidityAmount,
+		DefaultLockTokenTimestamp,
 		DefaultDepositLastTime,
 		DefaultIcaConnectionId,
+		DefaultDepositTokenToICAPacketSend,
+		DefaultJoinSwapExactAmountInPacketSend,
+		DefaultLockTokensPacketSend,
+		DefaultUnLockLiquidityPacketSend,
+		DefaultClaimRewardPacketSend,
+		DefaultDepositTokenToICAPacketSent,
 		DefaultJoinSwapExactAmountInPacketSent,
 		DefaultLockTokensPacketSent,
+		DefaultUnLockLiquidityPacketSent,
+		DefaultClaimRewardPacketSent,
 	)
 }
 
@@ -107,11 +171,19 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyDepositDenom, &p.DepositDenom, validateDenom),
 		paramtypes.NewParamSetPair(KeyCurrentDepositAmount, &p.CurrentDepositAmount, validateCoin),
 		paramtypes.NewParamSetPair(KeyLiquidityDenom, &p.LiquidityDenom, validateDenom),
-		paramtypes.NewParamSetPair(KeyCurrentLiquidityAmount, &p.CurrentLiquidityAmount, validateCoin),
-		paramtypes.NewParamSetPair(KeyDepositLastTime, &p.DepositLastTime, validateDepositEndTime),
+		paramtypes.NewParamSetPair(KeyLockTokenTimestamp, &p.LockTokenTimestamp, validateTime),
+		paramtypes.NewParamSetPair(KeyDepositLastTime, &p.DepositLastTime, validateTime),
 		paramtypes.NewParamSetPair(KeyIcaConnectionId, &p.IcaConnectionId, validateIcaConnectionId),
+		paramtypes.NewParamSetPair(KeyDepositTokenToICAPacketSend, &p.DepositTokenToICAPacketSend, validateBool),
+		paramtypes.NewParamSetPair(KeyJoinSwapExactAmountInPacketSend, &p.JoinSwapExactAmountInPacketSend, validateBool),
+		paramtypes.NewParamSetPair(KeyLockTokensPacketSend, &p.LockTokensPacketSend, validateBool),
+		paramtypes.NewParamSetPair(KeyUnLockLiquidityPacketSend, &p.UnLockLiquidityPacketSend, validateBool),
+		paramtypes.NewParamSetPair(KeyClaimRewardPacketSend, &p.ClaimRewardPacketSend, validateBool),
+		paramtypes.NewParamSetPair(KeyDepositTokenToICAPacketSent, &p.DepositTokenToICAPacketSent, validateBool),
 		paramtypes.NewParamSetPair(KeyJoinSwapExactAmountInPacketSent, &p.JoinSwapExactAmountInPacketSent, validateBool),
 		paramtypes.NewParamSetPair(KeyLockTokensPacketSent, &p.LockTokensPacketSent, validateBool),
+		paramtypes.NewParamSetPair(KeyUnLockLiquidityPacketSent, &p.UnLockLiquidityPacketSent, validateBool),
+		paramtypes.NewParamSetPair(KeyClaimRewardPacketSent, &p.ClaimRewardPacketSent, validateBool),
 	}
 }
 
@@ -165,7 +237,7 @@ func validateVestingDuration(i interface{}) error {
 	return nil
 }
 
-func validateDepositEndTime(i interface{}) error {
+func validateTime(i interface{}) error {
 	_, ok := i.(uint64)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)

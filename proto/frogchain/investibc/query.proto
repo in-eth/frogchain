@@ -6,7 +6,6 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "frogchain/investibc/params.proto";
-import "frogchain/investibc/deposit_balance.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "frogchain/x/investibc/types";
@@ -20,13 +19,9 @@ service Query {
   
   }
   
-  // Queries a list of DepositBalance items.
-  rpc DepositBalance    (QueryGetDepositBalanceRequest) returns (QueryGetDepositBalanceResponse) {
-    option (google.api.http).get = "/frogchain/investibc/deposit_balance/{index}";
-  
-  }
-  rpc DepositBalanceAll (QueryAllDepositBalanceRequest) returns (QueryAllDepositBalanceResponse) {
-    option (google.api.http).get = "/frogchain/investibc/deposit_balance";
+  // Queries a list of InterchainAccount items.
+  rpc InterchainAccount (QueryInterchainAccountRequest) returns (QueryInterchainAccountResponse) {
+    option (google.api.http).get = "/frogchain/investibc/interchain_account/{connectionId}";
   
   }
 }
@@ -40,20 +35,12 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryGetDepositBalanceRequest {
-  string index = 1;
+message QueryInterchainAccountRequest {
+  string owner = 1;
+  string connectionId = 2;
 }
 
-message QueryGetDepositBalanceResponse {
-  DepositBalance depositBalance = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryAllDepositBalanceRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllDepositBalanceResponse {
-  repeated DepositBalance                         depositBalance = 1 [(gogoproto.nullable) = false];
-           cosmos.base.query.v1beta1.PageResponse pagination     = 2;
+message QueryInterchainAccountResponse {
+  string icaAddress = 1;
 }
 

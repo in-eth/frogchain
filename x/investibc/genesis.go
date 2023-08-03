@@ -9,10 +9,6 @@ import (
 
 // InitGenesis initializes the module's state from a provided genesis state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
-	// Set all the depositBalance
-	for _, elem := range genState.DepositBalanceList {
-		k.SetDepositBalance(ctx, elem)
-	}
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetPort(ctx, genState.PortId)
 	// Only try to bind to port if it is not already bound, since we may already own
@@ -34,7 +30,6 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.Params = k.GetParams(ctx)
 
 	genesis.PortId = k.GetPort(ctx)
-	genesis.DepositBalanceList = k.GetAllDepositBalance(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis
